@@ -1,0 +1,26 @@
+import '../components/globals.css'
+import { Inter } from 'next/font/google'
+import { UserProvider } from '@auth0/nextjs-auth0/client';
+import { ExpenseCTXProvider } from '@/components/contexts/expenseCTX';
+import { FileManagerProvider } from '@/components/contexts/fileManagerCTX';
+import Layout from '../components/layout'
+import { TransactionHandlerProvider } from '@/components/contexts/transactionHandler';
+const inter = Inter({ subsets: ['latin'] })
+
+export default function MyApp({Component, pageProps }: {Component: any, pageProps: any}) {
+  return (
+    <>
+      <UserProvider>
+        <ExpenseCTXProvider>
+            <FileManagerProvider>
+              <TransactionHandlerProvider>
+                  <Layout className="h-1000px">
+                    <Component {...pageProps} />
+                  </Layout>
+              </TransactionHandlerProvider>
+            </FileManagerProvider>
+        </ExpenseCTXProvider>
+      </UserProvider>
+    </>
+  )
+}
