@@ -12,23 +12,23 @@ import { currFormatter, standardizeCurrency } from "@/utils/functions/valueForma
 import { useUser, UserProfile } from "@auth0/nextjs-auth0/client"
 import UpcomingTable from "@/components/charts/UpcomingTable"
 import DonutCategory from "@/components/charts/DonutCategory"
+import MIMO from "@/components/charts/MoneyInMoneyOut"
 import badges, { getBadge, getColor } from "@/components/static/categories"
 import UserType from "@/components/interfaces/userwithMetadata"
 let TableHeadStyle = ["dark:bg-black bg-white select-none","h-6 relative right-0 bottom-0 top-0 left-0 mx-auto my-auto"]
 let ChevronStyle = ["absolute w-8 aspect-square rounded-full right-0 bottom-0 top-0 my-auto mr-4","w-8 h-8 border-2 rounded-full absolute"]
-let colors = ["slate", "gray", "zinc", "neutral", "stone", "red", "orange", "amber", "yellow", "lime", "green", "emerald", "teal", "cyan", "sky", "blue", "indigo", "violet", "purple", "fuchsia", "pink", "rose"]
 export default function listPage(){
     const router = useRouter()
     //@ts-ignore
     const {user, error, isLoading}  = useUser() as {user: UserType, error: any, isLoading: boolean}
-    const [expenses, setExpenses] = useState<any>([])
+    // const [expenses, setExpenses] = useState<any>([])
     const [filtermode, setFiltermode] = useState<number>(0) // 0: all, 1: past 2 weeks, 2: past month, 3: past year
     const filterlabels = ["All Expenditure", "Expenditure in the past 2 weeks", "Expenditure in the past month", "Expenditure in the past year"]
     const selectLabels = ["All", "14 days", "30 days", "365 days"]
     const [filtered, setFiltered] = useState<any>([])
     const [originalState, setOriginalState] = useState<any>([])
     const [search, setSearch] = useState<string>("")
-    const {expenseData, categoryData, _error} = useExpenses() as {expenseData: ExpenseType[], categoryData: any[], _error: any, isLoading: boolean}
+    const {expenseData, categoryData, _error, setExpenseData} = useExpenses() as {expenseData: ExpenseType[], categoryData: any[], _error: any, isLoading: boolean, setExpenseData: React.Dispatch<React.SetStateAction<ExpenseType[]>>}
     const [sortBy, setSortBy] = useState<null|any>([0, 0])
     const [CurrentlyEditing, setCurrentlyEditing] = useState<any>(null)
     const [tab, setTab] = useState(0)
@@ -36,22 +36,7 @@ export default function listPage(){
     const {errorFU, loading, setExpense} = useFileUpload()
     const {handlerMode, setHandlerMode} = useTransactionHandler() as {handlerMode : string|null, setHandlerMode: React.Dispatch<React.SetStateAction<any[]>>}
     const [categorySums, setCategorySums] = useState({})
-    
     const categoryBadges = badges()
-    const currFormatter = (number: number) => {
-        console.log(number)
-        return (new Intl.NumberFormat('en-US', { style: 'currency', currency: user.user_metadata!.currency})).format(number)
-    };
-    useEffect(() => {
-        if (expenseData.length > 0){
-            setExpenses(expenseData)
-            console.log(expenseData)
-            console.log(categoryData)
-            expenseData.forEach((exp)=>{
-                console.log((categoryData.find((element) => {return element.id === exp.category[0]})).category)
-            })
-        }
-    }, [expenseData, isLoading])
     useEffect(() => {
     }, [user])
     
@@ -80,9 +65,9 @@ export default function listPage(){
                 <UpcomingTable expenses={expenseData} categories={categoryData}/>
               </Card>
               </div>
-              <Card className="min-h-16 h-fit bg-slate-200 border-slate-400 border-2">
-                <Title>Upcoming Transactions</Title>
-                <UpcomingTable expenses={expenseData} categories={categoryData}/>
+              <Card className="w-full bg-slate-200 border-slate-400 border-2">
+                <Title>Money In vs. Money Out</Title>
+                <MIMO />
               </Card>
             </Grid>
             <div className="mt-6">
@@ -178,7 +163,7 @@ export default function listPage(){
                                     </TableHeaderCell>
                                     <TableHeaderCell className={`w-8 dark:border-l-white border-x-gray-500 ${TableHeadStyle[0]}`}>
                                         <div className={`w-fit ${TableHeadStyle[1]}`}>
-                                            <Text className="w-fit dark:text-white text-black dark:hover:text-stone-300 hover:text-gray-300 break-words">Receipt</Text>
+                                            <Text className="w-fit dark:text-white text-black  break-words">Receipt</Text>
                                         </div>
                                     </TableHeaderCell>
                                     <TableHeaderCell className={`w-8 dark:border-l-white border-x-gray-500 ${TableHeadStyle[0]}`}>
@@ -187,17 +172,17 @@ export default function listPage(){
                                 </TableRow>
                             </TableHead>
                             <TableBody className="h-fit dark:divide-white divide-y  divide-black">
-                                {expenses.map((item : ExpenseType, index : number) => {
+                                {expenseData.map((item : ExpenseType, index : number) => {
                                     let date = "unknown"
                                     let formatter = Intl.NumberFormat('en-US', {})
-                                    if (expenses.length == 0){
+                                    if (expenseData.length == 0){
                                         return (<TableRow key={index}>
                                                 <TableCell className="w-full">
                                                     <Text className="w-fit mx-auto right-0" >No Expenses</Text>
                                                 </TableCell>
                                             </TableRow>)
                                         }
-                                    if (!expenses[0].transaction_date){}
+                                    if (!expenseData[0].transaction_date){}
                                     else {
                                         // const [Y, M, D] = expenses[0].transaction_date.split('-')
                                         // date = String(new Date(item.transaction_date))

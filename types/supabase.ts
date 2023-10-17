@@ -18,6 +18,7 @@ export interface ExpenseSchema {
     user_id: string | unknown
     recurring: boolean
     files: string[]
+    standardizedCurrency? : number
 } 
 export interface CategorySchema{
   category: string

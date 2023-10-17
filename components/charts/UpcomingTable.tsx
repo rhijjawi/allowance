@@ -4,6 +4,7 @@ import { Card, Table, TableHead, Button, TableRow, TableHeaderCell, TableBody, T
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { Dialog, Transition } from "@headlessui/react";
 import { getColor, getBadge } from "@/components/static/categories";
+import HoverSwitchCurr from "@/components/ui/buttons/hoverSwitchCurr";
 let TableHeadStyle = ["dark:bg-black bg-white select-none","h-6 relative right-0 bottom-0 top-0 left-0 mx-auto my-auto"]
 export default function table(props : {expenses : ExpenseType[], categories : any}){
     let {expenses, categories} = props
@@ -20,7 +21,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
             if (expense.recurring || ((Number(new Date(expense.transaction_date)) - Number(new Date())) > 0)){
                 setRecurring((prevState : any) => [...prevState, expense])}
         })
-    }, [expenses])
+    }, [props.expenses])
     useEffect(()=>{
     }, [recurring])
     const closeModal = (): any => setModalOpen(false);
@@ -65,7 +66,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
                             <Text>In {Math.round(DateDelta/(1000*3600*24))} days</Text>
                             </TableCell>
                             <TableCell>
-                            <Text className={`dark:text-white`}>{new Intl.NumberFormat('en-DE', {currency: item.currency, style: 'currency'}).format(item.amount)}</Text>
+                            <Text className={`dark:text-white`}><HoverSwitchCurr size={'md'} expense={item}/></Text>
                             </TableCell>
                         </TableRow>
                 )}).splice(0,3)}
@@ -102,10 +103,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                     >
-                        <Dialog.Panel
-                        className="w-full max-w-xl transform overflow-hidden ring-tremor bg-white
-                                            p-6 text-left align-middle shadow-tremor transition-all rounded-xl"
-                        >
+                        <Dialog.Panel className="w-full max-w-xl transform overflow-hidden ring-tremor bg-white p-6 text-left align-middle shadow-tremor transition-all rounded-xl">
                         <div className="relative mt-3">
                             <Table className="min-h-fit h-fit mt-5 w-full rounded-b-md border-2 rounded-md">
                             <TableHead>

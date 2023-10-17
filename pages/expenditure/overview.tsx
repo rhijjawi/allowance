@@ -26,9 +26,6 @@ export default function Expenditure() {
     const [chartData, setChartData] = useState<any>([])
     const [cards, setCards] = useState<any>([])
     const router = useRouter()
-    const currFormatter = (number: number) => {
-        return (new Intl.NumberFormat('en-US', { style: 'currency', currency: user.user_metadata.currency})).format(number)
-    };
     useEffect(()=>{
         if (!user && !isLoading){
             router.push('/api/auth/login')
@@ -164,7 +161,7 @@ return (
                     return getColor(i.id!)})}
                 categories={categories.map((i : any)=>{return i.category})}
                 index="month"
-                valueFormatter={(number)=>{return currFormatter(number)}}
+                valueFormatter={(number)=>{return currFormatter(number, user.user_metadata!.currency)}}
                 />
             </Card>
         </div>

@@ -1,8 +1,8 @@
 import { ExpenseType } from "@/components/contexts/expenseCTX";
-export const currFormatter = (number: number, curr: string) => {
+export const currFormatter = (number: number, curr: string = "USD") => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: curr}).format(number)
 };
-export const standardizeCurrency = async(transaction : ExpenseType, currency? : string) => {
+export const standardizeCurrency = async(transaction : ExpenseType, currency : string = "USD") => {
     const [Y,M,D] = (transaction.transaction_date.split('-'));
     let _
     if (new Date(transaction.transaction_date) > new Date()){
