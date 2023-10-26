@@ -9,7 +9,7 @@ export default function CategoryBadge() : {[key: number]: [any, Color|null]} {
         3 : [null, "zinc"],
         4 : [ShoppingCartIcon, "green"],
         5 : [AcademicCapIcon, "violet"] , 
-        6: [HeartIcon, "stone"],
+        6: [HeartIcon, "red"],
         7: [FilmIcon, "pink"],
         8: [PaperAirplaneIcon, "sky"],
         9 : [ScissorsIcon, "purple"],
@@ -18,6 +18,7 @@ export default function CategoryBadge() : {[key: number]: [any, Color|null]} {
         12: [CloudIcon, "lime"],
         13: [QuestionMarkCircleIcon, "lime"],
         14: [FireIcon, "lime"],
+        15: [HomeIcon, "zinc"],
     }
 }
 export function getBadge(id : number) {

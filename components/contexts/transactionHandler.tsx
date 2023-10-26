@@ -20,6 +20,12 @@ export function TransactionHandlerProvider({children} : {children: React.ReactNo
             await (await getSupabase(user!.accessToken)).from('expenses').delete().eq('id', handlerMode[1])
             setHandlerMode([null, null])
             return router.reload()
+        },
+        'edit' : async() => {
+
+        }, 
+        'add' : async() => {
+            
         }
     }
     useEffect(() => {

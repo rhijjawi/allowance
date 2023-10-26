@@ -150,8 +150,8 @@ return (
                 <Button size="md" className="h-full"><InformationCircleIcon className="h-6 w-6 inline "/><span> Read more</span></Button>
             </div>
         </Card>
-        <div id="barChart" className="w-screen">
-            <Card id={""} className="mt-6 block relative bg-red-100 w-screen">
+        <div id="barChart" className="w-full">
+            <Card id={""} className="mt-6 block relative bg-white w-full">
                 <Title>Overall Expenditure</Title>
                 <BarChart 
                 hidden={chartData.length == 0}

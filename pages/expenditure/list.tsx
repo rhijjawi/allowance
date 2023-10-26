@@ -1,49 +1,64 @@
 'use client'
-import { Card, Badge, Table, TabPanel,DonutChart, TabPanels, Grid, Divider, TabGroup, TableHead, TableHeaderCell, TableBody, TableRow, TableCell, TableFoot, TableFooterCell, Title, Select, SelectItem, Text, BarChart, AreaChart, TabList, Tab } from "@tremor/react"
+import { Card, Badge, Button, Table, TabPanel,DonutChart, TabPanels, Grid, Divider, TabGroup, TableHead, TableHeaderCell, TableBody, TableRow, TableCell, TableFoot, TableFooterCell, Title, Select, SelectItem, Text, BarChart, AreaChart, TabList, Tab, TextInput, Col, Metric } from "@tremor/react"
 import {useEffect, useState} from 'react'
 import { useExpenses, ExpenseType } from "@/components/contexts/expenseCTX"
-import {ChevronDownIcon, ChevronUpIcon} from '@heroicons/react/24/outline'
+import {ChevronDownIcon, ChevronUpIcon, PlusCircleIcon} from '@heroicons/react/24/outline'
 import { sortData } from "@/utils/functions/sortData"
 import { CheckIcon, PencilIcon, TrashIcon} from "@heroicons/react/24/solid"
 import { useFileUpload } from "@/components/contexts/fileManagerCTX"
 import { useTransactionHandler } from "@/components/contexts/transactionHandler"
-import { useRouter } from "next/router"
-import { currFormatter, standardizeCurrency } from "@/utils/functions/valueFormatters"
 import { useUser, UserProfile } from "@auth0/nextjs-auth0/client"
 import UpcomingTable from "@/components/charts/UpcomingTable"
 import DonutCategory from "@/components/charts/DonutCategory"
 import MIMO from "@/components/charts/MoneyInMoneyOut"
 import badges, { getBadge, getColor } from "@/components/static/categories"
 import UserType from "@/components/interfaces/userwithMetadata"
+import { ExpenditureDialog, IncomeDialogue } from "@/components/forms/QuickForms"
+import HoverSwitchCurr from "@/components/ui/buttons/hoverSwitchCurr"
+import getPrevious from "@/functions/getPrevious"
+import { getSupabase } from "@/utils/supabase"
+import { CategorySchema, ExpenseSchema, IncomeSchema } from "@/types/supabase"
+import {ExpenditureDelta, IncomeDelta} from "@/components/charts/ExpenditureDelta"
+import { LastPeriodDates } from "@/utils/functions/filterData"
 let TableHeadStyle = ["dark:bg-black bg-white select-none","h-6 relative right-0 bottom-0 top-0 left-0 mx-auto my-auto"]
 let ChevronStyle = ["absolute w-8 aspect-square rounded-full right-0 bottom-0 top-0 my-auto mr-4","w-8 h-8 border-2 rounded-full absolute"]
+
 export default function listPage(){
-    const router = useRouter()
-    //@ts-ignore
     const {user, error, isLoading}  = useUser() as {user: UserType, error: any, isLoading: boolean}
-    // const [expenses, setExpenses] = useState<any>([])
     const [filtermode, setFiltermode] = useState<number>(0) // 0: all, 1: past 2 weeks, 2: past month, 3: past year
     const filterlabels = ["All Expenditure", "Expenditure in the past 2 weeks", "Expenditure in the past month", "Expenditure in the past year"]
     const selectLabels = ["All", "14 days", "30 days", "365 days"]
     const [filtered, setFiltered] = useState<any>([])
     const [originalState, setOriginalState] = useState<any>([])
     const [search, setSearch] = useState<string>("")
-    const {expenseData, categoryData, _error, setExpenseData} = useExpenses() as {expenseData: ExpenseType[], categoryData: any[], _error: any, isLoading: boolean, setExpenseData: React.Dispatch<React.SetStateAction<ExpenseType[]>>}
+    const {expenseData, categoryData, incomeData, _error, setExpenseData} = useExpenses() as {expenseData: ExpenseSchema[], categoryData: CategorySchema[], incomeData: IncomeSchema[], _error: any, isLoading: boolean, setExpenseData: React.Dispatch<React.SetStateAction<ExpenseType[]>>}
     const [sortBy, setSortBy] = useState<null|any>([0, 0])
+
     const [CurrentlyEditing, setCurrentlyEditing] = useState<any>(null)
+    const previousEditing = getPrevious(CurrentlyEditing)
+    const [label, setLabel] = useState<string>("")
     const [tab, setTab] = useState(0)
     const chevrons = [null, <ChevronUpIcon className={ChevronStyle[1]}/>, <ChevronDownIcon className={ChevronStyle[1]}/>]
     const {errorFU, loading, setExpense} = useFileUpload()
     const {handlerMode, setHandlerMode} = useTransactionHandler() as {handlerMode : string|null, setHandlerMode: React.Dispatch<React.SetStateAction<any[]>>}
     const [categorySums, setCategorySums] = useState({})
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isIncomeOpen, setIncomeIsOpen] = useState<boolean>(false)
     const categoryBadges = badges()
     useEffect(() => {
-    }, [user])
-    
-    
+        const updateFunction = async () => {
+            // await (await getSupabase(user!.accessToken)).from('expenses').update({label: label}).eq(id, id)
+        }
+        if (CurrentlyEditing == null && typeof previousEditing == 'number'){
+            alert(label)
+        }
+    }, [previousEditing])
+    const daterange = LastPeriodDates()
     return (
         <>
         <main className="p-12 min-h-screen">
+            <ExpenditureDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+            <IncomeDialogue isOpen={isIncomeOpen} setIsOpen={setIncomeIsOpen} />
       <Title>Dashboard 🏦</Title>
       <Text>A more detailed view of your expenses </Text>
 
@@ -64,18 +79,34 @@ export default function listPage(){
                 <Title>Upcoming Transactions</Title>
                 <UpcomingTable expenses={expenseData} categories={categoryData}/>
               </Card>
+              <Card className=" bg-slate-200 border-slate-400 border-2 mt-3 flex-grow grid grid-cols-3">
+                <Button className="col-start-1 h-12" icon={PlusCircleIcon} color="red" onClick={()=>setIsOpen(true)}>Add Expense</Button>
+                <Button className="col-start-3 h-12" icon={PlusCircleIcon} color="emerald" onClick={()=>setIncomeIsOpen(true)}>Add Income</Button>
+              </Card>
               </div>
               <Card className="w-full bg-slate-200 border-slate-400 border-2">
                 <Title>Money In vs. Money Out</Title>
-                <MIMO />
+                <MIMO expenses={expenseData} income={incomeData}/>
               </Card>
             </Grid>
-            <div className="mt-6">
-              <Card>
+            <Grid numItemsMd={2} numItemsLg={3} className="gap-6 mt-6 ">
+                <Col numColSpan={1} numColSpanLg={3}>
+                <Card className=" dark:border-2 relative">
+                    <div className="w-full ml-5 my-5"><Text className="inline-block pr-2">Previous Period:</Text><Text className="inline-block dark:text-white"> {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[0])} - {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[1])}</Text><div><Text className="inline-block pr-2">Current Period:</Text><Text className="inline-block dark:text-white"> {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[2])} - {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[3])}</Text></div></div>
+                    <div className="grid grid-cols-3 relative">
+                        {categoryData.map((item: CategorySchema)=>{return (<ExpenditureDelta category={item} expenses={expenseData}/>)})}
+                        <IncomeDelta category={{category: "Income", id: 0, subcategories: []}} incomes={incomeData}/>
+                    </div>
+                    
+                </Card>
+                </Col>
+            </Grid>
+              {/* <Card>
+                <div className="mt-6">
                 <div className="h-96">
                         <Title className="">All Categories</Title>
                             <div className="">
-                                {/* <AreaChart
+                                <AreaChart
                                 index="date"
                                 className="px-2 py-3"
                                 categories={["allowance","housing","cheese"]}
@@ -105,11 +136,11 @@ export default function listPage(){
                                     allowance: -1000,
                                 }
                             ]}
-                                /> */}
+                                />
                         </div>
                     </div>
-                </Card>
-            </div>
+                </div>
+                </Card> */}
           </TabPanel>
           <TabPanel>
             <Card className="mt-6">
@@ -184,31 +215,30 @@ export default function listPage(){
                                         }
                                     if (!expenseData[0].transaction_date){}
                                     else {
-                                        // const [Y, M, D] = expenses[0].transaction_date.split('-')
-                                        // date = String(new Date(item.transaction_date))
-                                        date = (new Intl.DateTimeFormat(navigator.languages[0], {dateStyle : 'full'}).format(new Date(item.transaction_date)))
+                                        
+                                        date = (new Intl.DateTimeFormat(navigator.languages[0], {dateStyle : 'long'}).format(new Date(item.transaction_date)))
                                         formatter = new Intl.NumberFormat(navigator.languages[0], {currency: item.currency, style: 'currency'})
                                     }
-                                    return (<TableRow key={index} className={"dark:divide-white divide-black divide-x " + ["dark:bg-black/10 bg-white ", "dark:bg-slate-800 bg-gray-800/10"][index%2]}>
+                                    return (<TableRow key={item.id} className={"dark:divide-white divide-black divide-x " + ["dark:bg-black/10 bg-white ", "dark:bg-slate-800 bg-gray-800/10"][index%2]}>
                                         <TableCell className="relative w-8 mx-auto my-auto">
                                             <div className="absolute right-0 top-0 left-0 bottom-0 w-4 h-4 mx-auto my-auto">
                                                 <input checked={item.recurring} readOnly disabled id="checked-checkbox" type="checkbox" value="" className="absolute w-full aspect-square  bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
                                             </div>
                                         </TableCell>
                                         <TableCell className="mx-auto relative grid grid-cols-10 h-full">
-                                            <div suppressContentEditableWarning contentEditable={item.id == CurrentlyEditing} className={`col-span-8 relative h-[100%] ${(item.id == CurrentlyEditing) ? 'border border-green-500/80 rounded-md' : ''}`}>{/*"float-left relative bottom-0 top-0 left-0 mx-auto my-auto max-w-fit whitespace-pre-wrap break-words h-fit */}
-                                                <Text className="w-full text-lg py-4 px-2 text-black dark:text-white my-auto top-0 bottom-0 absolute whitespace-pre-wrap break-words h-fit">{item.label}</Text>
+                                            <div className={`col-span-8 relative h-[100%] ${(item.id == CurrentlyEditing) ? 'border-2 border-green-500/80 rounded-lg' : ''}`}>{/*"float-left relative bottom-0 top-0 left-0 mx-auto my-auto max-w-fit whitespace-pre-wrap break-words h-fit */}
+                                                {!(item.id == CurrentlyEditing) ? <Text className="w-full text-lg py-4 px-2 text-black dark:text-white my-auto top-0 bottom-0 absolute whitespace-pre-wrap break-words h-fit">{item.label}</Text> : <TextInput onChange={(e)=>{setLabel(e.target.value)}} className="w-full text-lg py-4 px-2 text-black dark:text-white my-auto top-0 bottom-0 absolute whitespace-pre-wrap break-words h-[100%]" defaultValue={item.label} />}
                                             </div>
-                                            <div className={`col-span-2 col-start-9 ml-2 relative h-10 aspect-square rounded-md ${!(item.id == CurrentlyEditing) ? 'bg-white/20' : 'bg-green-400'}`} onClick={(e)=>{ //relative float-right h-8 aspect-square  right-0 bottom-0 top-0 my-auto mr-4 border-2 cursor-pointer 
+                                            <div className="col-span-2 col-start-9 ml-2 relative h-10 aspect-square"></div>
+                                            {/* <div className={`col-span-2 col-start-9 ml-2 relative h-10 aspect-square rounded-md ${!(item.id == CurrentlyEditing) ? 'bg-white/20' : 'bg-green-400'}`} onClick={(e)=>{
                                                 if (item.id == CurrentlyEditing){setCurrentlyEditing(null); return}; setCurrentlyEditing(item.id)}}>
                                                 {!(item.id == CurrentlyEditing) ? (<PencilIcon className="w-4 h-4 bottom-0 right-0 left-0 top-0 absolute mx-auto dark:text-white my-auto"/>) : (<CheckIcon className="w-4 h-4 bottom-0 right-0 left-0 top-0 absolute mx-auto my-auto" />)}
-                                            </div>
+                                            </div> */}
                                         </TableCell>
                                         <TableCell className="relative">
                                             <Badge tooltip={
-                                                (categoryData.find((element) => {return element.id === item.category[0]})).subcategories[item.category[1]]
                                                 //@ts-ignore
-                                            } size={'md'} color={getColor((categoryData.find((element) => {return element.id === item.category[0]})).id)} className={`select-none dark:bg-black/0 border border-${getColor((categoryData.find((element) => {return element.id === item.category[0]})).id)}-500`} icon={getBadge((categoryData.find((element) => {return element.id === item.category[0]})).id)}>{(categoryData.find((element) => {return element.id === item.category[0]})).category}</Badge>
+                                                String((categoryData.find((element) => {return element.id === item.category[0]}))!.subcategories[item.category[1]])} size={'md'} color={getColor((categoryData.find((element) => {return element.id === item.category[0]})).id)} className={`select-none dark:bg-black/0 border border-${getColor((categoryData.find((element) => {return element.id === item.category[0]})).id)}-500`} icon={getBadge((categoryData.find((element) => {return element.id === item.category[0]})).id)}>{(categoryData.find((element) => {return element.id === item.category[0]})).category}</Badge>
                                         </TableCell>
                                         <TableCell className="mx-auto border-x">
                                             <Text className="w-fit right-0 left-0 mx-auto dark:text-white text-black">
@@ -217,7 +247,7 @@ export default function listPage(){
                                         </TableCell>
                                         <TableCell className="mx-auto ">
                                             <Text className="w-fit right-0 left-0 mx-auto text-black dark:text-white">
-                                                {formatter.format(item.amount)} {item.currency}
+                                                <HoverSwitchCurr size={'md'} expense={item}/>
                                             </Text>
                                         </TableCell>
                                         <TableCell className="mx-auto">

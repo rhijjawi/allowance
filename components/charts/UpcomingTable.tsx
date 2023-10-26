@@ -13,6 +13,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
     //important info
     useEffect(()=>{
         let active = true
+        setRecurring([])
         expenses.map((expense : ExpenseType) => {
             let date = new Date(expense.transaction_date)
             date.setUTCMonth(new Date().getUTCMonth())
@@ -27,7 +28,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
     const closeModal = (): any => setModalOpen(false);
     return (
         <>
-            <Table className="mt-5 max-w-full w-full border border-slate-400 rounded-md max-h-32 overflow-y-scroll">
+            <Table className="mt-5 max-w-full w-full border border-slate-400 rounded-md max-h-fit ">
             <TableHead className="border-b border-black bg-white">
                 <TableRow>
                     <TableHeaderCell className={`w-8 relative ${TableHeadStyle[0]}`}>
@@ -61,7 +62,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
                     if (DateDelta < 0){return}
                     return (
                         <TableRow key={index}>
-                            <TableCell>{item.label}</TableCell>
+                            <TableCell className="w-full"><div className="min-w-12 break-normal whitespace-pre-wrap">{item.label}</div></TableCell>
                             <TableCell>
                             <Text>In {Math.round(DateDelta/(1000*3600*24))} days</Text>
                             </TableCell>
@@ -69,10 +70,10 @@ export default function table(props : {expenses : ExpenseType[], categories : an
                             <Text className={`dark:text-white`}><HoverSwitchCurr size={'md'} expense={item}/></Text>
                             </TableCell>
                         </TableRow>
-                )}).splice(0,3)}
+                )}).splice(0,2)}
             </TableBody>
             </Table>
-                {recurring.length > 3 ? <div className="relative right-0 left-0 bottom-0 w-full h-8 mt-5"><Button 
+                {recurring.length > 2 ? <div className="relative right-0 left-0 bottom-0 w-full h-8 mt-5"><Button 
                     tooltip="View the full table of your upcoming/recurring transactions" 
                     className=" max-w-sm bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300 absolute mx-auto my-auto left-0 right-0 top-0 bottom-0"
                     icon={ArrowsPointingOutIcon}
@@ -159,7 +160,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
                                         <Text>In {Math.round(DateDelta/(1000*3600*24))} days</Text>
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <Text>{(new Intl.NumberFormat(navigator.languages[0], {currency: item.currency, style: 'currency'})).format(item.amount)}</Text>
+                                        <Text><HoverSwitchCurr size={'md'} expense={item}/></Text>
                                     </TableCell>
                                 </TableRow>
                                 )})}

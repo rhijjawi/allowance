@@ -2,16 +2,39 @@ import { BarChart } from "@tremor/react";
 import { ExpenseType } from "../contexts/expenseCTX";
 import { currFormatter } from "@/utils/functions/valueFormatters";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import UserType from "../interfaces/userwithMetadata";
-import { useEffect } from "react";
-export default function MIMO(props: {expenses : ExpenseType[]}){
-    const {user, error} = useUser() as {user: UserType, error : unknown}
 
+
+import UserType from "../interfaces/userwithMetadata";
+import { useEffect, useState } from "react";
+import { IncomeSchema } from "@/types/supabase";
+export default function MIMO(props: {expenses : ExpenseType[], income : IncomeSchema[]}){
+    const {user, error} = useUser() as {user: UserType, error : unknown}
+    const [moneyOut, setmoneyOut] = useState<number>(0)
+    const [moneyIn, setMoneyIn] = useState<number>(0)
+    useEffect(()=>{
+        async function handle(){
+            setmoneyOut(0)
+            setMoneyIn(0)
+            props.expenses.map((expense)=>{
+                if (new Date(expense.transaction_date).getUTCMonth() == new Date().getUTCMonth() || expense.recurring == true){
+                    setmoneyOut((prev)=>{return prev + expense.standardizedCurrency!})
+                }
+                
+            })
+            props.income.map((income : IncomeSchema)=>{
+                if (new Date(income.transaction_date).getUTCMonth() == new Date().getUTCMonth() || income.recurring == true){
+                    setMoneyIn((prev)=>{return prev + income.standardizedCurrency!})
+                }
+            })
+
+        }
+        handle()
+    },[props.expenses])
     return (
     <BarChart
     data={[{
-        "Money In": 2000,
-        "Money Out": 2500,
+        "Money In": moneyIn,
+        "Money Out": moneyOut,
       }]}
       index={"label"}
       className=""

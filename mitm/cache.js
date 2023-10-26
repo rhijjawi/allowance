@@ -58,7 +58,7 @@ app.get('/historical/:date/:src/:dst', async(req, res) => {
         historicalCache[date][src] = exch.data.rates
     }
     rate = historicalCache[date][src][dst]
-    res.set('fromcache', 'true').json({ "checkstr": `One ${src} = ${historicalCache[date][src][dst]}` , fromCache: false})
+    res.set('fromcache', 'true').json({ "checkstr": `One ${src} = ${historicalCache[date][src][dst]}`, amount : historicalCache[date][src][dst] , fromCache: false})
     //write object changes to file
     console.log(historicalCache)
     fs.writeFile('historicalCache.json', JSON.stringify(todayCache), (err) => {

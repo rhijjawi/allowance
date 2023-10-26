@@ -10,15 +10,27 @@ export interface ExpenseSchema {
     amount: number
     created_at?: string
     currency: string
-    category : number[] 
+    category : [number, number]
     id?: number
     label: string
     refunded: boolean
     transaction_date: string
     user_id: string | unknown
     recurring: boolean
-    files: string[]
     standardizedCurrency? : number
+    files: string[]
+} 
+export interface IncomeSchema {
+  amount: number
+  currency: string
+  category : [number, number]
+  id?: number
+  label: string
+  transaction_date: string
+  user_id: string | unknown
+  recurring: boolean
+  files: string[]
+  standardizedCurrency? : number
 } 
 export interface CategorySchema{
   category: string

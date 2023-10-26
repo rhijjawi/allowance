@@ -1,4 +1,3 @@
-'use server';
 import { NextApiRequest, NextApiResponse } from "next";
 import { generateTemporaryUrl } from "next-s3-upload";
 
