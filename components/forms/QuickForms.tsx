@@ -59,7 +59,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                     if (data.data){
                         setExpenseData([])
                         const _data = Object.assign({}, data.data[0])
-                        _data['standardizedCurrency'] = await standardizeCurrency(data.data[0], user?.publicMetadata!.currency)
+                        _data['standardizedCurrency'] = await standardizeCurrency(data.data[0], user!.publicMetadata!.currency as string)
                         setExpenseData([...expenseData, _data])
                     }
                 })
@@ -309,7 +309,7 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                     if (data.data){
                         setIncomeData([])
                         const _data = Object.assign({}, data.data[0])
-                        _data['standardizedCurrency'] = await standardizeCurrency(data.data[0], user.user_metadata!.currency)
+                        _data['standardizedCurrency'] = await standardizeCurrency(data.data[0], user!.publicMetadata.currency as string)
                         setIncomeData([...incomeData, _data])
                     }
                 })

@@ -56,7 +56,7 @@ export default function DC(props : any){
                     data={donut}
                     index={'label'}
                     valueFormatter={(number)=>{
-                        return currFormatter(number, user.user_metadata?.currency)
+                        return currFormatter(number, user!.publicMetadata?.currency as string)
                     }}
                     className=" h-80 w-full py-5 mx-2 px-2 rounded-md "
                     colors={donut.map((e : any) => {return getColor(getIDByCategoryName(e.label, categoryData))})}

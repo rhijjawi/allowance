@@ -1,5 +1,4 @@
 'use client';
-
 import { Card, Title, LineChart, Button, BarChart, Grid, Col, Color } from "@tremor/react";
 import { PlusCircleIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useUser, useAuth } from "@clerk/nextjs";
@@ -13,6 +12,7 @@ import { CategorySchema } from "@/types/supabase";
 
 
 export default function Expenditure() {
+
     const {user, isLoaded, isSignedIn} = useUser();
     const {getToken} = useAuth()
     const {expenseData, categoryData, _error, loading} = useExpenses()
@@ -83,7 +83,7 @@ export default function Expenditure() {
             let date = new Date(Date.parse(`${i.transaction_date}`))
             let category = categoryData.find((element : ExpenseType) => {return element.id === i.category[0]}).category
             expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`] ? {} : expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`] = {}
-            expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] ? expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] += await standardizeCurrency(i, user.publicMetadata!.currency) : expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] = await standardizeCurrency(i, user?.publicMetadata.currency)
+            expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] ? expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] += await standardizeCurrency(i, user!.publicMetadata?.currency as string) : expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] = await standardizeCurrency(i, user!.publicMetadata.currency as string)
         }
         if (categories != null){
         categories.forEach((e : any)=>{
@@ -158,7 +158,7 @@ return (
                     return getColor(i.id!)})}
                 categories={categories.map((i : any)=>{return i.category})}
                 index="month"
-                valueFormatter={(number)=>{return currFormatter(number, user?.publicMetadata.currency)}}
+                valueFormatter={(number)=>{return currFormatter(number, user!.publicMetadata.currency as string)}}
                 />
             </Card>
         </div>

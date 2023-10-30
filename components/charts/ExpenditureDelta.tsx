@@ -68,7 +68,7 @@ export function ExpenditureDelta(props: {category : CategorySchema, expenses : E
                     {percentageChange && percentageChange.toFixed(2)}%
                 </BadgeDelta>
             </Flex>
-            <Text className="dark:text-slate-300">{currFormatter(ExpenditureDelta, user?.publicMetadata!.currency)} {direction} than last period</Text>
+            <Text className="dark:text-slate-300">{currFormatter(ExpenditureDelta, user?.publicMetadata!.currency as string)} {direction} than last period</Text>
         </Card>
     )
 }
@@ -137,7 +137,7 @@ export function IncomeDelta(props: {category : CategorySchema, incomes : IncomeT
                     {percentageChange && percentageChange.toFixed(2)}%
                 </BadgeDelta>
             </Flex>
-            <Text className="dark:text-slate-300">{currFormatter(IncomeDelta, user.publicMetadata!.currency)} {direction} than last period</Text>
+            <Text className="dark:text-slate-300">{currFormatter(IncomeDelta, user!.publicMetadata.currency as string)} {direction} than last period</Text>
         </Card>
     )
 }

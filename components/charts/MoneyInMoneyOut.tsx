@@ -41,6 +41,6 @@ export default function MIMO(props: {expenses : ExpenseType[], income : IncomeSc
       categories={["Money In", "Money Out"]}
       colors={["green", "red"]}
       yAxisWidth={70}
-      valueFormatter={(number)=>{return new Intl.NumberFormat('en-US', { style: 'currency',  currency: user?.user_metadata ? user?.user_metadata.currency : "USD"}).format(number)}}
+      valueFormatter={(number)=>{return new Intl.NumberFormat('en-US', { style: 'currency',  currency: user!.publicMetadata  ? user!.publicMetadata.currency as string : "USD"}).format(number)}}
     />)
 }

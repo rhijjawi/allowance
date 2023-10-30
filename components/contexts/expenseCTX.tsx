@@ -41,7 +41,7 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
             if (income.data){
                 let standardizedIncomes : IncomeSchema[] = []
                 for (const _ of income.data){
-                    let standardizedCurrency = await standardizeCurrency(_, user.publicMetadata!.currency!)
+                    let standardizedCurrency = await standardizeCurrency(_, user!.publicMetadata.currency as string)
                     _['standardizedCurrency'] = standardizedCurrency
                     standardizedIncomes.push(_)
                 }
@@ -64,7 +64,7 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
             if (data){
                 let standardizedExpenses : ExpenseSchema[] = []
                 for (let expense of data){
-                    let standardizedCurrency = await standardizeCurrency(expense, user?.publicMetadata.currency)
+                    let standardizedCurrency = await standardizeCurrency(expense, user?.publicMetadata.currency as string)
                     expense['standardizedCurrency'] = standardizedCurrency
                     standardizedExpenses.push(expense)
                 }
