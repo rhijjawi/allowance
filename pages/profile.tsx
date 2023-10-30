@@ -1,4 +1,4 @@
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useUser } from "@clerk/nextjs";
 import { ReactElement, use, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,7 +29,7 @@ function Card(props : any, {...rest}){
   </div>)
 }
 export default function Profile() {
-    const {user,error, isLoading} = useUser()
+    const {user,isLoaded, } = useUser()
     const MonthlyBudget = useRef<HTMLInputElement>(null)
     const MonthlyIncome = useRef<HTMLInputElement>(null)
     const saveRef = useRef<HTMLButtonElement>(null)
@@ -46,13 +46,13 @@ export default function Profile() {
         <div className="w-24 h-24 right-0 left-0 mx-auto ">
             <div className="relative  z-10 text-center inline-flex h-full aspect-square items-center justify-center rounded-full bg-gray-500">
                 <span className="relative text-center inline-flex h-full aspect-square items-center justify-center rounded-lg bg-gray-500 overflow-hidden">
-                    {user?.picture ? <Image alt={""} src={user.picture} width={1000} height={1000}></Image> : <span className="text-md font-medium leading-none text-white">{user?.name?.split(' ').map((i)=>{return i[0]+""})}</span>}
+                    {user?.imageUrl ? <Image alt={""} src={user.imageUrl} width={1000} height={1000}></Image> : <span className="text-md font-medium leading-none text-white">{user?.fullName?.split(' ').map((i)=>{return i[0]+""})}</span>}
                 </span>
             </div>
             </div>
             <div className="relative w-full right-0 h-12 block">
                 <div className="w-fit right-0 absolute left-0 mx-auto mt-3">
-                    <p className="text-xl"><b>{user?.name}</b></p>
+                    <p className="text-xl"><b>{user?.fullName}</b></p>
                 </div>
             </div>
             <div className="my-3 max-w-sm mx-auto">
