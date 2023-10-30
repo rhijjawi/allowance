@@ -5,6 +5,7 @@ import { ExpenseCTXProvider } from '@/components/contexts/expenseCTX';
 import { FileManagerProvider } from '@/components/contexts/fileManagerCTX';
 import Layout from '../components/layout'
 import { TransactionHandlerProvider } from '@/components/contexts/transactionHandler';
+import { AlertProvider } from '@/components/contexts/alertHandler';
 const inter = Inter({ subsets: ['latin'] })
 
 export default function MyApp({Component, pageProps }: {Component: any, pageProps: any}) {
@@ -15,7 +16,9 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
             <FileManagerProvider>
               <TransactionHandlerProvider>
                   <Layout className="h-1000px">
-                    <Component {...pageProps} />
+                    <AlertProvider>
+                      <Component {...pageProps} />
+                    </AlertProvider>
                   </Layout>
               </TransactionHandlerProvider>
             </FileManagerProvider>

@@ -22,6 +22,7 @@
     "axios": "^1.5.1",
     "express": "^4.18.2",
     "flowbite-datepicker": "^1.2.2",
+    "framer-motion": "^10.16.4",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "next": "latest",

@@ -2,12 +2,11 @@
 
 import { Card, Title, LineChart, Button, BarChart, Grid, Col, Color } from "@tremor/react";
 import { PlusCircleIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { UserProfile } from "@auth0/nextjs-auth0/client";
+import { useUser, UserProfile } from '@auth0/nextjs-auth0/client';
 import { getSupabase } from "../../utils/supabase";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import {currFormatter, standardizeCurrency, NumToMonth} from "@/utils/functions/valueFormatters"
+import {currFormatter, standardizeCurrency, NumToMonth, MonthToNum} from "@/utils/functions/valueFormatters"
 import { ExpenseType, useExpenses } from "@/components/contexts/expenseCTX";
 import { getColor } from "@/components/static/categories";
 import { CategorySchema } from "@/types/supabase";
@@ -108,6 +107,9 @@ export default function Expenditure() {
         if (data.length > 0){
             if (active){
                 console.log(data)
+                console.log(data.sort((a : any, b : any) => {
+                    return MonthToNum(a.month.split(' ')[0]) - MonthToNum(b.month.split(' ')[0])
+                }))
                 setChartData(data)
             }
             return () => {active = false}
@@ -135,8 +137,7 @@ export default function Expenditure() {
             }
         });
         setInterval(() => {
-            document.getElementById("barChart")?.style.setProperty("width", (100-Math.random()*0.0000001) + `%`)
-                        }, 200);
+        }, 200);
         setCards(cards)
     }
     }, [chartData])
@@ -150,12 +151,13 @@ return (
                 <Button size="md" className="h-full"><InformationCircleIcon className="h-6 w-6 inline "/><span> Read more</span></Button>
             </div>
         </Card>
-        <div id="barChart" className="w-full">
-            <Card id={""} className="mt-6 block relative bg-white w-full">
+        <div className="w-[100%]">
+            <Card className="mt-6 block relative bg-white w-full">
                 <Title>Overall Expenditure</Title>
                 <BarChart 
+                id={"barChart"}
                 hidden={chartData.length == 0}
-                className="mt-6 aspect-square w-full"
+                className="mt-6 aspect-square w-[100%]"
                 data={chartData} 
                 colors={categories.map((i : any)=>{
                     return getColor(i.id!)})}

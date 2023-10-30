@@ -1,4 +1,4 @@
-import symbols from '../static/symbols';
+import * as symbols from '../static/symbols.json';
 import { useState, useEffect } from 'react';
 import { DatePicker, DatePickerValue, NumberInput, SearchSelect, SearchSelectItem, Select, SelectItem, TextInput } from '@tremor/react';
 import { CurrencyDollarIcon } from '@heroicons/react/24/solid';
@@ -276,7 +276,7 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
     const [category, setCategory] = useState<null|[number, number]>()
     const [isFormValid, setisFormValid] = useState<Boolean|null>(null);
     const {expenseData, categoryData, incomeData, incomeCategoryData, setIncomeData} = useExpenses()
-    const {user, error, isLoading} = useUser();
+    const {user, error, isLoading} = useUser() as {user: Metadata, error: any, isLoading: boolean};
     async function submitForm(fields : {label : string, amount : number, category : [number, number], date : DatePickerValue, currency : string, [index: string]: any}){
         if (!user){
             return router.push('/api/auth/login')
@@ -396,6 +396,7 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                     <select onChange={(e : any)=>{setCategory(JSON.parse(e.target.value))}} className='max-w-sm h-fit px-2 outline-none text-left whitespace-nowrap truncate focus:ring-2 transition duration-100 rounded-tremor-default flex flex-nowrap shadow-tremor-input focus:border-tremor-brand-subtle dark:shadow-dark-tremor-input dark:focus:border-dark-tremor-brand-subtle pl-3 pr-8 py-2 border bg-tremor-background dark:bg-dark-tremor-background hover:bg-tremor-background-muted dark:hover:bg-dark-tremor-background-muted text-tremor-content dark:text-dark-tremor-content border-tremor-border dark:border-dark-tremor-border'>
                             <option>Select a category...</option>
                             {incomeCategoryData.map((a : CategorySchema, indexa: number)=>{
+                            //@ts-ignore
                             return (<optgroup label={a.category} key={indexa}>{a.subcategories.map((b : string, indexb : number)=>{return <option key={indexb} value={JSON.stringify([indexa+1, indexb])}>{b}</option>})}
                             </optgroup>)
                         }

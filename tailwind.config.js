@@ -106,6 +106,8 @@ module.exports = {
           "50%": {
             transform: "translateX(-5px)",
           },
+        },
+        'text_slide': {
         }
       },
       animation: {

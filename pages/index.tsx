@@ -1,109 +1,270 @@
 import Image from 'next/image'
+import { ArrowTrendingDownIcon, BanknotesIcon, CpuChipIcon, CurrencyDollarIcon, GlobeAltIcon, AcademicCapIcon, HomeModernIcon, LockClosedIcon, EyeSlashIcon, ArrowUpOnSquareStackIcon } from '@heroicons/react/24/outline'
+import { Select, SelectItem, Text, Color} from '@tremor/react'
+import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from "framer-motion";
+import Link from 'next/link';
+import DownButtonJump from "@/components/ui/buttons/DownButtonJump"
 
-export default function Home(props : any) {
+export  default function Home(props : any) {
+  const [value, setValue] = useState('0');
+  useEffect(()=>{
+    console.log(value)
+  })
   return (
     <>
-      <div className="max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+        <DownButtonJump/>
+        <div className="overflow-hidden bg-white dark:bg-black w-full border-t-2">
+        <div className="h-fit py-5 border-b-2 mb-5">
+        <div className="mx-auto max-w-fit">
+          <Select enableClear={false} onValueChange={(e)=>setValue(e)} defaultValue='0' className='dark:border dark:border-white rounded-md' color='red'>
+            <SelectItem className="py-3 px-2 hover:cursor-pointer " color={''} value={"0"}>Everyone</SelectItem>
+            <SelectItem className="py-3 px-2 hover:cursor-pointer " value={"1"}>For Students</SelectItem>
+            <SelectItem className="py-3 px-2 hover:cursor-pointer " value={"2"}>For Parents</SelectItem>
+          </Select>
+        </div>
+        </div>
+        <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
+          {(value=='0' || value == "") ? 
+            <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{duration: 1.6}}
+            className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 mb-10">
+            <div className="lg:pr-8 col-start-1 lg:pt-4">
+              <div className="lg:max-w-lg">
+                <h2 className="text-lg font-semibold leading-7 text-indigo-600">LogMoney</h2>
+                <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">Save more, spend less.</p>
+                <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-white">
+                  A comprehensive financial management platform to help you regain control of your finances.
+                </p>
+                <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 dark:text-gray-500 lg:max-w-none">
+                  {[
+                    {
+                      name: "AI Powered Savings",
+                      icon: CpuChipIcon,
+                      description: "Computer vision and machine learning to help you save money (better)."
+                    },
+                    {
+                      name : "Expense Tracking",
+                      icon: CurrencyDollarIcon,
+                      icon_color: "text-red-500",
+                      description: "Effortlessly track and categorize your expenses to gain insights into your spending habits."
+                    },
+                    {
+                      name : "Income Tracking",
+                      icon: CurrencyDollarIcon,
+                      icon_color: "text-green-500",
+                      description: "Organize your income sources and understand your cash flow for better financial planning."
+                    },
+                    {
+                      name : "Upload Receipts",
+                      icon: ArrowUpOnSquareStackIcon,
+                      description: "Our dashboard allows you to upload receipts and track your expenses on the go."
+                    },
+                    {
+                      name: "Debt Management",
+                      icon: ArrowTrendingDownIcon,
+                      description : "Create a debt reduction plan and monitor your progress towards becoming debt-free."
+                    },
+                    {
+                      name: "International Currency Support",
+                      icon: GlobeAltIcon,
+                      description : "Easily manage your finances in multiple currencies, making it convenient for international transactions and travel."
+                    },
+                    {
+                      name: "Secure and Private",
+                      icon: LockClosedIcon,
+                      description: "We prioritize your data security and privacy. Your financial information is encrypted and protected. We do not sell your data to third parties, nor do we plan on doing so. Ever.",
+                    }
+                    ].map((feature) => (
+                    <div key={feature.name} className="relative pl-9">
+                      <dt className="inline font-semibold text-gray-900 dark:text-gray-300">
+                        {feature.icon && <feature.icon className={`absolute left-1 top-1 h-5 w-5 ${feature.icon_color ? feature.icon_color : "text-indigo-600"}`} aria-hidden="true" />}
+                        {feature.name}
+                      </dt>{' '}
+                      <dd className="inline">{feature.description}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+            <img
+              src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
+              alt="Product screenshot"
+              className="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
+              width={2432}
+              height={1442}
             />
-          </a>
+            </motion.div>
+           : null}
+          {value=='1' ? 
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{duration: 1.6}}
+            className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 mb-10">
+            <div className="lg:pr-8 col-start-1 lg:pt-4">
+              <div className="lg:max-w-lg">
+                <h2 className="text-lg font-semibold leading-7 text-indigo-600">LogMoney</h2>
+                <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">Built for students.</p>
+                <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
+                  Your comprehensive financial management platform to help YOU regain control of your finances.
+                </p>
+                <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 dark:text-gray-400 lg:max-w-none">
+                  {[
+                    {
+                      name: "AI Powered Savings (Coming soon!)",
+                      icon: CpuChipIcon,
+                      description: "Computer vision and machine learning to help you save money (better)."
+                    },
+                    {
+                      name: "Daily Budgeting",
+                      icon: BanknotesIcon,
+                      description: "Set a daily budget and track your spending to ensure you don't overspend."
+                    },
+                    {
+                      name : "Expense Tracking",
+                      icon: CurrencyDollarIcon,
+                      icon_color: "text-red-500",
+                      description: "Effortlessly track and categorize your expenses to gain insights into your spending habits."
+                    },
+                    {
+                      name : "Income Tracking",
+                      icon: CurrencyDollarIcon,
+                      icon_color: "text-green-500",
+                      description: "Organize your income sources and understand your cash flow for better financial planning."
+                    },
+                    {
+                      name : "Upload Receipts",
+                      icon: ArrowUpOnSquareStackIcon,
+                      description: "Our dashboard allows you to upload receipts and track your expenses on the go."
+                    },
+                    {
+                      name: "Debt Management",
+                      icon: ArrowTrendingDownIcon,
+                      description : "Create a debt reduction plan and monitor your progress towards becoming debt-free."
+                    },
+                    {
+                      icon: GlobeAltIcon,
+                      name: "International Currency Support",
+                      description : "Easily manage your finances in multiple currencies, making it convenient for international transactions and travel."
+                    },
+                    {
+                      icon: EyeSlashIcon,
+                      name: "Privacy",
+                      description: "Only share what matters. If you don't want to share your financial information with your parents, you don't have to."
+                    }
+                    ].map((feature) => (
+                    <div key={feature.name} className="relative pl-9">
+                      <dt className="inline font-semibold text-gray-900 dark:text-gray-400">
+                        {feature.icon && <feature.icon className={`absolute left-1 top-1 h-5 w-5 ${feature.icon_color ? feature.icon_color : "text-indigo-600"}`} aria-hidden="true" />}
+                        {feature.name}
+                      </dt>{' '}
+                      <dd className="inline">{feature.description}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+              <img
+                src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
+                alt="Product screenshot"
+                className="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
+                width={2432}
+                height={1442}
+              />
+          </motion.div> : null}
+          {value=='2' ? <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{duration: 1.6}}
+            className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 mb-10">
+            <div className="lg:pr-8 col-start-1 lg:pt-4">
+              <div className="lg:max-w-lg">
+                <h2 className="text-lg font-semibold leading-7 text-indigo-600">LogMoney</h2>
+                <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">Built for Parents.</p>
+                <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
+                  A platform built to help your children through their journey of financial literacy.
+                </p>
+                <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 dark:text-gray-400 lg:max-w-none">
+                  {[
+                    {
+                      name: "AI Powered Savings",
+                      icon: CpuChipIcon,
+                      description: "Computer vision and machine learning to help your kids save money."
+                    },
+                    {
+                      name : "Expense Tracking",
+                      icon: CurrencyDollarIcon,
+                      icon_color: "text-red-500",
+                      description: "Effortlessly track and categorize your expenses to gain insights into your spending habits."
+                    },
+                    {
+                      name : "Income Tracking",
+                      icon: CurrencyDollarIcon,
+                      icon_color: "text-green-500",
+                      description: "Organize your income sources and understand your cash flow for better financial planning."
+                    },
+                    {
+                      name: "Debt Management",
+                      icon: ArrowTrendingDownIcon,
+                      description : "Create a debt reduction plan and monitor your progress towards becoming debt-free."
+                    },
+                    {
+                      icon: GlobeAltIcon,
+                      name: "International Currency Support",
+                    description : "Reduce the hassle of converting currencies, we'll do it for you. Select your preferred currency in three clicks."
+                    },
+                    {
+                      icon: EyeSlashIcon,
+                      name: "Privacy",
+                      description: "We'll only send you what matters. If your child doesn't want to share certain information with you, they won't have to."
+                    }
+                    ].map((feature) => (
+                    <div key={feature.name} className="relative pl-9">
+                      <dt className="inline font-semibold text-gray-900 dark:text-gray-400">
+                        {feature.icon && <feature.icon className={`absolute left-1 top-1 h-5 w-5 ${feature.icon_color ? feature.icon_color : "text-indigo-600"}`} aria-hidden="true" />}
+                        {feature.name}
+                      </dt>{' '}
+                      <dd className="inline">{feature.description}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+            <img
+              src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
+              alt="Product screenshot"
+              className="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
+              width={2432}
+              height={1442}
+            />
+           </motion.div> : null}
+          <div id="cta-box" className="mx-auto max-w-3xl px-6 py-12 sm:py-12 lg:px-8 border rounded-md mb-10">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              <span className="text-indigo-600">Finances are complicated.</span>
+              <br />
+              <span className='dark:text-white'>With LogMoney, it doesn't have to be.</span>
+            </h2>
+            <div className="mt-10 flex items-center gap-x-6">
+              <button
+                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                <Link href="/sign-up">Get started</Link>
+              </button>
+              <Link href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+                Learn more <span aria-hidden="true">→</span>
+              </Link>
+            </div> 
+          </div> 
+
         </div>
       </div>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
     </>
   )
 }

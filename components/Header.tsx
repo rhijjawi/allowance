@@ -6,6 +6,7 @@ import {
   ArrowPathIcon,
   Bars3Icon,
   ChartPieIcon,
+  CreditCardIcon,
   CursorArrowRaysIcon,
   FingerPrintIcon,
   SquaresPlusIcon,
@@ -19,7 +20,8 @@ import {ExpenditureDialog} from './forms/QuickForms'
 
 const products = [
   { name: 'Overview', description: 'Get a better understanding of your expenditure', href: '/expenditure/overview', icon: ChartPieIcon },
-  { name: 'My Expenditure', description: 'Get a broken-down list of your expenditure', href: '/expenditure/list', icon: TableCellsIcon }
+  { name: 'My Expenditure', description: 'Get a broken-down list of your expenditure', href: '/expenditure/list', icon: TableCellsIcon},
+  { name : 'Debt Management', description: 'Manage your debt', href: '/debt/overview', icon: CreditCardIcon},
 ]
 
 function classNames(...classes : any[]) {
@@ -29,7 +31,7 @@ function classNames(...classes : any[]) {
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const { user, error, isLoading } = useUser();
-    let [isOpen, setIsOpen] = useState<boolean>(false)    
+    let [isOpen, setIsOpen] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)  
     
     const callsToAction = [
@@ -40,10 +42,10 @@ export default function Header() {
         <header className="bg-white z-50">
         <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
             <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
+            <Link href="/" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
                 <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
-            </a>
+            </Link>
             </div>
             <div className="flex lg:hidden">
             <button
@@ -72,7 +74,7 @@ export default function Header() {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
                 >
-                <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                <Popover.Panel className="absolute -left-8 top-full z-20 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
                     <div className="p-4">
                     {products.map((item) => (
                         <div
@@ -108,11 +110,11 @@ export default function Header() {
                 </Transition>
             </Popover>
 
+            <Link href="/reports" className="text-sm font-semibold leading-6 text-gray-900">
+                Reports
+            </Link>
             <Link href="/faq" className="text-sm font-semibold leading-6 text-gray-900">
                 FAQ
-            </Link>
-            <Link href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                Marketplace
             </Link>
             <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
                 Company

@@ -1,4 +1,4 @@
-import { ExpenseType } from "@/components/contexts/expenseCTX";
+import { ExpenseType, IncomeType } from "@/components/contexts/expenseCTX";
 export const currFormatter = (number: number, curr: string = "USD") => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: curr}).format(number)
 };
@@ -16,4 +16,7 @@ export const standardizeCurrency = async(transaction : ExpenseType|IncomeType, c
 }
 export const NumToMonth = (number : number) : string => {
     return "January,February,March,April,May,June,July,August,September,October,November,December".split(",")[number]
+}
+export const MonthToNum = (month : string) : number => {
+    return "January,February,March,April,May,June,July,August,September,October,November,December".split(",").indexOf(month)
 }
