@@ -1,5 +1,5 @@
 import React, { createContext, use, useContext, useEffect, useState } from "react";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { getSupabase } from "@/utils/supabase";
 import { useRouter } from "next/router";
 import { ExpenseSchema, CategorySchema, IncomeSchema } from "@/types/supabase";
@@ -15,18 +15,20 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
     const [loading, setLoading] = useState<boolean>(true)
     const [_error, _setError] = useState<boolean>(false)
     const router = useRouter()
-    const { user, error, isLoading } = useUser() as {user : Metadata, error: any, isLoading: boolean};
-    
+    const { user, isSignedIn, isLoaded } = useUser()
+    const {getToken} = useAuth()
     useEffect(() => {
-        if (!user && !isLoading){
+        if (!user && isLoaded){
             setLoading(false)
             _setError(true)
         }
-        
+        //(requesting_user_id() = user_id)
         async function fetchExpenses(){
-            const supabase = await getSupabase(user!.accessToken)
-            console.log(supabase)
+            const token = await getToken({template: "supabase"})
+            const supabase = await getSupabase(token)
             const { data, error } = await supabase.from('expenses').select('*').order('transaction_date', { ascending: false }) as {data : ExpenseSchema[], error:any}
+            
+            console.log(user, token, data)
             const categories  = await supabase.from('categories').select('*').order('id', { ascending: true })
             if (categories.data){
                 setcategoryData(categories.data)
@@ -39,7 +41,7 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
             if (income.data){
                 let standardizedIncomes : IncomeSchema[] = []
                 for (const _ of income.data){
-                    let standardizedCurrency = await standardizeCurrency(_, user.user_metadata?.currency)
+                    let standardizedCurrency = await standardizeCurrency(_, user.publicMetadata!.currency!)
                     _['standardizedCurrency'] = standardizedCurrency
                     standardizedIncomes.push(_)
                 }
@@ -53,14 +55,16 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
             }
             if (error || income.error || categories.error || incomeCategories.error){
                 if (error.code == "PGRST301") {
-                    router.push('/api/auth/login')
+                    {/* 
+                        RE LOG IN!!!
+                    */}
                 }
                 _setError(true)
             }
             if (data){
                 let standardizedExpenses : ExpenseSchema[] = []
                 for (let expense of data){
-                    let standardizedCurrency = await standardizeCurrency(expense, user.user_metadata?.currency)
+                    let standardizedCurrency = await standardizeCurrency(expense, user?.publicMetadata.currency)
                     expense['standardizedCurrency'] = standardizedCurrency
                     standardizedExpenses.push(expense)
                 }
@@ -68,7 +72,7 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
             }
             setLoading(false)
         }
-        if (user && !isLoading){
+        if (user && isLoaded){
             fetchExpenses()
         }
         

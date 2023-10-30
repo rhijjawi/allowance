@@ -1,7 +1,7 @@
 import { Color, DonutChart, Title, Text, Bold } from "@tremor/react"
 import { useEffect, useState } from "react"
 import { CategorySchema, ExpenseSchema } from "@/types/supabase"
-import { UserProfile, useUser } from "@auth0/nextjs-auth0/client"
+import { useUser } from "@clerk/nextjs"
 import {NumToMonth, standardizeCurrency, currFormatter } from "@/utils/functions/valueFormatters"
 import UserType from "@/components/interfaces/userwithMetadata"
 import sliceType from "../interfaces/sliceType"
@@ -13,7 +13,7 @@ export default function DC(props : any){
     const [slice, setSlice] = useState<sliceType>()
     let expenseData : ExpenseSchema[] = props.expenseData
     let categoryData : CategorySchema[] = props.categoryData//
-    const {user} = useUser() as {user: UserType}
+    const {user, isSignedIn, isLoaded} = useUser()
     const [Badge, setBadge] = useState<any>()
     useEffect(()=>{
         if (slice){

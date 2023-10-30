@@ -1,14 +1,14 @@
 import { BarChart } from "@tremor/react";
 import { ExpenseType } from "../contexts/expenseCTX";
 import { currFormatter } from "@/utils/functions/valueFormatters";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useUser } from "@clerk/nextjs"
 
 
 import UserType from "../interfaces/userwithMetadata";
 import { useEffect, useState } from "react";
 import { IncomeSchema } from "@/types/supabase";
 export default function MIMO(props: {expenses : ExpenseType[], income : IncomeSchema[]}){
-    const {user, error} = useUser() as {user: UserType, error : unknown}
+    const {user, isSignedIn, isLoaded} = useUser()
     const [moneyOut, setmoneyOut] = useState<number>(0)
     const [moneyIn, setMoneyIn] = useState<number>(0)
     useEffect(()=>{

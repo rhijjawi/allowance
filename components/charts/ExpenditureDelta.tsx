@@ -4,12 +4,12 @@ import { BadgeDelta, Flex, Metric, Title, Text, Subtitle, DeltaType, Card } from
 import {MonthExpenses, From1sttoNowEXP, From1sttoNowINC} from "@/utils/functions/filterData"
 import { currFormatter } from "@/utils/functions/valueFormatters";
 import Metadata from "../interfaces/userwithMetadata";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useUser } from "@clerk/nextjs";
 export function ExpenditureDelta(props: {category : CategorySchema, expenses : ExpenseType[]}){
     const categorySum = From1sttoNowEXP(props.expenses, props.category)
     const lastMonthSum = categorySum[1].reduce((a, b) => a + b.standardizedCurrency!, 0)
     const thisMonthSum = categorySum[0].reduce((a, b) => a + b.standardizedCurrency!, 0)
-    const {user} = useUser() as {user: Metadata}
+    const {user, isSignedIn, isLoaded} = useUser()
     let ExpenditureDelta = 0
     let direction;
     if (lastMonthSum > thisMonthSum){
@@ -68,7 +68,7 @@ export function ExpenditureDelta(props: {category : CategorySchema, expenses : E
                     {percentageChange && percentageChange.toFixed(2)}%
                 </BadgeDelta>
             </Flex>
-            <Text className="dark:text-slate-300">{currFormatter(ExpenditureDelta, user.user_metadata!.currency)} {direction} than last period</Text>
+            <Text className="dark:text-slate-300">{currFormatter(ExpenditureDelta, user?.publicMetadata!.currency)} {direction} than last period</Text>
         </Card>
     )
 }
@@ -78,7 +78,7 @@ export function IncomeDelta(props: {category : CategorySchema, incomes : IncomeT
     console.log(categorySum)
     const lastMonthSum = categorySum[1].reduce((a, b) => a + b.standardizedCurrency!, 0)
     const thisMonthSum = categorySum[0].reduce((a, b) => a + b.standardizedCurrency!, 0)
-    const {user} = useUser() as {user: Metadata}
+    const {user} = useUser()
     let IncomeDelta = 0
     let direction;
     if (lastMonthSum > thisMonthSum){
@@ -137,7 +137,7 @@ export function IncomeDelta(props: {category : CategorySchema, incomes : IncomeT
                     {percentageChange && percentageChange.toFixed(2)}%
                 </BadgeDelta>
             </Flex>
-            <Text className="dark:text-slate-300">{currFormatter(IncomeDelta, user.user_metadata!.currency)} {direction} than last period</Text>
+            <Text className="dark:text-slate-300">{currFormatter(IncomeDelta, user.publicMetadata!.currency)} {direction} than last period</Text>
         </Card>
     )
 }

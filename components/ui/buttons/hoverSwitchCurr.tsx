@@ -1,6 +1,6 @@
 import { ExpenseSchema } from "@/types/supabase"
 import { currFormatter } from "@/utils/functions/valueFormatters"
-import { useUser } from "@auth0/nextjs-auth0/client"
+import { useUser } from "@clerk/nextjs"
 import { Button } from "@tremor/react"
 import { useState } from "react"
 import UserType from "@/components/interfaces/userwithMetadata"

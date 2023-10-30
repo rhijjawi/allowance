@@ -1,5 +1,6 @@
 import React, { createContext, use, useContext, useEffect, useState } from "react";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useUser } from "@clerk/nextjs";
+
 import { useExpenses, ExpenseType } from "@/components/contexts/expenseCTX";
 import { Dialog } from "@headlessui/react";
 import { DragAndDrop } from "@/components/forms/uploadFile";
@@ -10,7 +11,7 @@ const FileManagerCTX = createContext<any>([])
 export function FileManagerProvider({children} : {children: React.ReactNode}){
     const [loading, setLoading] = useState<boolean>(true)
     const [_error, _setError] = useState<boolean>(false)
-    const { user, error, isLoading } = useUser();
+    const { user, isSignedIn, isLoaded } = useUser()
     const [open, setOpen] = useState<boolean>(false)
     const { expenseData,  } = useExpenses()
     const [expense, setExpense] = useState<ExpenseType|null>(null)
@@ -62,7 +63,7 @@ export function FileManagerProvider({children} : {children: React.ReactNode}){
                                 <Text>This transaction took place on <Bold>{new Date(resolvedExpense.transaction_date).toLocaleDateString()}</Bold>.</Text>
                             </div>
                             <div className="min-w-full py-3">
-                                <DragAndDrop id={resolvedExpense.id!} user={user!.sub}/>
+                                <DragAndDrop id={resolvedExpense.id!} user={user?.id}/>
                             </div>
                         </div>
                         )}

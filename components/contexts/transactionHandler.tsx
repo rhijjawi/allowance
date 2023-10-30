@@ -1,4 +1,4 @@
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { Dialog } from "@headlessui/react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ExpenseType, useExpenses } from "./expenseCTX";
@@ -8,16 +8,17 @@ import {CheckIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import { getSupabase } from "@/utils/supabase";
 import { useRouter } from "next/router";
 const TransactionHandlerCTX = createContext<any>([])
-
 export function TransactionHandlerProvider({children} : {children: React.ReactNode}){
-    const { user, error, isLoading } = useUser();
+    const { user, isSignedIn, isLoaded } = useUser()
+    const {getToken} = useAuth()
     const [handlerMode, setHandlerMode] = useState<any[]>([null, null])
     const [resolvedExpense, setResolvedExpense] = useState<ExpenseType|null>(null)
     let { expenseData  } = useExpenses()
     const router = useRouter()
+
     const functions = {
         'delete' : async() => {
-            await (await getSupabase(user!.accessToken)).from('expenses').delete().eq('id', handlerMode[1])
+            await (await getSupabase(await getToken({template: "supabase"}))).from('expenses').delete().eq('id', handlerMode[1])
             setHandlerMode([null, null])
             return router.reload()
         },

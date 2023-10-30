@@ -2,7 +2,7 @@
 
 import { Card, Title, LineChart, Button, BarChart, Grid, Col, Color } from "@tremor/react";
 import { PlusCircleIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
-import { useUser, UserProfile } from '@auth0/nextjs-auth0/client';
+import { useUser, useAuth } from "@clerk/nextjs";
 import { getSupabase } from "../../utils/supabase";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -13,29 +13,24 @@ import { CategorySchema } from "@/types/supabase";
 
 
 export default function Expenditure() {
-    interface Metadata extends UserProfile{
-        user_metadata: {
-            currency: string
-        }
-    }
-    //@ts-expect-error
-    const {user, error, isLoading} = useUser() as {user: Metadata, error: Error, isLoading: boolean};
+    const {user, isLoaded, isSignedIn} = useUser();
+    const {getToken} = useAuth()
     const {expenseData, categoryData, _error, loading} = useExpenses()
     const [categories, setCategories] = useState<any>([])
     const [chartData, setChartData] = useState<any>([])
     const [cards, setCards] = useState<any>([])
     const router = useRouter()
     useEffect(()=>{
-        if (!user && !isLoading){
+        if (!user && isLoaded){
             router.push('/api/auth/login')
             return
-        }}, [isLoading])
+        }}, [isLoaded])
     useEffect(()=>{
         let active = true
         if (user){
-            if (isLoading){return}
+            if (isLoaded){return}
             if (categories.length == 0){
-                getSupabase(user.accessToken).then((supabase)=>{
+                getToken({template: "supabase"}).then((token)=>getSupabase(token)).then((supabase)=>{
                     supabase.from('categories').select('*').then((categorydata)=>{
                         if (categorydata.data){
                             if (active){
@@ -44,7 +39,7 @@ export default function Expenditure() {
                         }
                         if (categorydata.error){
                             if (categorydata.error.code == "PGRST301"){
-                                router.push('/api/auth/login')
+                                // router.push('/api/auth/login')
                             }
                         }
                     })
@@ -54,7 +49,7 @@ export default function Expenditure() {
             }
         }
     return () => {active = false}
-    }, [isLoading])
+    }, [isLoaded])
     
     // useEffect(()=>{
     //     let active = true
@@ -88,7 +83,7 @@ export default function Expenditure() {
             let date = new Date(Date.parse(`${i.transaction_date}`))
             let category = categoryData.find((element : ExpenseType) => {return element.id === i.category[0]}).category
             expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`] ? {} : expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`] = {}
-            expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] ? expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] += await standardizeCurrency(i, user.user_metadata.currency) : expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] = await standardizeCurrency(i, user.user_metadata.currency)
+            expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] ? expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] += await standardizeCurrency(i, user.publicMetadata!.currency) : expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] = await standardizeCurrency(i, user?.publicMetadata.currency)
         }
         if (categories != null){
         categories.forEach((e : any)=>{
@@ -163,7 +158,7 @@ return (
                     return getColor(i.id!)})}
                 categories={categories.map((i : any)=>{return i.category})}
                 index="month"
-                valueFormatter={(number)=>{return currFormatter(number, user.user_metadata!.currency)}}
+                valueFormatter={(number)=>{return currFormatter(number, user?.publicMetadata.currency)}}
                 />
             </Card>
         </div>

@@ -5,14 +5,15 @@ import { useRef, useState } from "react";
 import axios from "axios";
 import { usePresignedUpload, useS3Upload } from "next-s3-upload";
 import { getSupabase } from "@/utils/supabase";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useAuth, useUser } from "@clerk/nextjs";
 export function DragAndDrop(props: {id : number, user : any}) {
   let { uploadToS3 } = usePresignedUpload();
   const [dragActive, setDragActive] = useState<boolean>(false);
   const inputRef = useRef<any>(null);
   const [filesArr, setFilesArr] = useState<any>([]);
   const [fileKeys, setFileKeys] = useState<any>([]);
-  const {user, error, isLoading} = useUser()
+  const {user, isLoaded, isSignedIn} = useUser();
+  const {getToken} = useAuth()
   function handleChange(e: any) {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
@@ -33,7 +34,7 @@ export function DragAndDrop(props: {id : number, user : any}) {
         fileKeys = [...fileKeys, key]
         if (url){await axios.get(`/api/generate-temporary-url?key=${key}`)}
       }
-      let {data, error} = await (await getSupabase(user!.accessToken)).from('expenses').update({files: fileKeys}).eq('id', props.id).select()
+      let {data, error} = await (await getSupabase(await getToken({template: "supabase"}))).from('expenses').update({files: fileKeys}).eq('id', props.id).select()
       console.log(data, error)
     }
   }

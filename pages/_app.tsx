@@ -6,12 +6,14 @@ import { FileManagerProvider } from '@/components/contexts/fileManagerCTX';
 import Layout from '../components/layout'
 import { TransactionHandlerProvider } from '@/components/contexts/transactionHandler';
 import { AlertProvider } from '@/components/contexts/alertHandler';
+import { ClerkProvider } from '@clerk/nextjs';
 const inter = Inter({ subsets: ['latin'] })
 
 export default function MyApp({Component, pageProps }: {Component: any, pageProps: any}) {
   return (
     <>
-      <UserProvider>
+      {/* <UserProvider> */}
+      <ClerkProvider>
         <ExpenseCTXProvider>
             <FileManagerProvider>
               <TransactionHandlerProvider>
@@ -23,7 +25,8 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
               </TransactionHandlerProvider>
             </FileManagerProvider>
         </ExpenseCTXProvider>
-      </UserProvider>
+      </ClerkProvider>
+      {/* </UserProvider> */}
     </>
   )
 }

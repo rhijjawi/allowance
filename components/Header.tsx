@@ -17,6 +17,7 @@ import { ChevronDownIcon, PhoneIcon, PlayCircleIcon, PlusCircleIcon, CalendarDay
 import Link from 'next/link';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import {ExpenditureDialog} from './forms/QuickForms'
+import { UserButton } from '@clerk/nextjs';
 
 const products = [
   { name: 'Overview', description: 'Get a better understanding of your expenditure', href: '/expenditure/overview', icon: ChartPieIcon },
@@ -30,7 +31,6 @@ function classNames(...classes : any[]) {
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const { user, error, isLoading } = useUser();
     let [isOpen, setIsOpen] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)  
     
@@ -121,9 +121,9 @@ export default function Header() {
             </a>
             </Popover.Group>
             <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href={!user?.name ? "/api/auth/login" : "/profile"} className="text-sm font-semibold leading-6 text-gray-900">
-                {!user?.name ? 'Log in →' : (`Signed in as ${user.name}`)}
-            </a>
+            {/* <a href={!user?.name ? "/api/auth/login" : "/profile"} className="text-sm font-semibold leading-6 text-gray-900"> */}
+                <UserButton afterSignOutUrl="/"/>
+            {/* </a> */}
             </div>
         </nav>
         <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>

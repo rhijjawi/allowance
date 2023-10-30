@@ -7,7 +7,7 @@ import { sortData } from "@/utils/functions/sortData"
 import { CheckIcon, PencilIcon, TrashIcon} from "@heroicons/react/24/solid"
 import { useFileUpload } from "@/components/contexts/fileManagerCTX"
 import { useTransactionHandler } from "@/components/contexts/transactionHandler"
-import { useUser, UserProfile } from "@auth0/nextjs-auth0/client"
+import { useUser } from "@clerk/nextjs"
 import UpcomingTable from "@/components/charts/UpcomingTable"
 import DonutCategory from "@/components/charts/DonutCategory"
 import MIMO from "@/components/charts/MoneyInMoneyOut"
@@ -24,7 +24,7 @@ let TableHeadStyle = ["dark:bg-black bg-white select-none","h-6 relative right-0
 let ChevronStyle = ["absolute w-8 aspect-square rounded-full right-0 bottom-0 top-0 my-auto mr-4","w-8 h-8 border-2 rounded-full absolute"]
 
 export default function listPage(){
-    const {user, error, isLoading}  = useUser() as {user: UserType, error: any, isLoading: boolean}
+    const { user, isSignedIn, isLoaded } = useUser()
     const [filtermode, setFiltermode] = useState<number>(0) // 0: all, 1: past 2 weeks, 2: past month, 3: past year
     const filterlabels = ["All Expenditure", "Expenditure in the past 2 weeks", "Expenditure in the past month", "Expenditure in the past year"]
     const selectLabels = ["All", "14 days", "30 days", "365 days"]

@@ -2,14 +2,14 @@ import * as symbols from '../static/symbols.json';
 import { useState, useEffect } from 'react';
 import { DatePicker, DatePickerValue, NumberInput, SearchSelect, SearchSelectItem, Select, SelectItem, TextInput } from '@tremor/react';
 import { CurrencyDollarIcon } from '@heroicons/react/24/solid';
-import { useUser } from '@auth0/nextjs-auth0/client';
+import { useAuth, useUser } from '@clerk/nextjs';
 import { Dialog } from '@headlessui/react';
 import { useRouter } from 'next/router';
 import { getSupabase } from '@/utils/supabase';
 import { useExpenses, ExpenseType } from '../contexts/expenseCTX'
 import { CategorySchema, IncomeSchema } from '@/types/supabase';
 import { standardizeCurrency } from '@/utils/functions/valueFormatters';
-import Metadata from '../interfaces/userwithMetadata';
+
 export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
     const router = useRouter()
     const [loading, setLoading] = useState<boolean>(false)
@@ -24,12 +24,10 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
     const [category, setCategory] = useState<null|[number, number]>(null)
     const [isFormValid, setisFormValid] = useState<Boolean|null>(null);
     const {expenseData, categoryData, isLoading, setExpenseData} = useExpenses()
-    //@ts-ignore
-    const {user, error, Loading} = useUser() as {user: Metadata, error: any, Loading: boolean};
+    const { user, isSignedIn, isLoaded } = useUser()
+    const { getToken } = useAuth();
     async function submitForm(fields : {label : string, amount : number, category : number[], date : DatePickerValue, currency : string, whoPaid : string|number, [index: string]: any}){
-        if (!user){
-            return router.push('/api/auth/login')
-        }
+        
         let inv = false
         Object.keys(fields).forEach((key : string)=>{
                 console.log(key, fields[key])
@@ -40,7 +38,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                 }
         });
         if (!inv){
-            getSupabase(user.accessToken).then((supabase)=>{
+            getToken({template: "supabase"}).then(async(token)=>getSupabase(token)).then((supabase)=>{
                 //@ts-ignore
                 let date = new Date(transactionDate)
                 date.setUTCHours(12)
@@ -53,7 +51,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                     label: transactionLabel,
                     refunded: false,
                     transaction_date: `${((new Date(date)).toISOString()).toLocaleString()}`,
-                    user_id: user.sub,
+                    user_id: user!.id,
                     files: []
                 }
                 console.log(data)
@@ -61,7 +59,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                     if (data.data){
                         setExpenseData([])
                         const _data = Object.assign({}, data.data[0])
-                        _data['standardizedCurrency'] = await standardizeCurrency(data.data[0], user.user_metadata!.currency)
+                        _data['standardizedCurrency'] = await standardizeCurrency(data.data[0], user?.publicMetadata!.currency)
                         setExpenseData([...expenseData, _data])
                     }
                 })
@@ -69,7 +67,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                 setLoading(false)
                 props.setIsOpen(false)
             })
-        }
+        };
 
     }
     useEffect(()=>{
@@ -276,10 +274,11 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
     const [category, setCategory] = useState<null|[number, number]>()
     const [isFormValid, setisFormValid] = useState<Boolean|null>(null);
     const {expenseData, categoryData, incomeData, incomeCategoryData, setIncomeData} = useExpenses()
-    const {user, error, isLoading} = useUser() as {user: Metadata, error: any, isLoading: boolean};
+    const {user, isLoaded, isSignedIn} = useUser();
+    const {getToken} = useAuth();
     async function submitForm(fields : {label : string, amount : number, category : [number, number], date : DatePickerValue, currency : string, [index: string]: any}){
         if (!user){
-            return router.push('/api/auth/login')
+            
         }
         let inv = false
         Object.keys(fields).forEach((key : string)=>{
@@ -291,12 +290,12 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                 }
         });
         if (!inv){
-            getSupabase(user.accessToken).then((supabase)=>{
+            getToken({template: "supabase"}).then((token)=>getSupabase(token).then((supabase)=>{
                 //@ts-ignore
                 let date = new Date(transactionDate)
                 date.setUTCHours(12)
                 let data : IncomeSchema = {
-                    user_id: user.sub,
+                    user_id: user!.id,
                     amount: AmountValue,
                     category: category!,
                     recurring: isSub,
@@ -316,7 +315,7 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                 })
                 setLoading(false)
                 props.setIsOpen(false)
-            })
+            }))
         }
 
     }
