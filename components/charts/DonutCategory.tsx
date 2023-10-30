@@ -1,3 +1,4 @@
+
 import { Color, DonutChart, Title, Text, Bold } from "@tremor/react"
 import { useEffect, useState } from "react"
 import { CategorySchema, ExpenseSchema } from "@/types/supabase"
@@ -49,6 +50,7 @@ export default function DC(props : any){
         }
     }, [props.expenseData])
     let MonthAsString = (NumToMonth(new Date().getUTCMonth()))
+    //@ts-ignore
     return (
         <>
             <Title>Expenditure by Category ({MonthAsString})</Title>
