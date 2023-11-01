@@ -17,7 +17,7 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
         <ExpenseCTXProvider>
             <FileManagerProvider>
               <TransactionHandlerProvider>
-                  <Layout className="h-1000px">
+                  <Layout>
                     <AlertProvider>
                       <Component {...pageProps} />
                     </AlertProvider>

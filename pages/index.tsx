@@ -5,9 +5,11 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from "framer-motion";
 import Link from 'next/link';
 import DownButtonJump from "@/components/ui/buttons/DownButtonJump"
+import { useUser } from '@clerk/nextjs';
 
 export  default function Home(props : any) {
   const [value, setValue] = useState('0');
+  const {user} = useUser()
   useEffect(()=>{
     console.log(value)
   })
@@ -18,9 +20,9 @@ export  default function Home(props : any) {
         <div className="h-fit py-5 border-b-2 mb-5">
         <div className="mx-auto max-w-fit">
           <Select enableClear={false} onValueChange={(e)=>setValue(e)} defaultValue='0' className='dark:border dark:border-white rounded-md' color='red'>
-            <SelectItem className="py-3 px-2 hover:cursor-pointer " color={''} value={"0"}>Everyone</SelectItem>
-            <SelectItem className="py-3 px-2 hover:cursor-pointer " value={"1"}>For Students</SelectItem>
-            <SelectItem className="py-3 px-2 hover:cursor-pointer " value={"2"}>For Parents</SelectItem>
+            <SelectItem className="py-3 px-2 hover:cursor-pointer" color={''} value={"0"}>Everyone</SelectItem>
+            <SelectItem className="py-3 px-2 hover:cursor-pointer" value={"1"}>For Students</SelectItem>
+            <SelectItem className="py-3 px-2 hover:cursor-pointer" value={"2"}>For Parents</SelectItem>
           </Select>
         </div>
         </div>
@@ -244,7 +246,7 @@ export  default function Home(props : any) {
               height={1442}
             />
            </motion.div> : null}
-          <div id="cta-box" className="mx-auto max-w-3xl px-6 py-12 sm:py-12 lg:px-8 border rounded-md mb-10">
+          <div id="cta-box" className="mx-auto max-w-3xl px-6 py-12 sm:py-12 lg:px-8 border dark:border-2 rounded-md mb-10">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               <span className="text-indigo-600">Finances are complicated.</span>
               <br />

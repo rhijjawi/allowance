@@ -5,6 +5,7 @@ export default function CircleJumpingButton(){
     const [visiblity, setVisiblity] = useState(true)
 
     function changeVis(){
+        console.log(window.scrollY < document.getElementById('cta-box')?.getBoundingClientRect()!.y!)
         if (window.scrollY < document.getElementById('cta-box')?.getBoundingClientRect()!.y!){
             setVisiblity(true)
         }

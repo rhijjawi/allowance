@@ -1,6 +1,6 @@
 import {useState, useEffect, Fragment} from "react"
 import { ExpenseType } from "../contexts/expenseCTX";
-import { Card, Table, TableHead, Button, TableRow, TableHeaderCell, TableBody, TableCell, Text, Title, Badge } from "@tremor/react";
+import { Card, Table, TableHead, Button, TableRow, TableHeaderCell, TableBody, TableCell, Text, Title, Badge, Subtitle } from "@tremor/react";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { Dialog, Transition } from "@headlessui/react";
 import { getColor, getBadge } from "@/components/static/categories";
@@ -28,7 +28,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
     const closeModal = (): any => setModalOpen(false);
     return (
         <>
-            <Table className="mt-5 max-w-full w-full border border-slate-400 rounded-md max-h-fit ">
+            {recurring.length > 0 ? <Table className="mt-5 max-w-full w-full border border-slate-400 rounded-md max-h-fit ">
             <TableHead className="border-b border-black bg-white">
                 <TableRow>
                     <TableHeaderCell className={`w-8 relative ${TableHeadStyle[0]}`}>
@@ -72,7 +72,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
                         </TableRow>
                 )}).splice(0,2)}
             </TableBody>
-            </Table>
+            </Table> : <p className="mt-5 text-indigo-500">No upcoming transactions</p>}
                 {recurring.length > 2 ? <div className="relative right-0 left-0 bottom-0 w-full h-8 mt-5"><Button 
                     tooltip="View the full table of your upcoming/recurring transactions" 
                     className=" max-w-sm bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300 absolute mx-auto my-auto left-0 right-0 top-0 bottom-0"

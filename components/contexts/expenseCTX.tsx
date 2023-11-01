@@ -3,9 +3,10 @@ import { useAuth, useUser } from "@clerk/nextjs";
 import { getSupabase } from "@/utils/supabase";
 import { useRouter } from "next/router";
 import { ExpenseSchema, CategorySchema, IncomeSchema } from "@/types/supabase";
-import Metadata from "../interfaces/userwithMetadata";
+import { ExpenseProvider } from "../interfaces/ExpenseProviderType";
 import { standardizeCurrency } from "@/utils/functions/valueFormatters";
-const ExpenseCTX = createContext<any>([])
+
+const ExpenseCTX = createContext<ExpenseProvider>([] as unknown as ExpenseProvider)
 
 export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
     const [expenseData, setExpenseData] = useState<ExpenseSchema[]>([])
@@ -78,7 +79,7 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
         
     }, [user])
     return (
-        <ExpenseCTX.Provider value={{expenseData, categoryData, incomeData, incomeCategoryData, _error, loading, setExpenseData, setIncomeData}}>
+        <ExpenseCTX.Provider value={{expenseData:expenseData, categoryData:categoryData, incomeData:incomeData, incomeCategoryData:incomeCategoryData, _error:_error, loading:loading, setExpenseData:setExpenseData, setIncomeData:setIncomeData}}>
             {children}
         </ExpenseCTX.Provider>
     )

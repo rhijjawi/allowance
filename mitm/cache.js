@@ -10,8 +10,8 @@ let todayCache = {}
 app.use((req, res, next) => {
     console.log(req.get('origin'))
     console.log(req.get('referer'))
-    res.header('Access-Control-Allow-Origin', 'http://expenses.ramzihijjawi.me:3000');//res.header('Access-Control-Allow-Origin', 'EXPENSEDOMAIN');
-    res.header('Cross-Origin-Resource-Policy', 'same-origin');
+    process.env.NODE_ENV=='development' ? res.header('Access-Control-Allow-Origin', 'http://expenses.ramzihijjawi.me:3000') : res.header('Access-Control-Allow-Origin', 'https://logmoney.app');
+    res.header('Cross-Origin-Resource-Policy', 'same-origin') ;
     next();
 })
 

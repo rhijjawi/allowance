@@ -1,10 +1,11 @@
-import { DocumentChartBarIcon, CurrencyDollarIcon, ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline"
-import { Button, Select, SelectItem, Subtitle, Title } from "@tremor/react"
+import { DocumentChartBarIcon, CurrencyDollarIcon, ChatBubbleLeftRightIcon, Cog8ToothIcon, ClipboardDocumentIcon } from "@heroicons/react/24/outline"
+import { Button, Select, TextInput,  SelectItem, Subtitle, Title } from "@tremor/react"
 import * as langs from "@/components/static/languages.json"
 import symbols from "@/components/static/symbols.json"
 import { motion, AnimatePresence, useAnimate } from "framer-motion";
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { useAlerts } from "@/components/contexts/alertHandler"
+import { useUser } from "@clerk/nextjs";
 export default function Index() {
     // A page to configure all the reports that the user wants sent to their parents or guardians
     const CustomButton = motion(Button, {forwardMotionProps: true})
@@ -12,6 +13,17 @@ export default function Index() {
     const {alerts, addAlert, setAlerts} = useAlerts()
     const [language, setLanguage] = useState("en")
     const [currency, setCurrency] = useState("USD")
+    const [email, setEmail] = useState("")
+    const {user, isLoaded, isSignedIn} = useUser()
+    const [isEmailValid, setIsEmailValid] = useState(false)
+    useEffect(()=>{
+        if (email.includes('@')){
+            setIsEmailValid(true)
+        }
+        else {
+            setIsEmailValid(false)
+        }
+    }, [email])
     useEffect(()=>{
         async function handlePress(){
             if (isLoading){
@@ -39,8 +51,9 @@ export default function Index() {
             icon: CurrencyDollarIcon,
             icon_color: "text-green-600 dark:text-green-400",
             options: Object.keys(symbols).map((key : string)=><SelectItem key={key} value={key}>{(symbols as any)[key]}</SelectItem>)
-        }
+        },
     ]
+    if (!isLoaded)return <></>
     return (
     <>
     
@@ -69,22 +82,43 @@ export default function Index() {
                     <div className="w-full border mt-3 mb-6 border-indigo-600/70"></div>
                     <div className="grid grid-cols-2">
                     <Title className="mb-3">Settings</Title>
-
-                    {settings.map((setting)=>
                     <div className="mb-5 py-4 px-4 relative border-2 border-indigo-500  dark:border-cyan-500 bg-indigo-200/50 col-start-1 col-span-2 mx-auto w-[45%] rounded-md shadow-md">
-                        <setting.icon className={`absolute w-6 h-6 right-3 top-3 ${setting.icon_color}`}/>
-                        <p className="align-baseline inline-block">{setting.name}</p>
-                        <Subtitle className="align-baseline">{setting.description}</Subtitle>
-                        <Select onValueChange={(val)=>setting.onChange(val)} enableClear={false} className="disabled:bg-gray-300/20 shadow-md rounded-lg cursor-not-allowed max-w-[15rem] mr-auto my-2 mx-auto ">
-                            {setting.options}
-                        </Select>
+                        Your unique ID: <p className="font-bold inline-block align-middle">{user!.id}</p>
+                        <Subtitle>This ID is used for pairing parents/guardians with your account{user?.publicMetadata.role as string}.</Subtitle>
+                        {navigator.clipboard && <Button onClick={()=>{
+                            addAlert("success", "Copied to clipboard")
+                            navigator.clipboard.writeText(user!.id)
+                        }} className="float-right" icon={ClipboardDocumentIcon}></Button>}
                     </div>
+                    {user!.publicMetadata.role=='parent' && (
+                    settings.map((setting)=>
+                        (<div className="mb-5 py-4 px-4 relative border-2 border-indigo-500  dark:border-cyan-500 bg-indigo-200/50 col-start-1 col-span-2 mx-auto w-[45%] rounded-md shadow-md">
+                            <setting.icon className={`absolute w-6 h-6 right-3 top-3 ${setting.icon_color}`}/>
+                            <p className="align-baseline inline-block">{setting.name}</p>
+                            <Subtitle className="align-baseline">{setting.description}</Subtitle>
+                            <Select onValueChange={(val)=>setting.onChange(val)} enableClear={false} className="disabled:bg-gray-300/20 shadow-md rounded-lg cursor-not-allowed max-w-[15rem] mr-auto my-2 mx-auto ">
+                                {setting.options}
+                            </Select>
+                        </div>)
+                    )
+                    
                     )}
+                    {user!.publicMetadata.role=='parent' && 
+                    <div className="mb-5 py-4 px-4 relative border-2 border-indigo-500  dark:border-cyan-500 bg-indigo-200/50 col-start-1 col-span-2 mx-auto w-[45%] rounded-md shadow-md">
+                            <Cog8ToothIcon className={`absolute w-6 h-6 right-3 top-3`}/>
+                            <p className="align-baseline inline-block">Contact Details</p>
+                            <Subtitle className="align-baseline">Entre</Subtitle>
+                            <TextInput type="email" onValueChange={(val : string)=>setEmail(val)} className={`disabled:bg-gray-300/20 shadow-md rounded-lg cursor-not-allowed max-w-[20rem] mr-auto my-2 mx-auto ${isEmailValid ? "border-2 !border-green-400" : ""}`}/>
+                    </div>
+                    }
+                    {user!.publicMetadata.role == 'parent' && (
                     <div className="col-span-2 w-56 mx-auto">
                         <CustomButton loading={isLoading} onClick={(e)=>{
                             setIsLoading(true)
                             }} className="w-full">Save Changes</CustomButton>
                     </div>
+                    )}
+                    
                     </div>
 
                 </div>

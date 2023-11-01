@@ -1,8 +1,7 @@
-'use client'
 import { Card, Badge, Button, Table, TabPanel,DonutChart, TabPanels, Grid, Divider, TabGroup, TableHead, TableHeaderCell, TableBody, TableRow, TableCell, TableFoot, TableFooterCell, Title, Select, SelectItem, Text, BarChart, AreaChart, TabList, Tab, TextInput, Col, Metric } from "@tremor/react"
 import {useEffect, useState} from 'react'
 import { useExpenses, ExpenseType } from "@/components/contexts/expenseCTX"
-import {ChevronDownIcon, ChevronUpIcon, PlusCircleIcon} from '@heroicons/react/24/outline'
+import {ChevronDownIcon, ChevronUpIcon, ClipboardDocumentIcon, PlusCircleIcon} from '@heroicons/react/24/outline'
 import { sortData } from "@/utils/functions/sortData"
 import { CheckIcon, PencilIcon, TrashIcon} from "@heroicons/react/24/solid"
 import { useFileUpload } from "@/components/contexts/fileManagerCTX"
@@ -12,11 +11,9 @@ import UpcomingTable from "@/components/charts/UpcomingTable"
 import DonutCategory from "@/components/charts/DonutCategory"
 import MIMO from "@/components/charts/MoneyInMoneyOut"
 import badges, { getBadge, getColor } from "@/components/static/categories"
-import UserType from "@/components/interfaces/userwithMetadata"
 import { ExpenditureDialog, IncomeDialogue } from "@/components/forms/QuickForms"
 import HoverSwitchCurr from "@/components/ui/buttons/hoverSwitchCurr"
 import getPrevious from "@/functions/getPrevious"
-import { getSupabase } from "@/utils/supabase"
 import { CategorySchema, ExpenseSchema, IncomeSchema } from "@/types/supabase"
 import {ExpenditureDelta, IncomeDelta} from "@/components/charts/ExpenditureDelta"
 import { LastPeriodDates } from "@/utils/functions/filterData"
@@ -31,7 +28,7 @@ export default function listPage(){
     const [filtered, setFiltered] = useState<any>([])
     const [originalState, setOriginalState] = useState<any>([])
     const [search, setSearch] = useState<string>("")
-    const {expenseData, categoryData, incomeData, _error, setExpenseData} = useExpenses() as {expenseData: ExpenseSchema[], categoryData: CategorySchema[], incomeData: IncomeSchema[], _error: any, isLoading: boolean, setExpenseData: React.Dispatch<React.SetStateAction<ExpenseType[]>>}
+    const {expenseData, categoryData, incomeData, _error, setExpenseData} = useExpenses()
     const [sortBy, setSortBy] = useState<null|any>([0, 0])
 
     const [CurrentlyEditing, setCurrentlyEditing] = useState<any>(null)
@@ -54,6 +51,7 @@ export default function listPage(){
         }
     }, [previousEditing])
     const daterange = LastPeriodDates()
+    if(!isLoaded) return null;
     return (
         <>
         <main className="p-12 min-h-screen">
@@ -66,6 +64,7 @@ export default function listPage(){
         <TabList>
           <Tab>Overview</Tab>
           <Tab>Detail</Tab>
+          <Tab>Month-to-date</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -80,27 +79,20 @@ export default function listPage(){
                 <UpcomingTable expenses={expenseData} categories={categoryData}/>
               </Card>
               <Card className=" bg-slate-200 border-slate-400 border-2 mt-3 flex-grow grid grid-cols-3">
+                <Title>Copy your invite code</Title>
+                <Button icon={ClipboardDocumentIcon} className="col-start-3">Copy Invite Code</Button>
+              </Card>
+              <Card className=" bg-slate-200 border-slate-400 border-2 mt-3 flex-grow grid grid-cols-3">
                 <Button className="col-start-1 h-12" icon={PlusCircleIcon} color="red" onClick={()=>setIsOpen(true)}>Add Expense</Button>
                 <Button className="col-start-3 h-12" icon={PlusCircleIcon} color="emerald" onClick={()=>setIncomeIsOpen(true)}>Add Income</Button>
               </Card>
               </div>
               <Card className="w-full bg-slate-200 border-slate-400 border-2">
                 <Title>Money In vs. Money Out</Title>
-                <MIMO expenses={expenseData} income={incomeData}/>
+                <MIMO expenses={expenseData} income={incomeData} currency={user!.publicMetadata.currency as string}/>
               </Card>
             </Grid>
-            <Grid numItemsMd={2} numItemsLg={3} className="gap-6 mt-6 ">
-                <Col numColSpan={1} numColSpanLg={3}>
-                <Card className=" dark:border-2 relative">
-                    <div className="w-full ml-5 my-5"><Text className="inline-block pr-2">Previous Period:</Text><Text className="inline-block dark:text-white"> {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[0])} - {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[1])}</Text><div><Text className="inline-block pr-2">Current Period:</Text><Text className="inline-block dark:text-white"> {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[2])} - {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[3])}</Text></div></div>
-                    <div className="grid grid-cols-3 relative">
-                        {categoryData.map((item: CategorySchema)=>{return (<ExpenditureDelta category={item} expenses={expenseData}/>)})}
-                        <IncomeDelta category={{category: "Income", id: 0, subcategories: []}} incomes={incomeData}/>
-                    </div>
-                    
-                </Card>
-                </Col>
-            </Grid>
+            
               {/* <Card>
                 <div className="mt-6">
                 <div className="h-96">
@@ -269,6 +261,20 @@ export default function listPage(){
                     </div>
             </Card>
           </TabPanel>
+          <TabPanel>
+          <Grid numItemsMd={2} numItemsLg={3} className="gap-6 mt-6 ">
+                <Col numColSpan={1} numColSpanLg={3}>
+                <Card className=" dark:border-2 relative">
+                    <div className="w-full ml-5 my-5"><Text className="inline-block pr-2">Previous Period:</Text><Text className="inline-block dark:text-white"> {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[0])} - {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[1])}</Text><div><Text className="inline-block pr-2">Current Period:</Text><Text className="inline-block dark:text-white"> {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[2])} - {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[3])}</Text></div></div>
+                    <div className="grid grid-cols-3 relative">
+                        {categoryData.map((item: CategorySchema, index: number)=>{return (<ExpenditureDelta category={item} key={index} expenses={expenseData}/>)})}
+                        <IncomeDelta category={{category: "Income", id: 0, subcategories: []}} incomes={incomeData}/>
+                    </div>
+                    
+                </Card>
+                </Col>
+            </Grid>
+        </TabPanel>
         </TabPanels>
       </TabGroup>
     </main>

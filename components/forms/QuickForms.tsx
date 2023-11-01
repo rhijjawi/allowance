@@ -12,7 +12,7 @@ import { standardizeCurrency } from '@/utils/functions/valueFormatters';
 
 export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
     const router = useRouter()
-    const [loading, setLoading] = useState<boolean>(false)
+    const [isloading, setLoading] = useState<boolean>(false)
     const getCurrencySymbol = (locale : string, currency: string) => (0).toLocaleString(locale, { style: 'currency', currency, minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace(/\d/g, '').trim();
     const [isSub, setisSub] = useState(false);
     const [currency, setCurrency] = useState('EUR');
@@ -23,9 +23,9 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
     const [transactionLabel, setTransactionLabel] = useState('');
     const [category, setCategory] = useState<null|[number, number]>(null)
     const [isFormValid, setisFormValid] = useState<Boolean|null>(null);
-    const {expenseData, categoryData, isLoading, setExpenseData} = useExpenses()
+    const {expenseData, categoryData, loading, setExpenseData} = useExpenses()
     const { user, isSignedIn, isLoaded } = useUser()
-    const { getToken } = useAuth();
+    const { getToken} = useAuth();
     async function submitForm(fields : {label : string, amount : number, category : number[], date : DatePickerValue, currency : string, whoPaid : string|number, [index: string]: any}){
         
         let inv = false

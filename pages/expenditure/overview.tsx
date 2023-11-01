@@ -9,48 +9,18 @@ import {currFormatter, standardizeCurrency, NumToMonth, MonthToNum} from "@/util
 import { ExpenseType, useExpenses } from "@/components/contexts/expenseCTX";
 import { getColor } from "@/components/static/categories";
 import { CategorySchema } from "@/types/supabase";
+import { motion } from "framer-motion";
 
 
 export default function Expenditure() {
 
     const {user, isLoaded, isSignedIn} = useUser();
-    const {getToken} = useAuth()
-    const {expenseData, categoryData, _error, loading} = useExpenses()
-    const [categories, setCategories] = useState<any>([])
+    
+    // const {getToken} = useAuth()
+    const {expenseData, categoryData} = useExpenses()
     const [chartData, setChartData] = useState<any>([])
     const [cards, setCards] = useState<any>([])
-    const router = useRouter()
-    useEffect(()=>{
-        if (!user && isLoaded){
-            router.push('/api/auth/login')
-            return
-        }}, [isLoaded])
-    useEffect(()=>{
-        let active = true
-        if (user){
-            if (isLoaded){return}
-            if (categories.length == 0){
-                getToken({template: "supabase"}).then((token)=>getSupabase(token)).then((supabase)=>{
-                    supabase.from('categories').select('*').then((categorydata)=>{
-                        if (categorydata.data){
-                            if (active){
-                                setCategories(categorydata.data)
-                            }
-                        }
-                        if (categorydata.error){
-                            if (categorydata.error.code == "PGRST301"){
-                                // router.push('/api/auth/login')
-                            }
-                        }
-                    })
-                    return supabase
-                }
-                )
-            }
-        }
-    return () => {active = false}
-    }, [isLoaded])
-    
+    const CustomCard = motion(Card)
     // useEffect(()=>{
     //     let active = true
     //     if (user){
@@ -81,15 +51,14 @@ export default function Expenditure() {
         async function forEachData(i : ExpenseType){
             const [Y,M,D] = (i.transaction_date.split('-'));
             let date = new Date(Date.parse(`${i.transaction_date}`))
-            let category = categoryData.find((element : ExpenseType) => {return element.id === i.category[0]}).category
+            let category = categoryData.find((element : ExpenseType) => {return element.id === i.category[0]})!.category
             expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`] ? {} : expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`] = {}
             expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] ? expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] += await standardizeCurrency(i, user!.publicMetadata?.currency as string) : expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] = await standardizeCurrency(i, user!.publicMetadata.currency as string)
         }
-        if (categories != null){
-        categories.forEach((e : any)=>{
+        if (categoryData != null){
+            categoryData.forEach((e : any)=>{
             categoryList[e.id] = e.category
         })
-        console.log(categoryList)
         for (let exp of expenseData){
             forEachData(exp)
         }
@@ -101,16 +70,18 @@ export default function Expenditure() {
         })
         if (data.length > 0){
             if (active){
-                console.log(data)
-                console.log(data.sort((a : any, b : any) => {
+                data = data.sort((a : any, b : any) => {
                     return MonthToNum(a.month.split(' ')[0]) - MonthToNum(b.month.split(' ')[0])
-                }))
+                })
                 setChartData(data)
+            }
+            else{
+
             }
             return () => {active = false}
         }}
         
-    }, [expenseData, categories])
+    }, [expenseData, categoryData])
     //
     useEffect(()=>{
         if (chartData.length > 0){
@@ -131,13 +102,13 @@ export default function Expenditure() {
                 })
             }
         });
-        setInterval(() => {
-        }, 200);
         setCards(cards)
     }
     }, [chartData])
+if(!isLoaded) return <></>;
+if(chartData.length == 0) return <></>;
 return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24 -z-[100]'>
+    <main className='flex min-h-screen flex-col items-center justify-between px-24 pt-12 -z-[100]'>
         <Card className="h-16 relative">
             <div className="absolute text-left top-[50%] -translate-y-[50%] z-0 left-0 right-0 m-auto ml-5 w-fit">
                 <Button size="md" className="h-full"><PlusCircleIcon className="h-6 w-6 inline"/><span> Quick Add</span></Button>
@@ -146,22 +117,26 @@ return (
                 <Button size="md" className="h-full"><InformationCircleIcon className="h-6 w-6 inline "/><span> Read more</span></Button>
             </div>
         </Card>
-        <div className="w-[100%]">
-            <Card className="mt-6 block relative bg-white w-full">
+            {<CustomCard 
+            hidden={chartData.length == 0}
+            initial={{size: 0, opacity: 0}}
+            animate={{size: 1, opacity: 1}}
+            >
+                {(chartData.length > 0) ? 
+                <>
                 <Title>Overall Expenditure</Title>
                 <BarChart 
                 id={"barChart"}
                 hidden={chartData.length == 0}
-                className="mt-6 aspect-square w-[100%]"
-                data={chartData} 
-                colors={categories.map((i : any)=>{
-                    return getColor(i.id!)})}
-                categories={categories.map((i : any)=>{return i.category})}
+                className="mt-6 min-w-fit aspect-square"
+                data={chartData}
+                colors={categoryData.map((i : CategorySchema)=>{
+                    return getColor(i.id!)})!}
+                categories={categoryData.map((i : any)=>{return i.category})}
                 index="month"
                 valueFormatter={(number)=>{return currFormatter(number, user!.publicMetadata.currency as string)}}
-                />
-            </Card>
-        </div>
+                /></>: <></>}
+            </CustomCard>}
 
         <Grid numItems={1} numItemsSm={2} numItemsLg={3} className="gap-5 mt-6 w-full">
             {cards}    

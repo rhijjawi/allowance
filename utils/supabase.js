@@ -13,7 +13,6 @@ const getSupabase = async (accessToken) => {
       },
     }
   );
-  console.log("supabase", accessToken);
   return supabase;
 };
 

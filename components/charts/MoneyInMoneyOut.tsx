@@ -7,8 +7,8 @@ import { useUser } from "@clerk/nextjs"
 import UserType from "../interfaces/userwithMetadata";
 import { useEffect, useState } from "react";
 import { IncomeSchema } from "@/types/supabase";
-export default function MIMO(props: {expenses : ExpenseType[], income : IncomeSchema[]}){
-    const {user, isSignedIn, isLoaded} = useUser()
+export default function MIMO(props: {expenses : ExpenseType[], income : IncomeSchema[], currency : string}){
+    
     const [moneyOut, setmoneyOut] = useState<number>(0)
     const [moneyIn, setMoneyIn] = useState<number>(0)
     useEffect(()=>{
@@ -41,6 +41,6 @@ export default function MIMO(props: {expenses : ExpenseType[], income : IncomeSc
       categories={["Money In", "Money Out"]}
       colors={["green", "red"]}
       yAxisWidth={70}
-      valueFormatter={(number)=>{return new Intl.NumberFormat('en-US', { style: 'currency',  currency: user!.publicMetadata  ? user!.publicMetadata.currency as string : "USD"}).format(number)}}
+      valueFormatter={(number)=>{return new Intl.NumberFormat('en-US', { style: 'currency',  currency: props.currency}).format(number)}}
     />)
 }
