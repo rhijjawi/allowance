@@ -1,10 +1,11 @@
 'use client';
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Popover, Transition,  } from '@headlessui/react'
 import {Subscriptions} from './forms/QuickForms'
 import {
   ArrowPathIcon,
   Bars3Icon,
+  BookOpenIcon,
   ChartPieIcon,
   CreditCardIcon,
   CursorArrowRaysIcon,
@@ -15,14 +16,23 @@ import {
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon, PlusCircleIcon, CalendarDaysIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link';
-import { useUser } from '@auth0/nextjs-auth0/client';
-import {ExpenditureDialog} from './forms/QuickForms'
+import { useUser } from '@clerk/nextjs';
+import {ExpenditureDialog, IncomeDialogue} from './forms/QuickForms'
 import { UserButton } from '@clerk/nextjs';
+import { motion } from 'framer-motion';
+import { useRouter } from 'next/router';
 
 const products = [
   { name: 'Overview', description: 'Get a better understanding of your expenditure', href: '/expenditure/overview', icon: ChartPieIcon },
-  { name: 'My Expenditure', description: 'Get a broken-down list of your expenditure', href: '/expenditure/list', icon: TableCellsIcon},
+  { name: 'My Money', description: 'A list of your income & expenditure', href: '/expenditure/list', icon: TableCellsIcon},
   { name : 'Debt Management', description: 'Manage your debt', href: '/debt/overview', icon: CreditCardIcon},
+]
+const debt = [
+    { name: 'Overview', description: 'A holistic view of your debt', href: '/debt', icon: ChartPieIcon },
+    { name: "Calculator (coming soon)", description: "Calculate your debt-free date", icon: SquaresPlusIcon},
+    { name: 'My Debt', description: 'Get a broken-down list of your debt', href: '/debt/list', icon: TableCellsIcon},
+    { name: 'Learn More', description: 'Debt explainers, suggestions and guides', href: '/debt/literature', icon: BookOpenIcon},
+    // 
 ]
 
 function classNames(...classes : any[]) {
@@ -32,18 +42,19 @@ function classNames(...classes : any[]) {
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     let [isOpen, setIsOpen] = useState<boolean>(false)
-    const [loading, setLoading] = useState<boolean>(false)  
-    
+    let [isIncomeOpen, setIsIncomeOpen] = useState<boolean>(false)
+    const {user, isLoaded, isSignedIn} = useUser()
+    const router = useRouter()
     const callsToAction = [
-        { name: 'Quick Log Expense', icon: PlusCircleIcon, onclickFunction: () => {setIsOpen(true)} },
-        { name: 'Add Subscription', icon: CalendarDaysIcon, onclickFunction: () => {} },
+        { name: 'Add Expense', icon: PlusCircleIcon, onclickFunction: () => {setIsIncomeOpen(false);setIsOpen(true)} },
+        { name: 'Add Income', icon: PlusCircleIcon, onclickFunction: () => {setIsOpen(false);setIsIncomeOpen(true)} },
     ]
     return (
         <header className="bg-white z-50">
         <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
             <div className="flex lg:flex-1">
             <Link href="/" className="-m-1.5 p-1.5">
-                <span className="sr-only">Your Company</span>
+                <span className="sr-only">LogMoney.app</span>
                 <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
             </Link>
             </div>
@@ -58,10 +69,11 @@ export default function Header() {
             </button>
             </div>
             <ExpenditureDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+            <IncomeDialogue isOpen={isIncomeOpen} setIsOpen={setIsIncomeOpen} />
             <Popover.Group className="hidden lg:flex lg:gap-x-12">
             <Popover className="relative">
                 <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
-                Expenses
+                My Money
                 <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
                 </Popover.Button>
 
@@ -109,29 +121,67 @@ export default function Header() {
                 </Popover.Panel>
                 </Transition>
             </Popover>
-
+            <ExpenditureDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+            <IncomeDialogue isOpen={isIncomeOpen} setIsOpen={setIsIncomeOpen} />
+            <Popover.Group className="hidden lg:flex lg:gap-x-12">
+            <Popover className="relative">
+                <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
+                Debt
+                <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+                </Popover.Button>
+                <Transition
+                as={Fragment}
+                enter="transition ease-out duration-200"
+                enterFrom="opacity-0 translate-y-1"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition ease-in duration-150"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 translate-y-1"
+                >
+                <Popover.Panel className="absolute -left-8 top-full z-20 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                    <div className="p-4">
+                    {debt.map((item) => (
+                        <div
+                        key={item.name}
+                        className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                        >
+                        <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                            <item.icon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />
+                        </div>
+                        <div className="flex-auto">
+                            {item.href ? <Link href={item.href} className="block font-semibold text-gray-900">
+                            {item.name}
+                            <span className="absolute inset-0" />
+                            </Link> : <p className="block cursor-not-allowed select-none font-semibold text-gray-900">
+                            {item.name}
+                            <span className="absolute inset-0" />
+                            </p>}
+                            <p className="mt-1 text-gray-600">{item.description}</p>
+                        </div>
+                        </div>
+                    ))}
+                    </div>
+                </Popover.Panel>
+                </Transition>
+            </Popover>
+            </Popover.Group>
             <Link href="/reports" className="text-sm font-semibold leading-6 text-gray-900">
                 Reports
             </Link>
             <Link href="/faq" className="text-sm font-semibold leading-6 text-gray-900">
                 FAQ
             </Link>
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                Company
-            </a>
             </Popover.Group>
-            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            {/* <a href={!user?.name ? "/api/auth/login" : "/profile"} className="text-sm font-semibold leading-6 text-gray-900"> */}
-                <UserButton afterSignOutUrl="/"/>
-            {/* </a> */}
-            </div>
+            <motion.div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                {user ? <UserButton afterSignOutUrl="/"/> : <motion.button onClick={()=>{router.push('/sign-in')}} className='w-fit py-2 px-4 text-sm bg-indigo-600 rounded-md cursor-pointer text-white'>Log In / Sign Up</motion.button>}
+            </motion.div>
         </nav>
         <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
             <div className="fixed inset-0 z-10" />
             <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
                 <a href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Your Company</span>
+                <span className="sr-only">LogMoney.app</span>
                 <img
                     className="h-8 w-auto"
                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"

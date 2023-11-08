@@ -4,14 +4,14 @@ import { createContext, useState, useEffect, useContext } from 'react'
 const alertContext = createContext<any>([])
 
 export function AlertProvider({children} : {children: React.ReactNode}){
-    const [alerts, setAlerts] = useState<{id: number, type: "success"|"warning"|"error", message: string}[]>([])
-    async function addAlert(type: "success"|"warning"|"error", message: string, arbitraryResoleTimeoutms? : number){
+    const [alerts, setAlerts] = useState<{id: number, type: "success"|"warning"|"error", message: string, timeout : number}[]>([])
+    async function addAlert(type: "success"|"warning"|"error", message: string, arbitraryResoleTimeoutms : number = 2000){
         setAlerts((prevState) => {
             const id = prevState.length > 0 ? prevState[prevState.length - 1].id + 1 : 0
-            return [...prevState, {id: id, type: type, message: message}]
+            return [...prevState, {id: id, type: type, message: message, timeout : arbitraryResoleTimeoutms}]
         })
         return new Promise(resolve => {
-            setTimeout(function() { resolve(void(0))}, arbitraryResoleTimeoutms ? arbitraryResoleTimeoutms : 2000);
+            setTimeout(()=>{ resolve(void(0))}, arbitraryResoleTimeoutms);
         }); 
     }
     const theme : {[key: string] : {color: string, icon : any} } = {
@@ -34,7 +34,7 @@ export function AlertProvider({children} : {children: React.ReactNode}){
           const alertTimers = alerts.map((alert) =>
             setTimeout(() => {
               setAlerts((prevState) => prevState.filter((a) => a.id !== alert.id));
-            }, 5000)
+            }, alert.timeout)
           );
     
           // Clear all the timers when the component unmounts

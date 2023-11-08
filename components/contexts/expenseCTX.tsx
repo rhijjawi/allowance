@@ -56,9 +56,7 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
             }
             if (error || income.error || categories.error || incomeCategories.error){
                 if (error.code == "PGRST301") {
-                    {/* 
-                        RE LOG IN!!!
-                    */}
+                    router.reload()
                 }
                 _setError(true)
             }

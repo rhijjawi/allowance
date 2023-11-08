@@ -51,7 +51,7 @@ export default function Expenditure() {
         async function forEachData(i : ExpenseType){
             const [Y,M,D] = (i.transaction_date.split('-'));
             let date = new Date(Date.parse(`${i.transaction_date}`))
-            let category = categoryData.find((element : ExpenseType) => {return element.id === i.category[0]})!.category
+            let category = categoryData.find((element : any) => {return element.id === i.category[0]})!.category
             expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`] ? {} : expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`] = {}
             expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] ? expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] += await standardizeCurrency(i, user!.publicMetadata?.currency as string) : expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] = await standardizeCurrency(i, user!.publicMetadata.currency as string)
         }
@@ -130,6 +130,7 @@ return (
                 hidden={chartData.length == 0}
                 className="mt-6 min-w-fit aspect-square"
                 data={chartData}
+                //@ts-ignore
                 colors={categoryData.map((i : CategorySchema)=>{
                     return getColor(i.id!)})!}
                 categories={categoryData.map((i : any)=>{return i.category})}

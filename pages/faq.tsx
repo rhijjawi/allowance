@@ -7,12 +7,12 @@ export default function FAQ() {
         hidden: {
             opacity: 0,
             height: 0,
-            transition: { duration: 1, delay : 0.2 }
+            transition: { duration: 0.3, delay : 0 }
         },
         visible: {
             opacity: 1,
             height: "fit-content",
-            transition: { duration: 1, delay : 0 }
+            transition: { duration: 0.3, delay : 0 }
         }
     }
 
@@ -28,6 +28,14 @@ export default function FAQ() {
         {
             "question": "Is my financial data secure?",
             "answer": "Yes, we take data security seriously. Your financial information is encrypted and protected. We use industry-standard security practices to keep your data safe. We will be implementing 2FA, and E2EE in the near future."
+        },
+        {
+            "question": "How do I track my expenses?",
+            "answer": "Using the expenses tab above, you can add your expenses and categorize them. You can also add your income and track your savings."
+        },
+        {
+            "question": "Can I import my expenses?",
+            "answer": "For now, you can only manually add your expenses. We will be adding the ability to import expenses from your bank account in the near future."
         },
         {
             "question": "How can I track my debt and set up a debt reduction plan?",
@@ -54,10 +62,10 @@ export default function FAQ() {
                         exit={{ opacity: 0 }}
 
                         transition={{ duration: 1, ease: "linear", height: { duration: 1 }, opacity: { duration: 1, delay: 0.15 } }}
-                        className="mx-auto relative max-w-4xl divide-y divide-gray-900/10 border-4 border-indigo-600 py-5 px-5 rounded-md">
-                        <QuestionMarkCircleIcon className="h-12 w-12 absolute right-5 top-5 rounded-lg text-cyan-300/80" />
+                        className="mx-auto relative max-w-4xl border-4 border-indigo-600 py-5 px-5 rounded-md">
+                        <QuestionMarkCircleIcon className="h-12 w-12 absolute right-5 top-5 rounded-lg dark:text-cyan-300/80" />
                         <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900 dark:text-white">Frequently Asked Questions</h2>
-                        <dl className="divide-y-2 space-y-6 divide-gray-900/10 mt-5">
+                        <dl className=" space-y-6 mt-5">
                             {faqs.map((faq, index: number) => (
                                 <div className="">
                                     <dt className="border-2 rounded-md dark:!border-indigo-500 h-12">
@@ -77,13 +85,13 @@ export default function FAQ() {
                                     </dt>
                                     <dd className="">
                                         <AnimatePresence>
-                                            {isOpen[index] && <motion.p
+                                            <motion.p
                                                 animate={isOpen[index] ? "visible" : "hidden"}
                                                 initial="hidden"
                                                 variants={pVariants}
                                                 className="text-base leading-7 text-gray-600 dark:text-slate-300 px-3 mt-1">
                                                 {faq.answer}
-                                            </motion.p>}
+                                            </motion.p>
                                         </AnimatePresence>
                                     </dd>
                                 </div>

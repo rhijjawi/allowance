@@ -58,13 +58,14 @@ export default function listPage(){
             <ExpenditureDialog isOpen={isOpen} setIsOpen={setIsOpen} />
             <IncomeDialogue isOpen={isIncomeOpen} setIsOpen={setIncomeIsOpen} />
       <Title>Dashboard 🏦</Title>
-      <Text>A more detailed view of your expenses </Text>
+      <Text>A detailed overview of your finances.</Text>
 
       <TabGroup className="mt-6" defaultIndex={tab} onIndexChange={setTab}>
         <TabList>
           <Tab>Overview</Tab>
           <Tab>Detail</Tab>
           <Tab>Month-to-date</Tab>
+          <Tab>Savings</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -79,8 +80,8 @@ export default function listPage(){
                 <UpcomingTable expenses={expenseData} categories={categoryData}/>
               </Card>
               <Card className=" bg-slate-200 border-slate-400 border-2 mt-3 flex-grow grid grid-cols-3">
-                <Title>Copy your invite code</Title>
-                <Button icon={ClipboardDocumentIcon} className="col-start-3">Copy Invite Code</Button>
+                <Title className="col-span-1 col-start-1">Copy your invite code</Title>
+                <Button icon={ClipboardDocumentIcon} size={"lg"} className="w-fit float-right col-start-3 text-sm w-full">Copy</Button>
               </Card>
               <Card className=" bg-slate-200 border-slate-400 border-2 mt-3 flex-grow grid grid-cols-3">
                 <Button className="col-start-1 h-12" icon={PlusCircleIcon} color="red" onClick={()=>setIsOpen(true)}>Add Expense</Button>
@@ -274,6 +275,9 @@ export default function listPage(){
                 </Card>
                 </Col>
             </Grid>
+        </TabPanel>
+        <TabPanel>
+            
         </TabPanel>
         </TabPanels>
       </TabGroup>

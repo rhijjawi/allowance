@@ -10,7 +10,6 @@ function SignUpPage() {
   const [preferredCurr, setPreferredCurr] = useState<string>("EUR");
   const [onboardingStep, setOnboardingStep] = useState<number>(0);
   const currencies = Object.keys(symbols).map((key : string)=>[(symbols as any)[key], key])
-  console.log(currencies)
   return (
     <div className="">
       <div className="absolute top-0 bottom-0 right-0 left-0 w-screen h-screen bg-white z-[50]">
@@ -21,17 +20,15 @@ function SignUpPage() {
         animate={{opacity: 1}}
         exit={{opacity: 0, x: -100}}
         transition={{duration: 1, ease: "linear", delay: 1}}
-        className="mx-auto my-auto bottom-0 right-0 top-0 left-0 absolute max-w-md max-h-fit h-fit w-fit py-6 px-8 bg-white dark:bg-black rounded-md outline-indigo-500 outline">
-          <div className="py-5">
-            <p className="text-bold text-lg text-black dark:text-white py-2">Are you a Parent or Guardian looking to oversee your dependant's expenditure?</p>
-            <Select value={String(roleType)} enableClear={false} className="w-52 mx-auto border-2 rounded-lg border-indigo-600 bg-indigo-600 !focus:outline-none focus:border-none" onValueChange={(e)=>{
-              setRoleType(Number(e) as 0|1|2)
-              }}>
-              <SelectItem value={"1"}>Yes</SelectItem>
-              <SelectItem value={"2"}>No</SelectItem>
-            </Select>
+        className="mx-auto my-auto bottom-0 right-0 top-0 left-0 absolute max-w-md max-h-fit h-fit min-w-2xl py-6 px-8 bg-white dark:bg-black rounded-md outline-indigo-500 outline">
+            <p className="font-bold leading-7 text-lg text-black dark:text-white py-2">Are you a Parent or Student?</p>
+           <div className="py-5">          
+          <div className="grid grid-cols-2">
+             <Button className={`col-start-1 w-[80%] mx-auto bg-black hover:bg-gray-900/90 ${roleType == 1  ? "!bg-green-500 !hover:bg-green-500" : ""}`} onClick={()=>{setRoleType(Number(1) as 0|1|2)}}>Guardian/Parent</Button>
+             <Button className={`col-start-2 w-[80%] mx-auto bg-black hover:bg-gray-900/90 ${roleType == 2  ? "!bg-green-500 !hover:bg-green-500" : ""}`} onClick={()=>{setRoleType(Number(2) as 0|1|2)}}>Student/Other</Button>
           </div>
-          <Subtitle>If you are not a parent, select no.</Subtitle>
+          </div>
+          {/* <Subtitle>If you are not a parent, select no.</Subtitle> */}
           <Button icon={ArrowRightIcon} iconPosition="right" disabled={roleType == 0} className="float-right dark:text-white" onClick={()=>{
             if (roleType != 0){
               setOnboardingStep(1)
