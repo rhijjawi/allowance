@@ -18,7 +18,7 @@ export function GuardianOnboardingProvider({children} : {children: React.ReactNo
     useEffect(() => {
         
         async function checkUser(){
-            if (user?.publicMetadata.role !== 'parent') {
+            if (isSignedIn && user?.publicMetadata.role !== 'parent') {
                 setHasFinishedOnboarding(true)
                 setHasValidStripeSubscription(true);
                 return
@@ -74,11 +74,10 @@ export function GuardianOnboardingProvider({children} : {children: React.ReactNo
                     <motion.div className='bg-gray-300/90 border-t border-t-black h-16 relative'>
                         <Button loading={loading} icon={ArrowRightIcon} onClick={()=>{
                             setLoading(true)
-                            setInterval(() => {
+                            setTimeout(() => {
                                 setLoading(false)
-                                router.push('/subscription/manage')
                             }, 2000);
-                            
+                            router.push('/subscription/manage')
                         }} iconPosition='right' className='my-auto bottom-0 top-0 right-0 absolute h-fit mr-5'>Continue</Button>
                     </motion.div>
                 </motion.div>

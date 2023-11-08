@@ -9,6 +9,7 @@ import { AlertProvider } from '@/components/contexts/alertHandler';
 import { ClerkProvider } from '@clerk/nextjs';
 import { GuardianOnboardingProvider } from '@/components/contexts/GuardianOnboardingCTX';
 import Script from 'next/script';
+import Head from 'next/head';
 const raleway = Raleway({ subsets: ['latin'] })
 
 
@@ -23,6 +24,10 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
                     <Layout>
                       <AlertProvider>
                         <GuardianOnboardingProvider>
+                        <Head>
+                          <title key="main">LogMoney.app | The better money app</title>
+                          <meta property="og:title" content="LogMoney.app | The better money app" key="title" />
+                        </Head>
                           <Script src="https://simple.logmoney.app/latest.js"  />
                           <noscript>
                             {/* eslint-disable @next/next/no-img-element */}

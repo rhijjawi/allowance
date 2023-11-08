@@ -14,9 +14,7 @@ export default async function handler(
               role : data.unsafe_metadata.role,
               currency : data.unsafe_metadata.currency
             },
-            unsafeMetadata : {
-    
-            }
+            unsafeMetadata : {}
         })
         res.status(200).json({message: "OK"})
     }
