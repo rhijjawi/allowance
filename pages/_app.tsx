@@ -8,6 +8,7 @@ import { TransactionHandlerProvider } from '@/components/contexts/transactionHan
 import { AlertProvider } from '@/components/contexts/alertHandler';
 import { ClerkProvider } from '@clerk/nextjs';
 import { GuardianOnboardingProvider } from '@/components/contexts/GuardianOnboardingCTX';
+import Script from 'next/script';
 const raleway = Raleway({ subsets: ['latin'] })
 
 
@@ -22,6 +23,15 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
                     <Layout>
                       <AlertProvider>
                         <GuardianOnboardingProvider>
+                          <Script src="https://simple.logmoney.app/latest.js"  />
+                          <noscript>
+                            {/* eslint-disable @next/next/no-img-element */}
+                            <img
+                              src="https://simple.logmoney.app/noscript.gif"
+                              alt=""
+                              referrerPolicy="no-referrer-when-downgrade"
+                            />
+                          </noscript>
                           <div className={raleway.className}>
                             <Component {...pageProps} />
                           </div>
