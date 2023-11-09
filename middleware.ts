@@ -1,8 +1,6 @@
 import { authMiddleware } from "@clerk/nextjs";
  
-// This example protects all routes including api/trpc routes
-// Please edit this to allow other routes to be public as needed.
-// See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
+//https://clerk.com/docs/references/nextjs/auth-middleware
 export default authMiddleware({
     publicRoutes: ['/', '/api(.*)', '/trpc(.*)', '/faq', '/debt/calculator', '/privacy-policy', '/terms-of-service'],
 });

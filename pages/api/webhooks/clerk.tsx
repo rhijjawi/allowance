@@ -17,27 +17,30 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
     },
     unsafeMetadata: {}
   })
-  const { data: data2, error } = await supabase.from('parents').select('*').eq('clerk_id', data.id);
-  if (data2!.length > 0) {
-    const stripeUser = await stripe.customers.retrieve(data2![0]['stripe_id']);
-    return res.status(200).json({ message: "OK", customer: stripeUser })
-  }
-  else {
-    const { id, emailAddresses, firstName, lastName } = data;
+  if (data.unsafe_metadata.role === "parent") {
+    const { data: data2, error } = await supabase.from('parents').select('*').eq('clerk_id', data.id);
+    if (data2!.length > 0) {
+      const stripeUser = await stripe.customers.retrieve(data2![0]['stripe_id']);
+      return res.status(200).json({ message: "OK", customer: stripeUser })
+    }
+    else {
+      const { id, email_addresses, first_name, last_name } = data;
 
-    const customer = await stripe.customers.create({
-      email: emailAddresses[0].emailAddress,
-      name: `${firstName} ${lastName}`,
-      metadata: { publicMetadata: { role: data.unsafe_metadata.role, currency: data.unsafe_metadata.currency } as any }
-    });
+      const customer = await stripe.customers.create({
+        email: email_addresses[0].emailAddress,
+        name: `${first_name} ${last_name}`,
+        metadata: { publicMetadata: { role: data.unsafe_metadata.role, currency: data.unsafe_metadata.currency } as any }
+      });
 
-    res.status(200).json({
-      code: 'oh sheiße',
-      customer,
-    });
+      res.status(200).json({
+        code: 'oh sheiße',
+        customer,
+      });
+      await supabase.from('parents').insert({clerk_id : data.id, stripe_id : customer.id, subscription_id : null})
+    }
   }
   res.status(200).json({ message: "OK" })
-
+  
 }
 export default async function handler(
   req: NextApiRequest,

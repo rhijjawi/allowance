@@ -2,7 +2,10 @@ import { motion } from "framer-motion";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import Stripe from "stripe";
-
+import { Button } from "@tremor/react";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { useAlerts } from "@/components/contexts/alertHandler";
+import { useState } from "react";
 export const getStaticProps = (async (context : any) => {
     let data;
     try {
@@ -17,6 +20,10 @@ export const getStaticProps = (async (context : any) => {
 
 export default function Subscriptions({prods} : {prods : Stripe.Price[]}){
     const {user, isSignedIn, isLoaded} = useUser();
+    const MotionButton = motion(Button)
+    const {addAlert} = useAlerts()
+    const [loading, setLoading] = useState<any>({})
+    const [disabled, setDisabled] = useState<any>({})
     if (!isLoaded){
         return <>Loading...</>
     }
@@ -40,7 +47,22 @@ export default function Subscriptions({prods} : {prods : Stripe.Price[]}){
                                     {/* @ts-ignore */}
                                     <motion.p className="text-black select-none text-xs">{i.product.description}</motion.p>
                                     <motion.p className="text-emerald-500 py-1 select-none">{i.billing_scheme == "per_unit" && formatter.format(i.unit_amount!/100)} {i.type == "recurring" ? `per ${i.recurring?.interval}` : "one time"}</motion.p>
-                                    <motion.button onClick={async()=>{fetch('/api/stripe/createCheckoutSession', {method: "POST"})}} className="bg-indigo-500 text-white rounded-md px-3 py-1 mt-5 mx-auto right-0 left-0">{i.type == "recurring" ? `Subscribe` : "Pay"}</motion.button>
+                                    <MotionButton loading={loading[i.id]} disabled={loading[i.id] }
+                                     onClick={async()=>{
+                                        setLoading({...loading, [i.id] : true})
+                                        fetch('/api/stripe/createCheckoutSession', {method: "POST", body: JSON.stringify({item : [i.id, Boolean(i.type == "recurring")]}) as any})
+                                        .then(async(res)=>{
+                                            if (res.status == 200){
+                                                setLoading({...loading, [i.id] : false})
+                                                const resp =  await res.json()
+                                                console.log(resp)
+                                                window.open(resp.goto, "_self")
+                                            }
+                                            else{
+                                                addAlert("error", "Something went wrong. Please try again later, or contact us if the problem persists.", 5000)
+                                            }
+                                        })
+                                        }} className="bg-indigo-500 text-white rounded-md px-3 py-1 mt-5 mx-auto right-0 left-0" icon={ArrowRightIcon} iconPosition="right">{i.type == "recurring" ? `Subscribe` : "Pay"}</MotionButton>
                                 </motion.div>
                             </>
                         )

@@ -64,9 +64,8 @@ export function AlertProvider({children} : {children: React.ReactNode}){
                         className={`relative cursor-pointer w-[30rem] rounded-md border-2 border-${theme[alert.type].color}-500 bg-${theme[alert.type].color}-300 bg-opacity-90 px-3 py-3`}>
                         <div className="pt-0">
                             <Icon className="inline-block h-5 w-5 align-middle" />
-                            <p className="inline pl-1 align-middle font-bold">{alert.type.charAt(0).toUpperCase() + alert.type.slice(1)}</p>
-                            {/* <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="absolute right-0 top-0 mr-2 mt-2 h-5 w-5 cursor-pointer text-black/60"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> */}
-                            <span className="h-full align-middle pl-2">{alert.message}</span>
+                            <p className="inline pl-1 align-middle font-bold dark:text-black">{alert.type.charAt(0).toUpperCase() + alert.type.slice(1)}</p>
+                            <span className="h-full align-middle pl-2 dark:text-black">{alert.message}</span>
                         </div>
                     </motion.div>)
             })}
