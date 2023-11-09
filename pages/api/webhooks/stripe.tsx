@@ -13,6 +13,7 @@ const handleStripeWebhook = async (req: NextApiRequest, res: NextApiResponse) =>
     try {
       event = stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'] as string, process.env.STRIPE_WEBHOOK_SECRET as string);
     } catch (err) {
+        //@ts-ignore
       res.status(400).send(`Webhook Error: ${err.message}`);
       return;
     }
