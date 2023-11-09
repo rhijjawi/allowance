@@ -56,4 +56,20 @@ async function POST(req: NextApiRequest, res: NextApiResponse){
         });
     }
 }
+
+async function DELETE(req: NextApiRequest, res: NextApiResponse){
+    const { userId } = getAuth(req);
+    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+    const { data, error } = await supabase.from('parents').select('*').eq('clerk_id', userId);
+    if (data![0] === undefined){
+        return res.status(404).json({ error: "Not Found" });
+    }
+    const stripeUser = await stripe.customers.del(data![0]['stripe_customer_id']);
+    const response = {
+        stripeUser : stripeUser,
+        supabaseUser: data![0],
+    }
+    return res.status(200).json(response);
+}
+
 export default handler;
