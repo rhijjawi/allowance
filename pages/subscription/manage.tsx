@@ -4,8 +4,15 @@ import Link from "next/link";
 import Stripe from "stripe";
 
 export const getStaticProps = (async (context : any) => {
-    const res = await fetch('http://expenses.ramzihijjawi.me:3000/api/stripe/getProds')
-    return {props: {prods : await res.json()}}
+    let data;
+    try {
+        const res = await fetch('http://expenses.ramzihijjawi.me:3000/api/stripe/getProds')
+        data = await res.json()
+    }
+    catch (e){
+        data = {}
+    }
+    return {props: {prods : data}, revalidate: 60}
 })
 
 export default function Subscriptions({prods} : {prods : Stripe.Price[]}){
