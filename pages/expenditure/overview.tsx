@@ -10,6 +10,7 @@ import { ExpenseType, useExpenses } from "@/components/contexts/expenseCTX";
 import { getColor } from "@/components/static/categories";
 import { CategorySchema } from "@/types/supabase";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 
 export default function Expenditure() {
@@ -21,29 +22,7 @@ export default function Expenditure() {
     const [chartData, setChartData] = useState<any>([])
     const [cards, setCards] = useState<any>([])
     const CustomCard = motion(Card)
-    // useEffect(()=>{
-    //     let active = true
-    //     if (user){
-    //         if (expenseData.length == 0){
-    //         getSupabase(user.accessToken).then((supabase)=>{
-    //                 supabase.from('expenses').select('*').order('transaction_date' ,{ascending: true}).then((expenses)=>{
-    //                     if (expenses.data){
-    //                         if (active){
-    //                             setExpenseData(expenses.data)
-    //                         }
-    //                     }
-    //                     if (expenses.error){
-    //                         if (expenses.error.code == "PGRST301"){
-    //                             router.push('/api/auth/login')
-    //                         }
-    //                     }
-    //                 }
-    //                 )
-    //             }
-    //             )
-    //         }}
-    //     return () => {active = false}
-    //     },[isLoading])
+    
     useEffect(()=>{
         let active = true
         let categoryList : any = {}
@@ -106,7 +85,7 @@ export default function Expenditure() {
     }
     }, [chartData])
 if(!isLoaded) return <></>;
-if(chartData.length == 0) return <></>;
+
 return (
     <main className='flex min-h-screen flex-col items-center justify-between px-24 pt-12 -z-[100]'>
         <Card className="h-16 relative">
@@ -118,17 +97,16 @@ return (
             </div>
         </Card>
             {<CustomCard 
-            hidden={chartData.length == 0}
+            className="h-fit"
             initial={{size: 0, opacity: 0}}
             animate={{size: 1, opacity: 1}}
             >
-                {(chartData.length > 0) ? 
+                { 
                 <>
                 <Title>Overall Expenditure</Title>
                 <BarChart 
                 id={"barChart"}
-                hidden={chartData.length == 0}
-                className="mt-6 min-w-fit aspect-square"
+                className="mt-6 min-w-fit w-full min-h-[400px] aspect-square"
                 data={chartData}
                 //@ts-ignore
                 colors={categoryData.map((i : CategorySchema)=>{
@@ -136,8 +114,10 @@ return (
                 categories={categoryData.map((i : any)=>{return i.category})}
                 index="month"
                 valueFormatter={(number)=>{return currFormatter(number, user!.publicMetadata.currency as string)}}
-                /></>: <></>}
-            </CustomCard>}
+                /></>}
+                {chartData.length == 0 ? <motion.p className="mt-6">It looks like you haven't recorded any expense data. Click <Link href="/expenditure/list" className="text-black font-semibold">here</Link> to get started</motion.p> : null}
+            </CustomCard> }
+                
 
         <Grid numItems={1} numItemsSm={2} numItemsLg={3} className="gap-5 mt-6 w-full">
             {cards}    

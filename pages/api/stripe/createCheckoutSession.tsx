@@ -34,6 +34,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse){
             success_url: `https://logmoney.app/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `https://logmoney.app/cancel`,
         });
+        console.log(session)
         return res.status(200).json({message: "OK", goto: session.url})
     }
     

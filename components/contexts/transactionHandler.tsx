@@ -13,14 +13,15 @@ export function TransactionHandlerProvider({children} : {children: React.ReactNo
     const {getToken} = useAuth()
     const [handlerMode, setHandlerMode] = useState<any[]>([null, null])
     const [resolvedExpense, setResolvedExpense] = useState<ExpenseType|null>(null)
-    let { expenseData  } = useExpenses()
-    const router = useRouter()
+
+    let { expenseData, setExpenseData } = useExpenses()
 
     const functions = {
         'delete' : async() => {
             await (await getSupabase(await getToken({template: "supabase"}))).from('expenses').delete().eq('id', handlerMode[1])
+            setExpenseData(expenseData.filter((e : ExpenseType) => {return e.id != Number(handlerMode[1])}))
             setHandlerMode([null, null])
-            return router.reload()
+
         },
         'edit' : async() => {
 
@@ -31,7 +32,6 @@ export function TransactionHandlerProvider({children} : {children: React.ReactNo
     }
     useEffect(() => {
         expenseData.forEach((e : ExpenseType) => {
-            console.log(e?.id, handlerMode[1])
             if (e.id == Number(handlerMode[1])){
                 setResolvedExpense(e)
             }
@@ -55,10 +55,7 @@ export function TransactionHandlerProvider({children} : {children: React.ReactNo
                        <>
                         <Text>Are you sure you'd like to delete the following transaction?</Text><br/>
                         <Text>{resolvedExpense.label}</Text><br/>
-                        <Text>{new Intl.NumberFormat(navigator.languages[0], {
-                                style: 'currency',
-                                currency: resolvedExpense.currency,
-                            }).format(resolvedExpense.amount)}</Text>
+                        <Text>{new Intl.NumberFormat(navigator.languages[0], {style: 'currency', currency: resolvedExpense.currency,}).format(resolvedExpense.amount)}</Text>
                             <Callout className="h-12 mt-4" title={handlerMode[0] == "delete" ? "This action cannot be undone." : ""} icon={ExclamationCircleIcon} color="rose">
                             {handlerMode[0] == "delete" ? "This action cannot be undone." : ""}
                             </Callout>

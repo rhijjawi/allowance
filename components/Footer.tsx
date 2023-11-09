@@ -30,12 +30,12 @@ export default function Footer(){
                     {footerItems.map((item, index) => {
                         console.log("item", item)
                         return (
-                        <motion.div className={`${["col-start-2","col-start-4","col-start-6"][index]} col-span-1`}>
+                        <motion.div key={index} className={`${["col-start-2","col-start-4","col-start-6"][index]} col-span-1`}>
                             <motion.ul className="py-8">
                                 {item.map((subitem, subindex) => {
                                     console.log(subitem)
                                 return (
-                                        <motion.li className="py-1">
+                                        <motion.li key={`${index}.${subindex}`} className="py-1">
                                                 <Link className="text-base" href={subitem.link}>{subitem.name}</Link>
                                         </motion.li>
                                 )

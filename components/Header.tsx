@@ -25,7 +25,7 @@ import { useRouter } from 'next/router';
 const products = [
   { name: 'Overview', description: 'Get a better understanding of your expenditure', href: '/expenditure/overview', icon: ChartPieIcon },
   { name: 'My Money', description: 'A list of your income & expenditure', href: '/expenditure/list', icon: TableCellsIcon},
-  { name : 'Debt Management', description: 'Manage your debt', href: '/debt/overview', icon: CreditCardIcon},
+//   { name : 'Debt Management', description: 'Manage your debt', href: '/debt/overview', icon: CreditCardIcon},
 ]
 const debt = [
     { name: 'Overview', description: 'A holistic view of your debt', href: '/debt', icon: ChartPieIcon },

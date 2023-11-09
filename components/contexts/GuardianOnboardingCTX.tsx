@@ -24,7 +24,7 @@ export function GuardianOnboardingProvider({children} : {children: React.ReactNo
                 return
             }
             const {data, error} = await ((await getSupabase(await getToken({template: "supabase"}))).from('parents').select('*').eq('clerk_id', user?.id))
-            if (data![0] === undefined){
+            if (error == null && data!.length == 0){
                 setHasFinishedOnboarding(false)
             }
             else if (data![0]['subscription_id'] != null && data![0]['subscription_status'] === 'active'){
@@ -42,7 +42,8 @@ export function GuardianOnboardingProvider({children} : {children: React.ReactNo
         checkUser()
         
     }, [isSignedIn])
-    if (exemptedRoutes.includes(router.asPath)) {
+
+    if (exemptedRoutes.includes(router.asPath) ) {
         return (
             <>
                 {children}

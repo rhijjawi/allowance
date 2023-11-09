@@ -17,6 +17,7 @@ import getPrevious from "@/functions/getPrevious"
 import { CategorySchema, ExpenseSchema, IncomeSchema } from "@/types/supabase"
 import {ExpenditureDelta, IncomeDelta} from "@/components/charts/ExpenditureDelta"
 import { LastPeriodDates } from "@/utils/functions/filterData"
+import { motion } from "framer-motion"
 let TableHeadStyle = ["dark:bg-black bg-white select-none","h-6 relative right-0 bottom-0 top-0 left-0 mx-auto my-auto"]
 let ChevronStyle = ["absolute w-8 aspect-square rounded-full right-0 bottom-0 top-0 my-auto mr-4","w-8 h-8 border-2 rounded-full absolute"]
 
@@ -75,20 +76,20 @@ export default function listPage(){
                 <DonutCategory expenseData={expenseData} categoryData={categoryData}/>: null}
               </Card>
               <div className="">
-              <Card className="min-h-16 h-fit bg-slate-200 border-slate-400 border-2">
+              <Card className="shadow-md min-h-16 h-fit bg-slate-200 border-slate-400 border-2">
                 <Title>Upcoming Transactions</Title>
                 <UpcomingTable expenses={expenseData} categories={categoryData}/>
               </Card>
-              <Card className=" bg-slate-200 border-slate-400 border-2 mt-3 flex-grow grid grid-cols-3">
+              <Card className="shadow-md bg-slate-200 border-slate-400 border-2 mt-3 flex-grow grid grid-cols-3">
                 <Title className="col-span-1 col-start-1">Copy your invite code</Title>
-                <Button icon={ClipboardDocumentIcon} size={"lg"} className="w-fit float-right col-start-3 text-sm w-full">Copy</Button>
+                <Button icon={ClipboardDocumentIcon} size={"lg"} className="float-right col-start-3 text-sm w-full">Copy</Button>
               </Card>
-              <Card className=" bg-slate-200 border-slate-400 border-2 mt-3 flex-grow grid grid-cols-3">
+              <Card className="shadow-md bg-slate-200 border-slate-400 border-2 mt-3 flex-grow grid grid-cols-3">
                 <Button className="col-start-1 h-12" icon={PlusCircleIcon} color="red" onClick={()=>setIsOpen(true)}>Add Expense</Button>
                 <Button className="col-start-3 h-12" icon={PlusCircleIcon} color="emerald" onClick={()=>setIncomeIsOpen(true)}>Add Income</Button>
               </Card>
               </div>
-              <Card className="w-full bg-slate-200 border-slate-400 border-2">
+              <Card className="w-full shadow-md bg-slate-200 border-slate-400 border-2">
                 <Title>Money In vs. Money Out</Title>
                 <MIMO expenses={expenseData} income={incomeData} currency={user!.publicMetadata.currency as string}/>
               </Card>
@@ -136,7 +137,7 @@ export default function listPage(){
                 </Card> */}
           </TabPanel>
           <TabPanel>
-            <Card className="mt-6">
+            <Card className="mt-6 bg-slate-200 border-slate-400 border-2">
                 <div className="flex justify-between">
                         <Title className="w-fit relative float-left">{filterlabels[filtermode]}</Title>
                         {/* @ts-ignore */}
@@ -145,8 +146,8 @@ export default function listPage(){
                             {selectLabels.map((item, index) => {return <SelectItem key={index} className="text-stone-700 bg-gray-800/30 hover:cursor-pointer" value={index}>{item}</SelectItem>})}
                         </Select>
                     </div>
-                    <div className="flex justify-between">
-                        <Table className="mt-5 w-full rounded-b-md border-2 rounded-md">
+                    <div className="block">
+                        {expenseData.length > 0 ?<Table className="grid mt-5 w-full rounded-b-md border-2 rounded-md">
                             <TableHead>
                                 <TableRow className="border-b-2 dark:border-b-white border-b-black">
                                     <TableHeaderCell className={`w-8 relative ${TableHeadStyle[0]}`}>
@@ -195,6 +196,7 @@ export default function listPage(){
                                     </TableHeaderCell>
                                 </TableRow>
                             </TableHead>
+                            
                             <TableBody className="h-fit dark:divide-white divide-y  divide-black">
                                 {expenseData.map((item : ExpenseType, index : number) => {
                                     let date = "unknown"
@@ -258,7 +260,8 @@ export default function listPage(){
                                     </TableRow>)
                                 })}
                             </TableBody>
-                        </Table>
+                        </Table> : <></>}
+                        {expenseData.length == 0 ? <motion.div className="h-full text-center w-full block mt-5">No data. To get started, go to the overview tab via the tab list above.</motion.div> : null}
                     </div>
             </Card>
           </TabPanel>
@@ -277,7 +280,9 @@ export default function listPage(){
             </Grid>
         </TabPanel>
         <TabPanel>
-            
+            <Col numColSpan={1} numColSpanLg={3} className="gap-6 mt-6 ">
+            <Card className=" dark:border-2 relative"></Card>
+            </Col>
         </TabPanel>
         </TabPanels>
       </TabGroup>
