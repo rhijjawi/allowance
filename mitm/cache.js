@@ -14,7 +14,9 @@ app.use((req, res, next) => {
     res.header('Cross-Origin-Resource-Policy', 'same-origin') ;
     next();
 })
-
+app.get('/health', (req, res) => {
+    res.json({status: 'ok'}).status(200)
+})
 app.get('/today/:src/:dst', async(req, res) => {
     const { src } = (req.params) //EUR
     const { dst } = (req.params) //USD

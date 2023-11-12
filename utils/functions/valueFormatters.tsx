@@ -6,10 +6,10 @@ export const standardizeCurrency = async(transaction : ExpenseType|IncomeType, c
     const [Y,M,D] = (transaction.transaction_date.split('-'));
     let _
     if (new Date(transaction.transaction_date) > new Date()){
-        _ = await fetch(`http://127.0.0.1:3001/today/${transaction.currency}/${currency}`)
+        _ = await fetch(`https://api.logmoney.app/today/${transaction.currency}/${currency}`)
     }
     else {
-        _ = await fetch(`http://127.0.0.1:3001/historical/${Y}-${M}-${D}/${transaction.currency}/${currency}`)
+        _ = await fetch(`https://api.logmoney.app/historical/${Y}-${M}-${D}/${transaction.currency}/${currency}`)
     }
     let data = await _.json()
     return data.amount * transaction.amount
