@@ -1,26 +1,23 @@
 'use client';
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Popover, Transition,  } from '@headlessui/react'
-import {Subscriptions} from './forms/QuickForms'
 import {
-  ArrowPathIcon,
   Bars3Icon,
   BookOpenIcon,
   ChartPieIcon,
-  CreditCardIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
+  HomeIcon,
   SquaresPlusIcon,
   TableCellsIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon, PlusCircleIcon, CalendarDaysIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link';
-import { useUser } from '@clerk/nextjs';
-import {ExpenditureDialog, IncomeDialogue} from './forms/QuickForms'
+import { UserProfile, useUser } from '@clerk/nextjs';
+import {ExpenditureDialog, IncomeDialogue} from '@/components/forms/QuickForms'
 import { UserButton } from '@clerk/nextjs';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
+import ParentHeader from './ParentHeader';
 
 const products = [
   { name: 'Overview', description: 'Get a better understanding of your expenditure', href: '/expenditure/overview', icon: ChartPieIcon },
@@ -32,8 +29,11 @@ const debt = [
     { name: "Calculator (coming soon)", description: "Calculate your debt-free date", icon: SquaresPlusIcon},
     { name: 'My Debt', description: 'Get a broken-down list of your debt', href: '/debt/list', icon: TableCellsIcon},
     { name: 'Learn More', description: 'Debt explainers, suggestions and guides', href: '/debt/literature', icon: BookOpenIcon},
-    // 
 ]
+const parentNavigation = [
+    { name: 'Reports', href: '/reports/manage' },
+]
+
 
 function classNames(...classes : any[]) {
     return classes.filter(Boolean).join(' ')
@@ -49,6 +49,7 @@ export default function Header() {
         { name: 'Add Expense', icon: PlusCircleIcon, onclickFunction: () => {setIsIncomeOpen(false);setIsOpen(true)} },
         { name: 'Add Income', icon: PlusCircleIcon, onclickFunction: () => {setIsOpen(false);setIsIncomeOpen(true)} },
     ]
+    if (user?.publicMetadata.role == 'parent') {return (<ParentHeader/>)}
     return (
         <header className="bg-white z-50">
         <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
@@ -59,11 +60,7 @@ export default function Header() {
             </Link>
             </div>
             <div className="flex lg:hidden">
-            <button
-                type="button"
-                className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-                onClick={() => setMobileMenuOpen(true)}
-            >
+            <button type="button" className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700" onClick={() => setMobileMenuOpen(true)}>
                 <span className="sr-only">Open main menu</span>
                 <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
@@ -71,99 +68,99 @@ export default function Header() {
             <ExpenditureDialog isOpen={isOpen} setIsOpen={setIsOpen} />
             <IncomeDialogue isOpen={isIncomeOpen} setIsOpen={setIsIncomeOpen} />
             <Popover.Group className="hidden lg:flex lg:gap-x-12">
-            <Popover className="relative">
-                <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
-                My Money
-                <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
-                </Popover.Button>
+                <Popover className="relative">
+                    <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
+                    My Money
+                    <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+                    </Popover.Button>
 
-                <Transition
-                as={Fragment}
-                enter="transition ease-out duration-200"
-                enterFrom="opacity-0 translate-y-1"
-                enterTo="opacity-100 translate-y-0"
-                leave="transition ease-in duration-150"
-                leaveFrom="opacity-100 translate-y-0"
-                leaveTo="opacity-0 translate-y-1"
-                >
-                <Popover.Panel className="absolute -left-8 top-full z-20 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-                    <div className="p-4">
-                    {products.map((item) => (
-                        <div
-                        key={item.name}
-                        className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
-                        >
-                        <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                            <item.icon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />
+                    <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-200"
+                    enterFrom="opacity-0 translate-y-1"
+                    enterTo="opacity-100 translate-y-0"
+                    leave="transition ease-in duration-150"
+                    leaveFrom="opacity-100 translate-y-0"
+                    leaveTo="opacity-0 translate-y-1"
+                    >
+                    <Popover.Panel className="absolute -left-8 top-full z-20 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                        <div className="p-4">
+                        {products.map((item) => (
+                            <div
+                            key={item.name}
+                            className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                            >
+                            <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                                <item.icon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />
+                            </div>
+                            <div className="flex-auto">
+                                <Link href={item.href} className="block font-semibold text-gray-900">
+                                {item.name}
+                                <span className="absolute inset-0" />
+                                </Link>
+                                <p className="mt-1 text-gray-600">{item.description}</p>
+                            </div>
+                            </div>
+                        ))}
                         </div>
-                        <div className="flex-auto">
-                            <Link href={item.href} className="block font-semibold text-gray-900">
+                        <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
+                        {callsToAction.map((item) => (
+                            <button
+                            key={item.name}
+                            onClick={item.onclickFunction}
+                            className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
+                            >
+                            <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
                             {item.name}
-                            <span className="absolute inset-0" />
-                            </Link>
-                            <p className="mt-1 text-gray-600">{item.description}</p>
+                            </button>
+                        ))}
                         </div>
-                        </div>
-                    ))}
-                    </div>
-                    <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                    {callsToAction.map((item) => (
-                        <button
-                        key={item.name}
-                        onClick={item.onclickFunction}
-                        className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
-                        >
-                        <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
-                        {item.name}
-                        </button>
-                    ))}
-                    </div>
-                </Popover.Panel>
-                </Transition>
-            </Popover>
+                    </Popover.Panel>
+                    </Transition>
+                </Popover>
             <ExpenditureDialog isOpen={isOpen} setIsOpen={setIsOpen} />
             <IncomeDialogue isOpen={isIncomeOpen} setIsOpen={setIsIncomeOpen} />
             <Popover.Group className="hidden lg:flex lg:gap-x-12">
-            <Popover className="relative">
-                <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
-                Debt
-                <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
-                </Popover.Button>
-                <Transition
-                as={Fragment}
-                enter="transition ease-out duration-200"
-                enterFrom="opacity-0 translate-y-1"
-                enterTo="opacity-100 translate-y-0"
-                leave="transition ease-in duration-150"
-                leaveFrom="opacity-100 translate-y-0"
-                leaveTo="opacity-0 translate-y-1"
-                >
-                <Popover.Panel className="absolute -left-8 top-full z-20 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-                    <div className="p-4">
-                    {debt.map((item) => (
-                        <div
-                        key={item.name}
-                        className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
-                        >
-                        <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                            <item.icon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />
+                <Popover className="relative">
+                    <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
+                    Debt
+                    <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+                    </Popover.Button>
+                    <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-200"
+                    enterFrom="opacity-0 translate-y-1"
+                    enterTo="opacity-100 translate-y-0"
+                    leave="transition ease-in duration-150"
+                    leaveFrom="opacity-100 translate-y-0"
+                    leaveTo="opacity-0 translate-y-1"
+                    >
+                    <Popover.Panel className="absolute -left-8 top-full z-20 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                        <div className="p-4">
+                        {debt.map((item) => (
+                            <div
+                            key={item.name}
+                            className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                            >
+                            <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                                <item.icon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />
+                            </div>
+                            <div className="flex-auto">
+                                {item.href ? <Link href={item.href} className="block font-semibold text-gray-900">
+                                {item.name}
+                                <span className="absolute inset-0" />
+                                </Link> : <p className="block cursor-not-allowed select-none font-semibold text-gray-900">
+                                {item.name}
+                                <span className="absolute inset-0" />
+                                </p>}
+                                <p className="mt-1 text-gray-600">{item.description}</p>
+                            </div>
+                            </div>
+                        ))}
                         </div>
-                        <div className="flex-auto">
-                            {item.href ? <Link href={item.href} className="block font-semibold text-gray-900">
-                            {item.name}
-                            <span className="absolute inset-0" />
-                            </Link> : <p className="block cursor-not-allowed select-none font-semibold text-gray-900">
-                            {item.name}
-                            <span className="absolute inset-0" />
-                            </p>}
-                            <p className="mt-1 text-gray-600">{item.description}</p>
-                        </div>
-                        </div>
-                    ))}
-                    </div>
-                </Popover.Panel>
-                </Transition>
-            </Popover>
+                    </Popover.Panel>
+                    </Transition>
+                </Popover>
             </Popover.Group>
             <Link href="/reports" className="text-sm font-semibold leading-6 text-gray-900">
                 Reports
@@ -173,7 +170,9 @@ export default function Header() {
             </Link>
             </Popover.Group>
             <motion.div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                {user ? <UserButton afterSignOutUrl="/"/> : <motion.button onClick={()=>{router.push('/sign-in')}} className='w-fit py-2 px-4 text-sm bg-indigo-600 rounded-md cursor-pointer text-white'>Log In / Sign Up</motion.button>}
+                {user ? <UserButton afterSignOutUrl="/" userProfileUrl='/profile' showName userProfileMode='navigation'>
+                </UserButton>
+                : <motion.button onClick={()=>{router.push('/sign-in')}} className='w-fit py-2 px-4 text-sm bg-indigo-600 rounded-md cursor-pointer text-white'>Log In / Sign Up</motion.button>}
             </motion.div>
         </nav>
         <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>

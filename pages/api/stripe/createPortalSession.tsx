@@ -17,28 +17,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 async function POST(req: NextApiRequest, res: NextApiResponse){
     const { userId } = getAuth(req);
-    const {item} = JSON.parse(req.body);
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
     const {data, error} = await supabase.from('parents').select('*').eq('clerk_id', userId);
-    if (data!.length == 0){
-        const stripeUser = await stripe.customers.retrieve(data![0]['stripe_id']);
-        return res.status(200).json({message: "OK", customer : stripeUser})
+    if (data!.length > 0){
+        const portalSession = await stripe.billingPortal.sessions.create({
+            customer: data![0]['stripe_id'],
+            return_url: `https://logmoney.app${req.query.backurl}`,
+        });
+        return res.status(200).json({message: "OK", portalSession : portalSession.url})
     }
     else {
-        const session = await stripe.checkout.sessions.create({
-            billing_address_collection : "auto",
-            currency: "eur",
-            line_items : [{price: item[0], quantity: 1}],
-            customer: data![0]['stripe_id'],
-            subscription_data: {trial_period_days: 30},
-            mode: item[1] ? 'subscription' : 'payment',
-            success_url: `https://logmoney.app/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `https://logmoney.app/cancel`,
-        });
-        console.log(session)
-        return res.status(200).json({message: "OK", goto: session.url})
+        return res.status(500).json({message: "oh sheiße", data: data, error: error})
     }
-    
 }
 
 export default handler;

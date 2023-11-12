@@ -5,43 +5,29 @@ import symbols from "@/components/static/symbols.json"
 import { motion, AnimatePresence, useAnimate } from "framer-motion";
 import { use, useEffect, useState } from "react"
 import { useAlerts } from "@/components/contexts/alertHandler"
-import { useAuth, useUser } from "@clerk/nextjs";
+import { clerkClient, useAuth, useUser } from "@clerk/nextjs";
 import { getSupabase } from "@/utils/supabase";
 export default function Index() {
-
-    const [isLoading, setIsLoading] = useState(false)
-    const {alerts, addAlert, setAlerts} = useAlerts()
-    const [language, setLanguage] = useState("en")
-    const [currency, setCurrency] = useState("USD")
-    const [email, setEmail] = useState("")
     const {user, isLoaded, isSignedIn} = useUser()
+    if (!isLoaded)return <></>
+    const [isLoading, setIsLoading] = useState(false)
+    const { addAlert } = useAlerts()
+    //@ts-ignore
+    const [language, setLanguage] = useState(user?.publicMetadata.reports.language)
+    //@ts-ignore
+    const [currency, setCurrency] = useState(user?.publicMetadata.reports.currency)
+    //@ts-ignore
+    const [email, setEmail] = useState(user.publicMetadata.reports.email)
     const {getToken} = useAuth()
     const [isEmailValid, setIsEmailValid] = useState(false)
     useEffect(()=>{
-        if (email.includes('@')){
+        if (email && email.includes('@') && email.includes('.')){
             setIsEmailValid(true)
         }
         else {
             setIsEmailValid(false)
         }
     }, [email])
-    useEffect(()=>{
-        async function handlePress(){
-            if (isLoading){
-                await addAlert("success", "Successfully saved changes", 2000)
-            }
-            setIsLoading(false)
-        }
-        handlePress()
-    }, [isLoading])
-    useEffect(()=>{
-        async function handlePress(){
-            const token = await getToken({template: "supabase"})
-            const supabase = await getSupabase(token)
-            const reportConfig = await supabase.from('reports').select('*').limit(1).single()
-        }
-        handlePress()
-    }, [])
     
     const settings = [
         {
@@ -50,6 +36,7 @@ export default function Index() {
             onChange: (value : string)=>{setLanguage(value)},
             icon: ChatBubbleLeftRightIcon,
             icon_color: "text-indigo-600 dark:text-white",
+            value: language,
             options: langs.sort((a, b)=>{return a.name.localeCompare(b.name)}).map((lang)=><SelectItem key={lang.code} value={lang.code}>{lang.name}</SelectItem>)
         },
         {
@@ -58,10 +45,11 @@ export default function Index() {
             onChange: (value : string)=>{setCurrency(value)},
             icon: CurrencyDollarIcon,
             icon_color: "text-green-600 dark:text-green-400",
+            value: currency,
             options: Object.keys(symbols).map((key : string)=><SelectItem key={key} value={key}>({key}) {(symbols as any)[key]}</SelectItem>)
         },
     ]
-    if (!isLoaded)return <></>
+    
     return (
     <>
     <div className="overflow-hidden bg-white dark:bg-black w-full border-t-2 h-fit">
@@ -91,7 +79,7 @@ export default function Index() {
                     <Title className="mb-3">Settings</Title>
                     <div className="mb-5 py-4 px-4 relative border-2 border-indigo-500  dark:border-cyan-500 bg-indigo-200/50 col-start-1 col-span-2 mx-auto w-[45%] rounded-md shadow-md">
                         Your unique ID: <p className="font-bold inline-block align-middle">{user!.id}</p>
-                        <Subtitle>This ID is used for pairing parents/guardians with your account{user?.publicMetadata.role as string}.</Subtitle>
+                        <Subtitle>This ID is used for pairing parents/guardians with your account.</Subtitle>
                         {navigator.clipboard && <Button onClick={()=>{
                             addAlert("success", "Copied to clipboard")
                             navigator.clipboard.writeText(user!.id)
@@ -99,14 +87,17 @@ export default function Index() {
                     </div>
                     {user!.publicMetadata.role=='parent' && (
                     settings.map((setting)=>
-                        (<div className="mb-5 py-4 px-4 relative border-2 border-indigo-500  dark:border-cyan-500 bg-indigo-200/50 col-start-1 col-span-2 mx-auto w-[45%] rounded-md shadow-md">
+                        {
+                            return (
+                        <div className="mb-5 py-4 px-4 relative border-2 border-indigo-500  dark:border-cyan-500 bg-indigo-200/50 col-start-1 col-span-2 mx-auto w-[45%] rounded-md shadow-md">
                             <setting.icon className={`absolute w-6 h-6 right-3 top-3 ${setting.icon_color}`}/>
                             <p className="align-baseline inline-block">{setting.name}</p>
                             <Subtitle className="align-baseline">{setting.description}</Subtitle>
-                            <Select onValueChange={(val)=>setting.onChange(val)} enableClear={false} className="disabled:bg-gray-300/20 shadow-md rounded-lg cursor-not-allowed max-w-[15rem] mr-auto my-2 mx-auto ">
+                            {/* @ts-ignore */}
+                            <Select onValueChange={(val)=>setting.onChange(val)} value={setting.value} enableClear={false} className="disabled:bg-gray-300/20 shadow-md rounded-lg cursor-not-allowed max-w-[15rem] mr-auto my-2 mx-auto ">
                                 {setting.options}
                             </Select>
-                        </div>)
+                        </div>)}
                     )
                     
                     )}
@@ -114,13 +105,31 @@ export default function Index() {
                     <div className="mb-5 py-4 px-4 relative border-2 border-indigo-500  dark:border-cyan-500 bg-indigo-200/50 col-start-1 col-span-2 mx-auto w-[45%] rounded-md shadow-md">
                             <Cog8ToothIcon className={`absolute w-6 h-6 right-3 top-3`}/>
                             <p className="align-baseline inline-block">Contact Details</p>
-                            <TextInput type="email" placeholder="maxmustermann@emaildomain.com" onValueChange={(val : string)=>setEmail(val)} className={`disabled:bg-gray-300/20 shadow-md rounded-lg cursor-not-allowed max-w-[20rem] mr-auto my-2 mx-auto ${isEmailValid ? "border-2 !border-green-400" : ""}`}/>
+                            <TextInput required error={!isEmailValid} type="email" placeholder="max@mustermann.com" value={email} onValueChange={(val : string)=>setEmail(val)} className={`disabled:bg-gray-300/20 shadow-md rounded-lg cursor-not-allowed max-w-[20rem] mr-auto my-2 mx-auto ${isEmailValid ? "border-2 !border-green-400" : ""}`}/>
                     </div>
                     }
                     {user!.publicMetadata.role == 'parent' && (
                     <div className="col-span-2 w-56 mx-auto">
-                        <Button loading={isLoading} onClick={(e)=>{
+                        <Button disabled={!isEmailValid} loading={isLoading} onClick={async(e)=>{
                             setIsLoading(true)
+                            const metaupdate = await fetch('/api/user/metadata', {method: 'PUT', headers: {"Content-Type": "application/json"},
+                            body : JSON.stringify(
+                                {
+                                    pub: {
+                                        reports: {
+                                            language: language,
+                                            currency: currency,
+                                            email: email
+                                        },
+                                }}
+                            )})
+                            if (metaupdate.status === 200){
+                                addAlert("success", "Successfully saved changes", 2000)
+                            }
+                            else {
+                                addAlert("error", "Failed to save changes", 2000)
+                            }
+                            setIsLoading(false)
                             }} className="w-full">Save Changes</Button>
                     </div>
                     )}

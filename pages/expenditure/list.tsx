@@ -18,6 +18,7 @@ import { CategorySchema, ExpenseSchema, IncomeSchema } from "@/types/supabase"
 import {ExpenditureDelta, IncomeDelta} from "@/components/charts/ExpenditureDelta"
 import { LastPeriodDates } from "@/utils/functions/filterData"
 import { motion } from "framer-motion"
+import ParentHeader from "@/components/ui/headers/ParentHeader"
 let TableHeadStyle = ["dark:bg-black bg-white select-none","h-6 relative right-0 bottom-0 top-0 left-0 mx-auto my-auto"]
 let ChevronStyle = ["absolute w-8 aspect-square rounded-full right-0 bottom-0 top-0 my-auto mr-4","w-8 h-8 border-2 rounded-full absolute"]
 

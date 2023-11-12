@@ -1,12 +1,14 @@
-import { useUser } from "@clerk/nextjs";
-import { ReactElement, use, useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { Button, Text, ButtonProps, NumberInput, DatePicker, DatePickerProps } from "@tremor/react";
-import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
-import * as symbols from "@/components/static/symbols.json";
-import { CalendarIcon } from "@heroicons/react/24/outline";
+"use client";
+import { UserProfile, useUser } from "@clerk/nextjs";
+import { User } from "@clerk/nextjs/server";
 import { Dialog } from "@headlessui/react";
+import { CalendarIcon, CurrencyDollarIcon, UserIcon, WalletIcon } from "@heroicons/react/24/outline";
+import { Button, NumberInput, Text } from "@tremor/react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/router";
+import { useRef, useState } from "react";
+import symbols from "@/components/static/symbols.json";
+import { useAlerts } from "@/components/contexts/alertHandler";
 function nth(number: number){
     if (number > 3 && number < 21) return 'th';
     switch (number % 10) {
@@ -16,20 +18,9 @@ function nth(number: number){
       default: return "th";
     }
 };
-function Card(props : any, {...rest}){
-    return(
-    <div className={`divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow w-full mt-5 max-w-[80%] my-auto mx-auto border-2 ${props.className}`}>
-    <div className="px-4 py-5 sm:px-6 text-lg dark:bg-dark-tremor-background">
-      {props.header}
-    </div>
-    <div className="pt-5 sm:pt-6 dark:bg-dark-tremor-background">{props.children}</div>
-    <div className="px-4 py-4 sm:px-6 dark:bg-dark-tremor-background">
-      {props.footer}
-    </div>
-  </div>)
-}
-export default function Profile() {
-    const {user,isLoaded, } = useUser()
+export default function ManageProfile(){
+    const {user, isLoaded, isSignedIn} = useUser()
+    const router = useRouter()
     const MonthlyBudget = useRef<HTMLInputElement>(null)
     const MonthlyIncome = useRef<HTMLInputElement>(null)
     const saveRef = useRef<HTMLButtonElement>(null)
@@ -41,26 +32,26 @@ export default function Profile() {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [wasOpened, setWasOpened] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
-    return (<>
-    <Card header={<h1>Profile</h1>} footer={<span className="text-stone-500">Change your profile picture on <a target="_blank" className="text-[rgb(29,79,196)]" href={'https://gravatar.com/'}>Gravatar</a><br/>If you're running into any issues, feel free to contact us at: <a className="text-blue-300 underline" href={`mailto:expenses@ramzihijjawi.me`}>expenses@ramzihijjawi.me</a></span>}>
-        <div className="w-24 h-24 right-0 left-0 mx-auto ">
-            <div className="relative  z-10 text-center inline-flex h-full aspect-square items-center justify-center rounded-full bg-gray-500">
-                <span className="relative text-center inline-flex h-full aspect-square items-center justify-center rounded-lg bg-gray-500 overflow-hidden">
-                    {user?.imageUrl ? <Image alt={""} src={user.imageUrl} width={1000} height={1000}></Image> : <span className="text-md font-medium leading-none text-white">{user?.fullName?.split(' ').map((i)=>{return i[0]+""})}</span>}
-                </span>
-            </div>
-            </div>
-            <div className="relative w-full right-0 h-12 block">
-                <div className="w-fit right-0 absolute left-0 mx-auto mt-3">
-                    <p className="text-xl"><b>{user?.fullName}</b></p>
-                </div>
-            </div>
-            <div className="my-3 max-w-sm mx-auto">
-                {/* <div className="relative max-w-md mx-auto right-0 h-12 block">
-                    <label className="text-md font-medium leading-none text-gray-700">Monthly Budget</label>
-                    <NumberInput placeholder="Enter your monthly budget" ref={MonthlyBudget}/>
-                </div> */}
-                <label htmlFor="monthlyBudget" className="text-md block mb-2 font-medium leading-none text-gray-700 dark:text-white">
+    const { addAlert } = useAlerts()
+    if (!isLoaded)return (<></>)
+
+    return (
+        <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="w-full min-h-screen h-fit"
+        transition={{duration: 1}}
+        >
+
+            <UserProfile path="/profile/manage" routing="virtual" appearance={{elements: {rootBox : "mx-auto h-fit my-10"}}}>
+                <UserProfile.Page label="account" />
+                <UserProfile.Page label="security" />
+                <UserProfile.Page label="Expenditure" url="expenditure" labelIcon={<WalletIcon />}>
+                    <div className="w-full h-fit">
+                    <div className="my-3 max-w-sm mx-auto">
+                
+                <label htmlFor="monthlyBudget" className="text-md block mb-2 font-medium leading-none text-gray-700 dark:text-black">
                         Monthly Budget
                 </label>
                 <div className="grid grid-cols-10">
@@ -82,7 +73,7 @@ export default function Profile() {
                                 setbudgetCurrency(e.target.value)
                             }
                                 }
-                            className="h-full dark:text-gray-900 absolute right-0 top-0 float-right rounded-md border-0 bg-transparent text-gray-500 focus:ring-transparent sm:text-sm"
+                            className="h-full dark:text-white absolute right-0 top-0 float-right rounded-md border-0 bg-transparent text-gray-500 focus:ring-transparent sm:text-sm"
                             value={budgetCurrency}
                         >
                             {Object.keys(symbols).map((currency:string, index:number) => (
@@ -96,7 +87,7 @@ export default function Profile() {
                     icon={CalendarIcon} className="h-full px-2 aspect-square"></Button> */}
                 </div>
                 </div>
-                <label htmlFor="monthlyBudget" className="text-md block font-medium leading-none text-gray-700 mt-8 mb-2 dark:text-white">
+                <label htmlFor="monthlyBudget" className="text-md block font-medium leading-none text-gray-700 mt-8 mb-2 dark:text-black">
                         Monthly Income/Allowance
                 </label>
                 <div className="grid grid-cols-10">
@@ -147,7 +138,7 @@ export default function Profile() {
                                         <Text>You recieve your paycheck, allowance, or income on the {date}{nth(date)} day of each month.</Text>
                                     </div>
                             </div>
-                                    <div className="relative w-fit mb-3 right-0 bottom-0 left-0 mx-auto">
+                                    <div className="w-fit mb-3 right-0 bottom-0 left-0 mx-auto">
                                         <Button onClick={()=>{
                                             setIsOpen(false)
                                         }} className="h-10 pt-4 py-2 mx-auto relative">Done</Button>
@@ -158,14 +149,34 @@ export default function Profile() {
                     </div>
                     {/*  */}
                 </div>
+                    <div className="h-fit w-fit mx-auto mt-5">
+                        <Button className="mx-auto">Save Changes</Button>
+                    </div>
                 </div>
-                <div className="w-fit mx-auto right-0 left-0 bottom-0">
-                    <Button ref={saveRef} loading={loading} onClick={()=>{
-                        setLoading(true)    
-                    }} className="relative mx-auto my-5 py-2 px-3">Save Changes</Button>
-                </div>
-            
-            
-    </Card>
-    </>)
+                    </div>
+                </UserProfile.Page>
+                <UserProfile.Page label="Subscription" url="subscription" labelIcon={<UserIcon />}>
+                    <div className="w-full h-24">
+                        <p className="text-black font-semibold text-2xl">Manage your Subscription</p>
+                        <div className="mx-auto w-fit py-3">
+                            <Button variant="primary" className="mx-auto w-fit bottom-0 right-0 left-0 top-0" onClick={async()=>{
+                                fetch(`/api/stripe/createPortalSession?backurl=${router.pathname}`, {method : "POST"}).then((res) => {
+                                    if (res.status === 200){
+                                        res.json().then((data)=>{
+                                            router.push(data.portalSession)
+                                        })
+                                    }
+                                    else{
+                                        res.json().then((data)=>{
+                                            addAlert("error", "Something went wrong", 5000)
+                                        })
+                                    }
+                                })
+                            }}>Manage</Button>
+                        </div>
+                    </div>
+                </UserProfile.Page> 
+            </UserProfile>
+        </motion.div>
+    )
 }

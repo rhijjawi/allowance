@@ -10,13 +10,10 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env
 
 async function POST(req: NextApiRequest, res: NextApiResponse) {
   const { data } = req.body;
-  await clerkClient.users.updateUserMetadata(data.id, {
-    publicMetadata: {
-      role: data.unsafe_metadata.role,
-      currency: data.unsafe_metadata.currency
-    },
-    unsafeMetadata: {}
-  })
+  let pm = {
+    role: data.unsafe_metadata.role,
+    currency: data.unsafe_metadata.currency,
+  }
   if (data.unsafe_metadata.role === "parent") {
     const { data: data2, error } = await supabase.from('parents').select('*').eq('clerk_id', data.id);
     if (data2!.length > 0) {
@@ -38,7 +35,19 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
       });
       await supabase.from('parents').insert({clerk_id : data.id, stripe_id : customer.id, subscription_id : null})
     }
+    let pm = {
+      role: data.unsafe_metadata.role,
+      currency: data.unsafe_metadata.currency,
+      reports : {
+        currency : data.unsafe_metadata.currency,
+        language : "en"
+      }
+    }
   }
+  await clerkClient.users.updateUserMetadata(data.id, {
+    publicMetadata:  pm,
+    unsafeMetadata: {}
+  });
   res.status(200).json({ message: "OK" })
   
 }

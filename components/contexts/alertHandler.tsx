@@ -1,7 +1,8 @@
 import { BellIcon, CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { AnimatePresence, motion } from 'framer-motion'
 import { createContext, useState, useEffect, useContext } from 'react'
-const alertContext = createContext<any>([])
+import {AlertProvider} from '../interfaces/alertProviderType'
+const alertContext = createContext<AlertProvider>([] as unknown as AlertProvider)
 
 export function AlertProvider({children} : {children: React.ReactNode}){
     const [alerts, setAlerts] = useState<{id: number, type: "success"|"warning"|"error", message: string, timeout : number}[]>([])
@@ -13,6 +14,14 @@ export function AlertProvider({children} : {children: React.ReactNode}){
         return new Promise(resolve => {
             setTimeout(()=>{ resolve(void(0))}, arbitraryResoleTimeoutms);
         }); 
+    }
+    async function clearAlerts(){
+        setAlerts((prevState) => {
+            return []
+        })
+        return new Promise(resolve => {
+            setTimeout(()=>{ resolve(void(0))}, 100);
+        });
     }
     const theme : {[key: string] : {color: string, icon : any} } = {
         success : {
@@ -44,8 +53,8 @@ export function AlertProvider({children} : {children: React.ReactNode}){
         }
       }, [alerts]);
     return (
-    <alertContext.Provider value={{alerts: alerts, addAlert: addAlert, setAlerts: setAlerts}}>
-        <div className="fixed h-fit z-[50] right-3 top-5 grid grid-cols-1 gap-2">
+    <alertContext.Provider value={{addAlert: addAlert, clearAlerts: clearAlerts}}>
+        <div className="fixed h-fit z-[10000] right-3 top-5 grid grid-cols-1 gap-2">
         <AnimatePresence initial={true}>
             {alerts.map((alert)=>{
                 const Icon = theme[alert.type].icon
@@ -60,9 +69,9 @@ export function AlertProvider({children} : {children: React.ReactNode}){
                         initial={{ opacity: 0, x: 200 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 200 }}
-                        transition={{ duration: 0.7 }}
-                        className={`relative cursor-pointer w-[30rem] rounded-md border-2 border-${theme[alert.type].color}-500 bg-${theme[alert.type].color}-300 bg-opacity-90 px-3 py-3`}>
-                        <div className="pt-0">
+                        transition={{ duration: 0.5 }}
+                        className={`relative z-[1000] cursor-pointer w-[30rem] rounded-md border-2 border-${theme[alert.type].color}-500 bg-${theme[alert.type].color}-300 bg-opacity-90 px-3 py-3`}>
+                        <div className="pt-0 z-[1000]">
                             <Icon className="inline-block h-5 w-5 align-middle" />
                             <p className="inline pl-1 align-middle font-bold dark:text-black">{alert.type.charAt(0).toUpperCase() + alert.type.slice(1)}</p>
                             <span className="h-full align-middle pl-2 dark:text-black">{alert.message}</span>

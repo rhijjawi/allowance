@@ -6,7 +6,6 @@ import { Card, Metric, Subtitle, Text, Title, Callout} from "@tremor/react";
 import { ExclamationCircleIcon} from "@heroicons/react/24/solid";
 import {CheckIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import { getSupabase } from "@/utils/supabase";
-import { useRouter } from "next/router";
 const TransactionHandlerCTX = createContext<any>([])
 export function TransactionHandlerProvider({children} : {children: React.ReactNode}){
     const { user, isSignedIn, isLoaded } = useUser()
@@ -76,6 +75,6 @@ export function TransactionHandlerProvider({children} : {children: React.ReactNo
 }
 export function useTransactionHandler(){
     const ctx = useContext(TransactionHandlerCTX)
-    if (ctx === undefined) throw new Error("useExpenseCTX must be used within a ExpenseCTXProvider")
+    if (ctx === undefined) throw new Error("TransactionHandlerCTX must be used within a TransactionHandlerProvider")
     return ctx
 }

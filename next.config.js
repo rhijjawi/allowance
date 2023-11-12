@@ -6,8 +6,11 @@ const nextConfig = {
         remotePatterns : [{
             protocol: 'https',
             hostname: 's.gravatar.com',
-            port: '',
             pathname: '/avatar/**'
+        },
+        {
+            protocol: 'https',
+            hostname: 'img.clerk.com',
         }
         ],   
     }

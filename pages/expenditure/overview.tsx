@@ -11,18 +11,23 @@ import { getColor } from "@/components/static/categories";
 import { CategorySchema } from "@/types/supabase";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { Switch } from "@headlessui/react";
 
+const chartVariants = {
+    animate : {opacity: 1, width: "99%"},
+    initial : {opacity: 0, width: "100%"}
+}
 
 export default function Expenditure() {
 
     const {user, isLoaded, isSignedIn} = useUser();
     
-    // const {getToken} = useAuth()
+    const [checked, setChecked] = useState(false)
     const {expenseData, categoryData} = useExpenses()
     const [chartData, setChartData] = useState<any>([])
     const [cards, setCards] = useState<any>([])
     const CustomCard = motion(Card)
-    
+    const CustomBarChart = motion(BarChart, {forwardMotionProps: true})
     useEffect(()=>{
         let active = true
         let categoryList : any = {}
@@ -96,15 +101,19 @@ return (
                 <Button size="md" className="h-full"><InformationCircleIcon className="h-6 w-6 inline "/><span> Read more</span></Button>
             </div>
         </Card>
-            {<CustomCard 
-            className="h-fit"
-            initial={{size: 0, opacity: 0}}
-            animate={{size: 1, opacity: 1}}
+            {<Card 
+            className="h-fit relative"
+            hidden={chartData.length == 0}
             >
                 { 
                 <>
                 <Title>Overall Expenditure</Title>
-                <BarChart 
+                
+                <CustomBarChart
+                variants={chartVariants}
+                animate={chartData.length > 0 ? "animate" : "initial"}
+                exit={{size: 0, opacity: 0}}
+                transition={{duration: 0.3}}
                 id={"barChart"}
                 className="mt-6 min-w-fit w-full min-h-[400px] aspect-square"
                 data={chartData}
@@ -116,7 +125,7 @@ return (
                 valueFormatter={(number)=>{return currFormatter(number, user!.publicMetadata.currency as string)}}
                 /></>}
                 {chartData.length == 0 ? <motion.p className="mt-6">It looks like you haven't recorded any expense data. Click <Link href="/expenditure/list" className="text-black font-semibold">here</Link> to get started</motion.p> : null}
-            </CustomCard> }
+            </Card> }
                 
 
         <Grid numItems={1} numItemsSm={2} numItemsLg={3} className="gap-5 mt-6 w-full">

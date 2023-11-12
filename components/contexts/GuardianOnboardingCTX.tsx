@@ -5,16 +5,19 @@ import { createContext, useState, useEffect, useContext } from 'react'
 import { getSupabase } from '@/utils/supabase'
 import { Button } from '@tremor/react'
 import { useRouter } from 'next/router'
+import { useAlerts } from './alertHandler'
+import {AlertProvider} from '../interfaces/alertProviderType'
 const GuardianOnboardingContext = createContext<any>([])
-const exemptedRoutes = ['/subscription/manage', '/sign-in/[[...index]]', '/sign-in', '/sign-up', '/sign-up/[[...index]]', '/forgot-password', '/reset-password', '/verify-email', '/verify-phone', '/', '/privacy-policy', '/_error', '/terms-of-service', '/contact-us', '/about-us', '/faq', '/pricing', '/debt/literature']
+const exemptedRoutes = ['/subscription/manage', '/404', '/sign-in/[[...index]]', '/sign-in', '/sign-up', '/sign-up/[[...index]]', '/forgot-password', '/reset-password', '/verify-email', '/verify-phone', '/', '/privacy-policy', '/_error', '/terms-of-service', '/contact-us', '/about-us', '/faq', '/pricing', '/debt/literature']
 
 export function GuardianOnboardingProvider({children} : {children: React.ReactNode}){
-    const [hasValidStripeSubscription, setHasValidStripeSubscription] = useState<boolean|null>(null)
-    const [hasFinishedOnboarding, setHasFinishedOnboarding] = useState<boolean|null>(null)
+    const [hasValidStripeSubscription, setHasValidStripeSubscription] = useState<boolean|null>(true)
+    const [hasFinishedOnboarding, setHasFinishedOnboarding] = useState<boolean|null>(true)
     const {user, isLoaded, isSignedIn} = useUser()
     const { getToken } = useAuth()
     const [loading, setLoading] = useState<boolean>(false)
     const router = useRouter()
+    const { addAlert } = useAlerts(); 
     useEffect(() => {
         
         async function checkUser(){
@@ -28,11 +31,13 @@ export function GuardianOnboardingProvider({children} : {children: React.ReactNo
                 setHasFinishedOnboarding(false)
             }
             else if (data![0]['subscription_id'] != null && data![0]['subscription_status'] === 'active'){
-                fetch('/api/stripe/validateSubscription', {}).then((res) => {
+                fetch('/api/stripe/validateSubscription').then((res) => {
                     if (res.status === 200){
+                        addAlert("success", 'subscription is valid :)', 5000)
                         setHasValidStripeSubscription(true)
                     }
                     else{
+                        addAlert("error", 'subscription not valid', 5000)
                         setHasValidStripeSubscription(false)
                     }
                 });
@@ -43,7 +48,7 @@ export function GuardianOnboardingProvider({children} : {children: React.ReactNo
         
     }, [isSignedIn])
 
-    if (exemptedRoutes.includes(router.asPath) ) {
+    if (exemptedRoutes.includes(router.asPath) || router.pathname == '/_error') {
         return (
             <>
                 {children}
@@ -56,7 +61,7 @@ export function GuardianOnboardingProvider({children} : {children: React.ReactNo
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1, delay: 1 }}
-            className={`fixed h-full w-full top-0 right-0 left-0 z-[1000] bottom-0 ${hasValidStripeSubscription ? "hidden" :  "bg-black/40"}`}>
+            className={`fixed h-full w-full top-0 right-0 left-0 z-[100] bottom-0 ${hasValidStripeSubscription ? "hidden" :  "bg-black/40"}`}>
                 <motion.div className='absolute overflow-hidden rounded-md h-fit max-w-lg w-full bg-white right-0 left-0 top-0 bottom-0 mx-auto my-auto'>
                     <motion.div className="top-0 w-full bg-gray-300/90 h-12 ">
                         <p className='font-semibold text-lg text-black py-2 px-4'>
