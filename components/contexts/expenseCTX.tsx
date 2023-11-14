@@ -23,24 +23,27 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
             setLoading(false)
             _setError(true)
         }
-        //(requesting_user_id() = user_id)
+
         async function fetchExpenses(){
+            setLoading(true)
             const token = await getToken({template: "supabase"})
             const supabase = await getSupabase(token)
             const { data, error } = await supabase.from('expenses').select('*').order('transaction_date', { ascending: false }) as {data : ExpenseSchema[], error:any}
-            
-            console.log(user, token, data)
             const categories  = await supabase.from('categories').select('*').order('id', { ascending: true })
+            const income  = await supabase.from('income').select('*').order('id', { ascending: true })
+            const incomeCategories  = await supabase.from('incomeCategories').select('*').order('id', { ascending: true })
+            let standardizedIncomes : IncomeSchema[] = []
+            let standardizedExpenses : ExpenseSchema[] = []
             if (categories.data){
-                setcategoryData(categories.data)
             }
             if (categories.error){
                 _setError(true)
             }
-            const income  = await supabase.from('income').select('*').order('id', { ascending: true })
-            const incomeCategories  = await supabase.from('incomeCategories').select('*').order('id', { ascending: true })
+            if (incomeCategories.data){
+                setIncomeCategoryData(incomeCategories.data)
+            }
             if (income.data){
-                let standardizedIncomes : IncomeSchema[] = []
+                
                 for (const _ of income.data){
                     let standardizedCurrency = await standardizeCurrency(_, user!.publicMetadata.currency as string)
                     _['standardizedCurrency'] = standardizedCurrency
@@ -48,27 +51,18 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
                 }
                 setIncomeData(income.data)
             }
-            if (income.error){
-                _setError(true)
-            }
-            if (incomeCategories.data){
-                setIncomeCategoryData(incomeCategories.data)
-            }
-            if (error || income.error || categories.error || incomeCategories.error){
-                if (error.code == "PGRST301") {
-                    router.reload()
-                }
-                _setError(true)
-            }
             if (data){
-                let standardizedExpenses : ExpenseSchema[] = []
                 for (let expense of data){
                     let standardizedCurrency = await standardizeCurrency(expense, user?.publicMetadata.currency as string)
                     expense['standardizedCurrency'] = standardizedCurrency
                     standardizedExpenses.push(expense)
                 }
-                setExpenseData(standardizedExpenses)
             }
+            
+            categories.data ? setcategoryData(categories.data) : setcategoryData([])
+            data ? setExpenseData(standardizedExpenses) : setExpenseData([])
+            income.data ? setIncomeData(standardizedIncomes) : setIncomeData([])
+            incomeCategories.data ? setIncomeCategoryData(incomeCategories.data) : setIncomeCategoryData([])
             setLoading(false)
         }
         if (user && isLoaded){

@@ -4,12 +4,13 @@ export const currFormatter = (number: number, curr: string = "USD") => {
 };
 export const standardizeCurrency = async(transaction : ExpenseType|IncomeType, currency : string = "USD") => {
     const [Y,M,D] = (transaction.transaction_date.split('-'));
+    const url = process.env.NODE_ENV === "development" ? "http://127.0.0.1:3001" : "https://api.logmoney.app"
     let _
     if (new Date(transaction.transaction_date) > new Date()){
-        _ = await fetch(`https://api.logmoney.app/today/${transaction.currency}/${currency}`)
+        _ = await fetch(`${url}/today/${transaction.currency}/${currency}`)
     }
     else {
-        _ = await fetch(`https://api.logmoney.app/historical/${Y}-${M}-${D}/${transaction.currency}/${currency}`)
+        _ = await fetch(`${url}/historical/${Y}-${M}-${D}/${transaction.currency}/${currency}`)
     }
     let data = await _.json()
     return data.amount * transaction.amount

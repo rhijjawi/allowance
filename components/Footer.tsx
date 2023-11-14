@@ -27,24 +27,18 @@ export default function Footer(){
                 exit={{ opacity: 0 }}
                 transition={{ duration: 1, delay: 1 }}
                 className="w-full h-full grid grid-cols-7">
-                    {footerItems.map((item, index) => {
-                        console.log("item", item)
-                        return (
+                    {footerItems.map((item, index) => (
+
                         <motion.div key={index} className={`${["col-start-2","col-start-4","col-start-6"][index]} col-span-1`}>
                             <motion.ul className="py-8">
-                                {item.map((subitem, subindex) => {
-                                    console.log(subitem)
-                                return (
+                                {item.map((subitem, subindex) => (
                                         <motion.li key={`${index}.${subindex}`} className="py-1">
                                                 <Link className="text-base" href={subitem.link}>{subitem.name}</Link>
                                         </motion.li>
-                                )
-                                })}
+                                ))}
                             </motion.ul>
                         </motion.div>
-
-                        )
-                    }
+                    )
                     )}
                 </motion.div>
             </footer>

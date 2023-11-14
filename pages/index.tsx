@@ -10,9 +10,7 @@ import { useUser } from '@clerk/nextjs';
 export  default function Home(props : any) {
   const [value, setValue] = useState('0');
   const {user} = useUser()
-  useEffect(()=>{
-    console.log(value)
-  })
+
   return (
     <>
         <DownButtonJump/>

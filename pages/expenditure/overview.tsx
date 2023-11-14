@@ -1,6 +1,6 @@
 'use client';
-import { Card, Title, LineChart, Button, BarChart, Grid, Col, Color } from "@tremor/react";
-import { PlusCircleIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
+import { Card, Title, LineChart, Button, BarChart, Grid, Col, Color, ProgressCircle, Metric } from "@tremor/react";
+import { PlusCircleIcon, InformationCircleIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { useUser, useAuth } from "@clerk/nextjs";
 import { getSupabase } from "../../utils/supabase";
 import { useEffect, useState } from "react";
@@ -13,20 +13,26 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Switch } from "@headlessui/react";
 
+
 const chartVariants = {
     animate : {opacity: 1, width: "99%"},
     initial : {opacity: 0, width: "100%"}
 }
+const cardVariants = {
+    animate : {opacity: 1},
+    initial : {opacity: 0}
+}
+
 
 export default function Expenditure() {
 
     const {user, isLoaded, isSignedIn} = useUser();
     
     const [checked, setChecked] = useState(false)
-    const {expenseData, categoryData} = useExpenses()
+    const {expenseData, categoryData, loading} = useExpenses()
     const [chartData, setChartData] = useState<any>([])
     const [cards, setCards] = useState<any>([])
-    const CustomCard = motion(Card)
+    const CustomCard = motion(Card, {forwardMotionProps: true})
     const CustomBarChart = motion(BarChart, {forwardMotionProps: true})
     useEffect(()=>{
         let active = true
@@ -54,42 +60,37 @@ export default function Expenditure() {
         })
         if (data.length > 0){
             if (active){
-                data = data.sort((a : any, b : any) => {
-                    return MonthToNum(a.month.split(' ')[0]) - MonthToNum(b.month.split(' ')[0])
-                })
+                data = data.sort((a : any, b : any) => (MonthToNum(a.month.split(' ')[0]) - MonthToNum(b.month.split(' ')[0])))
                 setChartData(data)
-            }
-            else{
-
             }
             return () => {active = false}
         }}
         
     }, [expenseData, categoryData])
     //
-    useEffect(()=>{
-        if (chartData.length > 0){
-        let nowmonth = NumToMonth(new Date().getUTCMonth())
-        let nowyear = (new Date().getUTCFullYear())
-        let cards : any = []
-        chartData.forEach((i : any, index : number)=>{
-            if (i.month == `${nowmonth} ${nowyear}`){
-                Object.keys(i).forEach((category)=>{
-                    if (category != "month"){
-                        cards.push(
-                            <Card key={`${category}-${index}`} className="w-80">
-                                <Title>{category}</Title>
-                                <div className="text-2xl font-bold">{i[category]}</div>
-                            </Card>
-                        )
-                    }
-                })
-            }
-        });
-        setCards(cards)
-    }
-    }, [chartData])
-if(!isLoaded) return <></>;
+    // useEffect(()=>{
+    //     if (chartData.length > 0){
+    //     let nowmonth = NumToMonth(new Date().getUTCMonth())
+    //     let nowyear = (new Date().getUTCFullYear())
+    //     let cards : any = []
+    //     chartData.forEach((i : any, index : number)=>{
+    //         if (i.month == `${nowmonth} ${nowyear}`){
+    //             Object.keys(i).forEach((category)=>{
+    //                 if (category != "month"){
+    //                     cards.push(
+    //                         <Card key={`${category}-${index}`} className="w-80">
+    //                             <Title>{category}</Title>
+    //                             <div className="text-2xl font-bold">{i[category]}</div>
+    //                         </Card>
+    //                     )
+    //                 }
+    //             })
+    //         }
+    //     });
+    //     setCards(cards)
+    // }
+    // }, [chartData])
+if(!isLoaded || loading) return <></>;
 
 return (
     <main className='flex min-h-screen flex-col items-center justify-between px-24 pt-12 -z-[100]'>
@@ -101,14 +102,55 @@ return (
                 <Button size="md" className="h-full"><InformationCircleIcon className="h-6 w-6 inline "/><span> Read more</span></Button>
             </div>
         </Card>
-            {<Card 
-            className="h-fit relative"
-            hidden={chartData.length == 0}
+        <Grid numItemsMd={3} numItemsLg={3} numItems={1} className="w-full gap-x-5 my-5">
+            <CustomCard
+            variants={cardVariants}
+            animate={!loading ? "animate" : "initial"}
             >
+                <Title >Expenditure Status</Title>
+                <ProgressCircle tooltip="" size="lg" className="bg-green-300 mx-auto rounded-full w-fit my-5" value={75}/>
+            </CustomCard>
+            <CustomCard
+            className="relative"
+            variants={cardVariants}
+            animate={chartData.length > 0 ? "animate" : "initial"}>
+                <Title className="mb-2">
+                    Savings Account
+                </Title>
+                <p className="text-3xl font-semibold text-center">$2,000 saved</p>
+                <div className="dark:bg-white bg-black h-1 w-[60%] mx-auto rounded-md my-1"></div>
+                <p className="text-3xl font-semibold w-full text-center"><span className="text-green-400">$2,000</span> goal</p>
+                <Button className="absolute bottom-0 right-0 mb-5 mr-5" iconPosition="right" icon={PencilIcon}>Edit</Button>
+            </CustomCard>
+            <CustomCard
+            className="relative"
+            variants={cardVariants}
+            animate={chartData.length > 0 ? "animate" : "initial"}
+            >
+                <Title color="yellow" className="mb-2">Emergency Fund</Title>
+                <p className="text-3xl font-semibold text-left">$200 in cash</p>
+                <p className="text-3xl font-semibold text-left">$375 in bank account</p>
+                <Button className="absolute bottom-0 right-0 mb-5 mr-5" iconPosition="right" icon={PencilIcon}>Edit</Button>
+            </CustomCard>
+        </Grid>
+        <Card className="h-fit relative" hidden={chartData.length == 0}>
                 { 
                 <>
                 <Title>Overall Expenditure</Title>
-                
+                    <Switch
+                    
+                    checked={checked}
+                    onChange={setChecked}
+                    className={`${checked ? 'bg-indigo-600' : 'bg-gray-200'
+                    } absolute top-0 right-0 my-5 mx-5 inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                    >
+                    <span className="sr-only">Use setting</span>
+                    <span
+                        aria-hidden="true"
+                        className={`${checked ? 'translate-x-6' : 'translate-x-1'
+                        } inline-block w-4 h-4 transform bg-white rounded-full transition-transform`}
+                    />
+                    </Switch>
                 <CustomBarChart
                 variants={chartVariants}
                 animate={chartData.length > 0 ? "animate" : "initial"}
@@ -117,15 +159,14 @@ return (
                 id={"barChart"}
                 className="mt-6 min-w-fit w-full min-h-[400px] aspect-square"
                 data={chartData}
-                //@ts-ignore
                 colors={categoryData.map((i : CategorySchema)=>{
-                    return getColor(i.id!)})!}
+                    return getColor(i.id!) as Color})!}
                 categories={categoryData.map((i : any)=>{return i.category})}
                 index="month"
                 valueFormatter={(number)=>{return currFormatter(number, user!.publicMetadata.currency as string)}}
                 /></>}
                 {chartData.length == 0 ? <motion.p className="mt-6">It looks like you haven't recorded any expense data. Click <Link href="/expenditure/list" className="text-black font-semibold">here</Link> to get started</motion.p> : null}
-            </Card> }
+            </Card>
                 
 
         <Grid numItems={1} numItemsSm={2} numItemsLg={3} className="gap-5 mt-6 w-full">

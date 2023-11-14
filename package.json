@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.1.0",
@@ -31,6 +32,7 @@
     "next": "latest",
     "next-connect": "^1.0.0",
     "next-s3-upload": "^0.3.2",
+    "next-sitemap": "^4.2.3",
     "postcss": "8.4.29",
     "react": "18.2.0",
     "react-datetime": "^3.2.0",
