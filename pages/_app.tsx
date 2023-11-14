@@ -27,6 +27,11 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
                           <Head>
                             <title key="main">LogMoney.app | The better money app</title>
                             <meta property="og:title" content="LogMoney.app | The better money app" key="title" />
+                            <meta property='og:description' content='Discover LogMoney.app - the smart choice for responsible financial oversight. Discover how students and spenders across the world keep themselves financially accountable.' key='description' />
+                            <meta property='og:image' content='https://logmoney.app/og/image.png' key='image' />
+                            <meta property='og:url' content='https://logmoney.app' key='url' />
+                            <meta property='og:type' content='website' key='type' />
+                            <meta property='og:site_name' content='LogMoney' key='site_name' />
                           </Head>
                           <Script src="https://simple.logmoney.app/latest.js"  />
                           <noscript>
