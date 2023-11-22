@@ -1,5 +1,5 @@
 'use client';
-import { Card, Title, LineChart, Button, BarChart, Grid, Col, Color, ProgressCircle, Metric } from "@tremor/react";
+import { Card, Title, LineChart, Button, BarChart, Grid, Col, Color, ProgressCircle, Metric, ProgressBar } from "@tremor/react";
 import { PlusCircleIcon, InformationCircleIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { useUser, useAuth } from "@clerk/nextjs";
 import { getSupabase } from "../../utils/supabase";
@@ -12,7 +12,9 @@ import { CategorySchema } from "@/types/supabase";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Switch } from "@headlessui/react";
-
+import { fetcher } from "@/utils/fetcher";
+import useSWR from "swr";
+import { MonthExpenses } from "@/utils/functions/filterData";
 
 const chartVariants = {
     animate : {opacity: 1, width: "99%"},
@@ -21,20 +23,28 @@ const chartVariants = {
 const cardVariants = {
     animate : {opacity: 1},
     initial : {opacity: 0}
+    
 }
 
 
 export default function Expenditure() {
 
     const {user, isLoaded, isSignedIn} = useUser();
-    
+    const { data, error, isLoading } = useSWR('/api/user/misc', fetcher)
     const [checked, setChecked] = useState(false)
     const {expenseData, categoryData, loading} = useExpenses()
     const [chartData, setChartData] = useState<any>([])
     const [cards, setCards] = useState<any>([])
     const CustomCard = motion(Card, {forwardMotionProps: true})
     const CustomBarChart = motion(BarChart, {forwardMotionProps: true})
+    const [sum, setSum] = useState<number>(0)
     useEffect(()=>{
+        MonthExpenses(expenseData, new Date()).forEach((exp : ExpenseType)=>{
+            setSum((...prev) => prev[0] + exp.standardizedCurrency!)
+        })
+    }, [])
+    useEffect(()=>{
+
         let active = true
         let categoryList : any = {}
         let expenseList : any = {}
@@ -67,30 +77,7 @@ export default function Expenditure() {
         }}
         
     }, [expenseData, categoryData])
-    //
-    // useEffect(()=>{
-    //     if (chartData.length > 0){
-    //     let nowmonth = NumToMonth(new Date().getUTCMonth())
-    //     let nowyear = (new Date().getUTCFullYear())
-    //     let cards : any = []
-    //     chartData.forEach((i : any, index : number)=>{
-    //         if (i.month == `${nowmonth} ${nowyear}`){
-    //             Object.keys(i).forEach((category)=>{
-    //                 if (category != "month"){
-    //                     cards.push(
-    //                         <Card key={`${category}-${index}`} className="w-80">
-    //                             <Title>{category}</Title>
-    //                             <div className="text-2xl font-bold">{i[category]}</div>
-    //                         </Card>
-    //                     )
-    //                 }
-    //             })
-    //         }
-    //     });
-    //     setCards(cards)
-    // }
-    // }, [chartData])
-if(!isLoaded || loading) return <></>;
+if(!isLoaded || loading || isLoading) return <></>;
 
 return (
     <main className='flex min-h-screen flex-col items-center justify-between px-24 pt-12 -z-[100]'>
@@ -108,32 +95,38 @@ return (
             animate={!loading ? "animate" : "initial"}
             >
                 <Title >Expenditure Status</Title>
-                <ProgressCircle tooltip="" size="lg" className="bg-green-300 mx-auto rounded-full w-fit my-5" value={75}/>
+                <ProgressCircle tooltip="" size="lg"  value={(200/1000)*100}/>
             </CustomCard>
             <CustomCard
             className="relative"
             variants={cardVariants}
-            animate={chartData.length > 0 ? "animate" : "initial"}>
+            animate={!loading ? "animate" : "initial"}
+            transition={{delay : 3}}>
                 <Title className="mb-2">
                     Savings Account
                 </Title>
-                <p className="text-3xl font-semibold text-center">$2,000 saved</p>
-                <div className="dark:bg-white bg-black h-1 w-[60%] mx-auto rounded-md my-1"></div>
-                <p className="text-3xl font-semibold w-full text-center"><span className="text-green-400">$2,000</span> goal</p>
+                <div className="">
+                    <p className="text-3xl font-semibold text-center">{currFormatter(data.savings[0], user?.publicMetadata.currency as string)} saved</p>
+                    <div className=" w-[60%] mx-auto rounded-md my-2">
+                        {data.savings[1] !== 0 && <ProgressBar tooltip={`${(data.savings[0]/data.savings[1])*100}%`} className=" h-full rounded-md" value={(data.savings[0]/data.savings[1])*100}/>}
+                    </div>
+                    {data.savings[1] !== 0 && <p className="text-3xl font-semibold w-full text-center"><span className="text-green-400">{currFormatter(data.savings[1], user?.publicMetadata.currency as string)}</span> goal</p>}
+                </div>
+                <Button className="absolute bottom-0 left-0 mb-5 ml-5" iconPosition="right" icon={PencilIcon}>Edit Goal</Button>
                 <Button className="absolute bottom-0 right-0 mb-5 mr-5" iconPosition="right" icon={PencilIcon}>Edit</Button>
             </CustomCard>
             <CustomCard
             className="relative"
             variants={cardVariants}
-            animate={chartData.length > 0 ? "animate" : "initial"}
             >
                 <Title color="yellow" className="mb-2">Emergency Fund</Title>
-                <p className="text-3xl font-semibold text-left">$200 in cash</p>
-                <p className="text-3xl font-semibold text-left">$375 in bank account</p>
+                <p className="text-3xl font-semibold text-left">{currFormatter(data.emergency[0], user?.publicMetadata.currency as string)} in cash</p>
+                <p className="text-3xl font-semibold text-left">{currFormatter(data.emergency[1], user?.publicMetadata.currency as string)} in bank account</p>
                 <Button className="absolute bottom-0 right-0 mb-5 mr-5" iconPosition="right" icon={PencilIcon}>Edit</Button>
+                
             </CustomCard>
         </Grid>
-        <Card className="h-fit relative" hidden={chartData.length == 0}>
+        <Card className="h-fit relative">
                 { 
                 <>
                 <Title>Overall Expenditure</Title>
