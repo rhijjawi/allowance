@@ -282,7 +282,9 @@ export default function ListPage(){
         </TabPanel>
         <TabPanel>
             <Col numColSpan={1} numColSpanLg={3} className="gap-6 mt-6 ">
-            <Card className=" dark:border-2 relative"></Card>
+            <Card className=" dark:border-2 relative">
+                
+            </Card>
             </Col>
         </TabPanel>
         </TabPanels>

@@ -4,7 +4,14 @@ import { CategorySchema } from "@/types/supabase"
 export function MonthExpenses(expenses : any, month : Date){
     return expenses.filter((expense : any) => {
         let date = new Date(expense.transaction_date)
-        if (date.getUTCMonth() == month.getUTCMonth() && date.getFullYear() == month.getUTCFullYear()){return expense}
+        if (date.getUTCMonth() == month.getUTCMonth() && date.getFullYear() == month.getUTCFullYear()){return true}
+        if (expense.recurring){
+            const day = date.getDate()
+            const today = new Date().getDate()         
+            if ((day < today)){
+                return true
+            }
+        }
     })
 };
 export function LastPeriodDates(){

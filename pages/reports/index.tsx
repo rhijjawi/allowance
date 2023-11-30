@@ -143,10 +143,3 @@ export default function Index() {
     </>
     )
 }
-{/* <div key={feature.name} className="relative pl-9">
-                      <dt className="inline font-semibold text-gray-900 dark:text-gray-300">
-                        {feature.icon && <feature.icon className={`absolute left-1 top-1 h-5 w-5 ${feature.icon_color ? feature.icon_color : "text-indigo-600"}`} aria-hidden="true" />}
-                        {feature.name}
-                      </dt>{' '}
-                      <dd className="inline">{feature.description}</dd>
-                    </div> */}

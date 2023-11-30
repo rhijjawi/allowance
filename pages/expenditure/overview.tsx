@@ -28,7 +28,6 @@ const cardVariants = {
 
 
 export default function Expenditure() {
-
     const {user, isLoaded, isSignedIn} = useUser();
     const { data, error, isLoading } = useSWR('/api/user/misc', fetcher)
     const [checked, setChecked] = useState(false)
@@ -39,10 +38,11 @@ export default function Expenditure() {
     const CustomBarChart = motion(BarChart, {forwardMotionProps: true})
     const [sum, setSum] = useState<number>(0)
     useEffect(()=>{
-        MonthExpenses(expenseData, new Date()).forEach((exp : ExpenseType)=>{
-            setSum((...prev) => prev[0] + exp.standardizedCurrency!)
-        })
-    }, [])
+        if (expenseData.length > 0){
+            setSum(0)
+            MonthExpenses(expenseData, new Date()).forEach((exp : ExpenseType)=>setSum((...prev) => prev[0] + exp.standardizedCurrency!))
+        }
+    }, [expenseData])
     useEffect(()=>{
 
         let active = true
@@ -95,14 +95,14 @@ return (
             animate={!loading ? "animate" : "initial"}
             >
                 <Title >Expenditure Status</Title>
-                <ProgressCircle tooltip="" size="lg"  value={(200/1000)*100}/>
+                {data.budget[0] == 0 ? <p className="text-xl">Please set a budget</p> : <ProgressCircle tooltip={`On track - ${currFormatter(sum, user?.publicMetadata.currency as string)}/${data.budget[0]} @ ${(sum/data.budget[0])*100}`} className="py-5" size="lg" color="green" value={(sum/data.budget[0])*100}/>}
             </CustomCard>
             <CustomCard
             className="relative"
             variants={cardVariants}
             animate={!loading ? "animate" : "initial"}
             transition={{delay : 3}}>
-                <Title className="mb-2">
+                <Title color="green" className="mb-2">
                     Savings Account
                 </Title>
                 <div className="">
@@ -119,9 +119,9 @@ return (
             className="relative"
             variants={cardVariants}
             >
-                <Title color="yellow" className="mb-2">Emergency Fund</Title>
-                <p className="text-3xl font-semibold text-left">{currFormatter(data.emergency[0], user?.publicMetadata.currency as string)} in cash</p>
-                <p className="text-3xl font-semibold text-left">{currFormatter(data.emergency[1], user?.publicMetadata.currency as string)} in bank account</p>
+                <Title color="red" className="mb-2">Emergency Fund</Title>
+                <p className="text-2xl font-semibold text-left">{currFormatter(data.emergency[0], user?.publicMetadata.currency as string)} in cash</p>
+                <p className="text-2xl font-semibold text-left">{currFormatter(data.emergency[1], user?.publicMetadata.currency as string)} in bank account</p>
                 <Button className="absolute bottom-0 right-0 mb-5 mr-5" iconPosition="right" icon={PencilIcon}>Edit</Button>
                 
             </CustomCard>
