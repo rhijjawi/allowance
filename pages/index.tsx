@@ -1,3 +1,4 @@
+"use client";
 import Image from 'next/image'
 import { ArrowTrendingDownIcon, BanknotesIcon, CpuChipIcon, CurrencyDollarIcon, GlobeAltIcon, AcademicCapIcon, HomeModernIcon, LockClosedIcon, EyeSlashIcon, ArrowUpOnSquareStackIcon } from '@heroicons/react/24/outline'
 import { Select, SelectItem, Text, Color} from '@tremor/react'
@@ -6,24 +7,24 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from 'next/link';
 import DownButtonJump from "@/components/ui/buttons/DownButtonJump"
 import { useUser } from '@clerk/nextjs';
+import { useParams } from 'next/navigation';
 
 export  default function Home(props : any) {
   const [value, setValue] = useState('0');
   const {user} = useUser()
-
   return (
     <>
         <DownButtonJump/>
         <div className="overflow-hidden bg-white dark:bg-black w-full border-t-2">
-        <div className="h-fit py-5 border-b-2 mb-5">
-        <div className="mx-auto max-w-fit">
-          <Select enableClear={false} onValueChange={(e)=>setValue(e)} defaultValue='0' className='dark:border dark:border-white rounded-md' color='red'>
-            <SelectItem className="py-3 px-2 hover:cursor-pointer" color={''} value={"0"}>Everyone</SelectItem>
-            <SelectItem className="py-3 px-2 hover:cursor-pointer" value={"1"}>For Students</SelectItem>
-            <SelectItem className="py-3 px-2 hover:cursor-pointer" value={"2"}>For Parents</SelectItem>
-          </Select>
-        </div>
-        </div>
+          <div className="h-fit py-5 border-b-2 mb-5">
+            <div className="mx-auto max-w-fit">
+              <Select enableClear={false} onValueChange={(e)=>setValue(e)} defaultValue='0' className='dark:border dark:border-white rounded-md' color='red'>
+                <SelectItem className="py-3 px-2 hover:cursor-pointer" value={"0"}>Everyone</SelectItem>
+                <SelectItem className="py-3 px-2 hover:cursor-pointer" value={"1"}>For Students</SelectItem>
+                <SelectItem className="py-3 px-2 hover:cursor-pointer" value={"2"}>For Parents</SelectItem>
+              </Select>
+            </div>
+          </div>
         <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
           {(value=='0' || value == "") ? 
             <motion.div

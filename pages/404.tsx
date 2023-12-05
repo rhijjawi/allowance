@@ -1,17 +1,33 @@
 "use client";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
+import Error from "next/error";
+import { useUser } from "@clerk/nextjs";
 
-
-export const getStaticProps: GetStaticProps<any> = () => {
-    return { props: {} };
+export const getStaticProps = ({ res }) => {
+    return { props: {errorCode : 100}};
 };
-export default function FourOhFour(){
+export default function FourOhFour({ errorCode } : {errorCode : number}){
     const router = useRouter();
+    const {user, isLoaded, isSignedIn} = useUser();
+    if (!isLoaded) return <></>
     return (
-        <div>
-            <h1>404</h1>
-            <p>Page not found : {router.asPath}/{router.pathname}</p>
-        </div>
+        <>
+            <div className="min-h-screen bg-gray-500/10">
+                <div className="bg-white dark:bg-gray-600/20 border border-black dark:border-white h-fit w-fit absolute right-0 left-0 top-0 bottom-0 mx-auto my-auto pt-3 pb-8 px-5 rounded-md">
+                    <div className="w-full text-white">
+                        <p className="text-2xl font-bold">/404</p>
+                        <p className="font-bold">Page Not Found</p>
+                        <p className="text-sm">The page you are looking for does not exist.</p>
+                        <button onClick={() => router.push('/')} className=" bg-orange-500 hover:bg-orange-600 text-white px-3 mt-3 rounded-md mx-auto w-fit py-2 right-0">Go Home</button>
+                        <button hidden={!isSignedIn} onClick={() => router.push('/expenditure/overview')} className="bg-orange-500 hover:bg-orange-600 text-white px-3 mt-3 rounded-md mx-auto w-fit py-2 right-0 float-right">Go to Dashboard</button>
+                    </div>
+                </div>
+            </div>
+            <div className="" hidden>
+                <Error statusCode={errorCode}></Error>
+            </div>
+        </>
+        
     )
 }
