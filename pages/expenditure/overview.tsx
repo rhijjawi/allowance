@@ -15,7 +15,7 @@ import { Switch } from "@headlessui/react";
 import { fetcher } from "@/utils/fetcher";
 import useSWR from "swr";
 import { MonthExpenses } from "@/utils/functions/filterData";
-
+import axios from "axios";
 const chartVariants = {
     animate : {opacity: 1, width: "99%"},
     initial : {opacity: 0, width: "100%"}
@@ -37,6 +37,11 @@ export default function Expenditure() {
     const CustomCard = motion(Card, {forwardMotionProps: true})
     const CustomBarChart = motion(BarChart, {forwardMotionProps: true})
     const [sum, setSum] = useState<number>(0)
+    useEffect(()=>{
+        if (expenseData.length > 0){
+            axios.post('http://localhost:2999/generate_report', {expenseList : expenseData, categoryData: categoryData, id : user?.id})
+     }
+    }, [expenseData])
     useEffect(()=>{
         if (expenseData.length > 0){
             setSum(0)
@@ -123,7 +128,6 @@ return (
                 <p className="text-2xl font-semibold text-left">{currFormatter(data.emergency[0], user?.publicMetadata.currency as string)} in cash</p>
                 <p className="text-2xl font-semibold text-left">{currFormatter(data.emergency[1], user?.publicMetadata.currency as string)} in bank account</p>
                 <Button className="absolute bottom-0 right-0 mb-5 mr-5" iconPosition="right" icon={PencilIcon}>Edit</Button>
-                
             </CustomCard>
         </Grid>
         <Card className="h-fit relative">
@@ -131,11 +135,9 @@ return (
                 <>
                 <Title>Overall Expenditure</Title>
                     <Switch
-                    
                     checked={checked}
                     onChange={setChecked}
-                    className={`${checked ? 'bg-indigo-600' : 'bg-gray-200'
-                    } absolute top-0 right-0 my-5 mx-5 inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                    className={`${checked ? 'bg-indigo-600' : 'bg-gray-200'} absolute top-0 right-0 my-5 mx-5 inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
                     >
                     <span className="sr-only">Use setting</span>
                     <span

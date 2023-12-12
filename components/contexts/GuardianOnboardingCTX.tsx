@@ -21,7 +21,7 @@ export function GuardianOnboardingProvider({children} : {children: React.ReactNo
     useEffect(() => {
         
         async function checkUser(){
-            if (isSignedIn && user?.publicMetadata.role !== 'parent') {
+            if ((isSignedIn && user?.publicMetadata.role !== 'parent') || process.env.NODE_ENV === 'development') {
                 setHasFinishedOnboarding(true)
                 setHasValidStripeSubscription(true);
                 return

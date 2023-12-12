@@ -6,6 +6,7 @@ export const standardizeCurrency = async(transaction : ExpenseType|IncomeType, c
     const [Y,M,D] = (transaction.transaction_date.split('-'));
     const url = process.env.NODE_ENV === "development" ? "http://127.0.0.1:3001" : "https://api.logmoney.app"
     let _
+    if (transaction.currency === currency) return 1 * transaction.amount;
     if (new Date(transaction.transaction_date) > new Date()){
         _ = await fetch(`${url}/today/${transaction.currency}/${currency}`)
     }

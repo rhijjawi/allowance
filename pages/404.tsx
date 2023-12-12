@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Error from "next/error";
 import { useUser } from "@clerk/nextjs";
 
-export const getStaticProps = ({ res }) => {
+export const getStaticProps = ({ res }: {res: any}) => {
     return { props: {errorCode : 100}};
 };
 export default function FourOhFour({ errorCode } : {errorCode : number}){
