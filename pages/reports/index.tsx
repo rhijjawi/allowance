@@ -21,7 +21,7 @@ export default function Index() {
     const {getToken} = useAuth()
     const [isEmailValid, setIsEmailValid] = useState(false)
     useEffect(()=>{
-        if (email && email.includes('@') && email.includes('.')){
+        if (email && email.includes('@') && email.includes('.') && email.split('.').reverse()[0].length > 0){
             setIsEmailValid(true)
         }
         else {

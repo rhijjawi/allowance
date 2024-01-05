@@ -37,11 +37,11 @@ export default function Expenditure() {
     const CustomCard = motion(Card, {forwardMotionProps: true})
     const CustomBarChart = motion(BarChart, {forwardMotionProps: true})
     const [sum, setSum] = useState<number>(0)
-    useEffect(()=>{
-        if (expenseData.length > 0){
-            axios.post('http://localhost:2999/generate_report', {expenseList : expenseData, categoryData: categoryData, id : user?.id})
-     }
-    }, [expenseData])
+    // useEffect(()=>{
+    //     if (expenseData.length > 0){
+    //         axios.post('http://localhost:2999/generate_report', {expenseList : expenseData, categoryData: categoryData, id : user?.id})
+    //  }
+    // }, [expenseData])
     useEffect(()=>{
         if (expenseData.length > 0){
             setSum(0)
