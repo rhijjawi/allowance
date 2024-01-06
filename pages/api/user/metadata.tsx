@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 };
 
-function overwriteNestedKey(obj, path, value) {
+function overwriteNestedKey(obj : any, path : string, value : string) {
     const keys = path.split('.');
     let currentObject = obj;
 
