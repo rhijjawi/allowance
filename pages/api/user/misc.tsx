@@ -7,7 +7,7 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env
 
 async function GET(req: NextApiRequest, res : NextApiResponse){
     const {userId} = getAuth(req);
-    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+    if (!userId) {return res.status(401).json({ error: "Unauthorized" });}
     const {data, error} = await supabase.from('misc').select('savings, emergency, budget, allowance').eq('clerk_id', userId);
     if (error){res.status(500).send("Error retrieving misc data"); return}
     if (data.length == 0){

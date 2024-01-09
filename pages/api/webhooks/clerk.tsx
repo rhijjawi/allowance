@@ -44,6 +44,9 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
       }
     }
   }
+  if (data.unsafe_metadata.role === "student") {
+    await supabase.from('misc').insert({clerk_id : data.id, emergency : [0, 0, data.unsafe_metadata.currency], savings : [0, 0, data.unsafe_metadata.currency] ,budget : [0, data.unsafe_metadata.currency], allowance : [0, data.unsafe_metadata.currency, 1]})
+  }
   await clerkClient.users.updateUserMetadata(data.id, {
     publicMetadata:  pm,
     unsafeMetadata: {}

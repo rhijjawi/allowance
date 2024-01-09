@@ -74,7 +74,7 @@ export default function FAQ() {
                                             setIsOpen({ ...isOpen, [index]: !isOpen[index] })
                                         }}></div>
                                             <span className="text-base font-semibold leading-7 my-2">{faq.question}</span>
-                                            <span className="ml-6 flex h-7 items-center">
+                                            <span className="ml-6 flex h-7 items-center my-auto">
                                                 {isOpen[index] ? (
                                                     <MinusSmallIcon className="h-6 w-6" aria-hidden="true" />
                                                 ) : (

@@ -10,10 +10,19 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { GuardianOnboardingProvider } from '@/components/contexts/GuardianOnboardingCTX';
 import Script from 'next/script';
 import Head from 'next/head';
+import { useEffect } from 'react';
 const raleway = Raleway({ subsets: ['latin'] })
 
 
 export default function MyApp({Component, pageProps }: {Component: any, pageProps: any}) {
+  useEffect(()=>{
+    if (typeof localStorage === 'undefined') {
+      return
+    }
+    if (localStorage.getItem("modals") === null || !Array.isArray(JSON.parse(localStorage.getItem("modals")!))){
+      localStorage.setItem("modals", JSON.stringify([]))
+    }
+  }, [])
   return (
     <>
       {/* <UserProvider> */}

@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import {currFormatter, standardizeCurrency, NumToMonth, MonthToNum} from "@/utils/functions/valueFormatters"
 import { ExpenseType, useExpenses } from "@/components/contexts/expenseCTX";
 import { getColor } from "@/components/static/categories";
-import { CategorySchema, IncomeSchema } from "@/types/supabase";
+import { CategorySchema } from "@/types/supabase";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Switch } from "@headlessui/react";
@@ -66,22 +66,49 @@ export default function Expenditure() {
         let active = true
         let categoryList : any = {}
         let expenseList : any = {}
-        let data : any = []
+        let months : number[] = []
         if (categoryData == null || expenseData == null) return
-        categoryData.forEach((e : any)=>{categoryList[e.id] = e.category})
-        const thisMonth = expenseData.filter((e : ExpenseType)=>{
-            if (e.recurring){
-                let recurranceDate : Date = new Date(Date.parse(e.transaction_date as string))
-                return (recurranceDate.getDate() >= new Date().getDate())
-            }
-            return (Date.parse(e.transaction_date as string) > new Date().setDate(1))
+        categoryData.forEach((e : any)=>{
+            categoryList[e.id] = e.category
         })
-        thisMonth.forEach(async(i)=>{
-            let category = categoryData.find((element : any) => {return element.id === i.category[0]})!.category
-            expenseList[`${NumToMonth(new Date().getUTCMonth())} ${new Date().getUTCFullYear()}`] ? {} : expenseList[`${NumToMonth(new Date().getUTCMonth())} ${new Date().getUTCFullYear()}`] = {}
-            expenseList[`${NumToMonth(new Date().getUTCMonth())} ${new Date().getUTCFullYear()}`][category] ? expenseList[`${NumToMonth(new Date().getUTCMonth())} ${new Date().getUTCFullYear()}`][category] += await standardizeCurrency(i, user!.publicMetadata?.currency as string) : expenseList[`${NumToMonth(new Date().getUTCMonth())} ${new Date().getUTCFullYear()}`][category] = await standardizeCurrency(i, user!.publicMetadata.currency as string)
+        const sorted = expenseData.sort((a : ExpenseType, b : ExpenseType) => (new Date(a.transaction_date).getTime() - new Date(b.transaction_date).getTime()))
+        const past3months = [0, 1, 2, 3].map((i)=>{
+            let date = new Date();
+            let month = (new Date(date.setMonth(date.getMonth() - i))).getUTCMonth()
+            let year = (new Date(date.setMonth(date.getMonth() - i))).getUTCFullYear()
+            return [month, year]
         })
-        
+        const past3monthsData = sorted.filter((i : ExpenseType)=>{
+            let date = new Date(Date.parse(i.transaction_date as string))
+            let month = date.getUTCMonth()
+            let year = date.getUTCFullYear()
+
+            return past3months.indexOf([month, year]) !== -1
+        })
+        console.log(past3months, past3monthsData)
+        sorted.map((i : ExpenseType)=>{!months.includes(new Date(Date.parse(i.transaction_date as string)).getUTCMonth()) ? months.push(new Date(Date.parse(i.transaction_date as string)).getUTCMonth()) : null})
+
+        months.forEach(async(i)=>{
+            let onlyMonths = sorted.filter((e : ExpenseType)=>{return (new Date(Date.parse(e.transaction_date as string)).getUTCMonth() == i) && (e.recurring == false) })
+            let onlyRecurring = sorted.filter((e : ExpenseType)=>{return e.recurring})
+            onlyMonths.forEach(async(i)=>{
+                let date = new Date(Date.parse(`${i.transaction_date}`))
+                let category = categoryData.find((element : any) => {return element.id === i.category[0]})!.category
+                console.log(category)
+                expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`] ? {} : expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`] = {}
+                expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] ? expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] += await standardizeCurrency(i, user!.publicMetadata?.currency as string) : expenseList[`${NumToMonth(date.getUTCMonth())} ${date.getUTCFullYear()}`][category] = await standardizeCurrency(i, user!.publicMetadata.currency as string)
+            });
+            onlyRecurring.forEach(async(j)=>{
+                let date = new Date(Date.parse(`${j.transaction_date}`))
+                let category = categoryData.find((element : any) => {return element.id === j.category[0]})!.category
+                console.log(category)
+                if (new Date(Date.parse(j.transaction_date as string)).getUTCMonth() <= i){
+                    expenseList[`${NumToMonth(i)} ${date.getUTCFullYear()}`] ? {} : expenseList[`${NumToMonth(i)} ${date.getUTCFullYear()}`] = {}
+                    expenseList[`${NumToMonth(i)} ${date.getUTCFullYear()}`][category] ? expenseList[`${NumToMonth(i)} ${date.getUTCFullYear()}`][category] += await standardizeCurrency(j, user!.publicMetadata?.currency as string) : expenseList[`${NumToMonth(i)} ${date.getUTCFullYear()}`][category] = await standardizeCurrency(j, user!.publicMetadata.currency as string)
+                }
+            })
+        })
+        let data : any = []
         Object.keys(expenseList).forEach((i)=>{
             let _data = expenseList[i]
             _data.month = i
@@ -89,7 +116,7 @@ export default function Expenditure() {
         })
         if (data.length > 0){
             if (active){
-                data = data.sort((a : any, b : any) => (Date.parse(a.transaction_date) - Date.parse(b.transaction_date)))
+                data = data.sort((a : any, b : any) => (MonthToNum(a.month.split(' ')[0]) - MonthToNum(b.month.split(' ')[0])))
                 setChartData(data)
             }
             return () => {active = false}
@@ -103,8 +130,7 @@ useEffect(()=>{
         setPercentage(budgetMath)
     }
     a();
-}, [misc])
-
+}, [sum])
 if(!isLoaded || loading || misc == null ) return <></>;
 return (
     <main className='flex min-h-screen flex-col items-center justify-between px-24 pt-12 -z-[100] bg-dark-tremor-background-muted/75'>

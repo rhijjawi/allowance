@@ -46,6 +46,7 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
                 
                 for (const _ of income.data){
                     let standardizedCurrency = await standardizeCurrency(_, user!.publicMetadata.currency as string)
+                    
                     _['standardizedCurrency'] = standardizedCurrency
                     standardizedIncomes.push(_)
                 }

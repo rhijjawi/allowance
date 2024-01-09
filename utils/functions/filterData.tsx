@@ -27,7 +27,6 @@ export function From1sttoNowEXP(expenses : ExpenseType[]|IncomeType[], category:
             const day = transaction_date.getDate()
             const today = new Date().getDate()         
             if ((day < today)&& (expense.category[0] == category.id)){
-                console.log('recurringLast', expense, expense.recurring, day, today)
                 return true
             }
         }
@@ -41,7 +40,7 @@ export function From1sttoNowEXP(expenses : ExpenseType[]|IncomeType[], category:
             const day = transaction_date.getDate()
             const today = new Date().getDate()         
             if ((day < today)&& (expense.category[0] == category.id)){
-                console.log('recurring', expense, expense.recurring, day, today)
+
                 return true
             }
         }
@@ -57,7 +56,6 @@ export function From1sttoNowINC(incomes : IncomeType[], category: CategorySchema
         return ((firstDay <= new Date(income.transaction_date) && new Date(income.transaction_date) <= lastDayAllowed))
     })
     const MonthToDate = incomes.filter((income : IncomeType) => {
-        console.log(income)
         const transaction_date = new Date(income.transaction_date)
         let firstDayLastMonth = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1);
         let lastDayAllowedLastMonth = new Date(new Date().setUTCMonth(new Date().getUTCMonth() - 1));

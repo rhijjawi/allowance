@@ -14,6 +14,7 @@ import { ChevronDownIcon, PhoneIcon, PlayCircleIcon, PlusCircleIcon, CalendarDay
 import Link from 'next/link';
 import { UserProfile, useUser } from '@clerk/nextjs';
 import {ExpenditureDialog, IncomeDialogue} from '@/components/forms/QuickForms'
+import {SavingsModal} from '@/components/forms/savingsDialogue'
 import { UserButton } from '@clerk/nextjs';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
@@ -41,8 +42,9 @@ function classNames(...classes : any[]) {
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    let [isOpen, setIsOpen] = useState<boolean>(false)
-    let [isIncomeOpen, setIsIncomeOpen] = useState<boolean>(false)
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isIncomeOpen, setIsIncomeOpen] = useState<boolean>(false)
+    const [isSavingsOpen, setIsSavingsOpen] = useState<boolean>(false)
     const {user, isLoaded, isSignedIn} = useUser()
     const router = useRouter()
     const callsToAction = [
@@ -67,6 +69,7 @@ export default function Header() {
             </div>
             <ExpenditureDialog isOpen={isOpen} setIsOpen={setIsOpen} />
             <IncomeDialogue isOpen={isIncomeOpen} setIsOpen={setIsIncomeOpen} />
+            
             <Popover.Group className="hidden lg:flex lg:gap-x-12">
                 <Popover className="relative">
                     <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
@@ -120,6 +123,7 @@ export default function Header() {
                 </Popover>
             <ExpenditureDialog isOpen={isOpen} setIsOpen={setIsOpen} />
             <IncomeDialogue isOpen={isIncomeOpen} setIsOpen={setIsIncomeOpen} />
+            
             <Popover.Group className="hidden lg:flex lg:gap-x-12">
                 <Popover className="relative">
                     <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">

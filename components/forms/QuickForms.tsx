@@ -128,6 +128,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                         Date
                     </label>
                     <DatePicker 
+                    
                         weekStartsOn={1}
                         id="datePicker"
                         value={transactionDate}

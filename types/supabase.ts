@@ -14,7 +14,7 @@ export interface ExpenseSchema {
     id?: number
     label: string
     refunded: boolean
-    transaction_date: string
+    transaction_date: string|Date
     user_id: string | unknown
     recurring: boolean
     standardizedCurrency? : number

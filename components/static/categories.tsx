@@ -1,9 +1,10 @@
 import { CheckIcon, PencilIcon, TrashIcon, HeartIcon} from "@heroicons/react/24/solid"
-import {ChevronDownIcon, ChevronUpIcon, HomeIcon, BoltIcon, GiftIcon, ShoppingCartIcon, AcademicCapIcon, FilmIcon, PaperAirplaneIcon, ScissorsIcon, CloudIcon, QuestionMarkCircleIcon, FireIcon, BanknotesIcon} from '@heroicons/react/24/outline'
+import {ChevronDownIcon, ChevronUpIcon, HomeIcon, BoltIcon, GiftIcon, ShoppingCartIcon, AcademicCapIcon, FilmIcon, PaperAirplaneIcon, ScissorsIcon, CloudIcon, QuestionMarkCircleIcon, FireIcon, BanknotesIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import { CategorySchema } from "@/types/supabase"
 import { Badge, Color } from "@tremor/react"
 export default function CategoryBadge() : {[key: number]: [any, Color|null]} {
     return {
+        0 : [XMarkIcon, "red"],
         1 : [HomeIcon, "blue"],
         2 : [BoltIcon, "yellow"],
         3 : [null, "zinc"],
