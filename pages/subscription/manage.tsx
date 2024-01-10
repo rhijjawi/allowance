@@ -5,7 +5,8 @@ import Stripe from "stripe";
 import { Button } from "@tremor/react";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { useAlerts } from "@/components/contexts/alertHandler";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 export const getStaticProps = (async (context : any) => {
     let data;
     try {
@@ -24,19 +25,29 @@ export default function Subscriptions({prods} : {prods : Stripe.Price[]}){
     const {addAlert} = useAlerts()
     const [loading, setLoading] = useState<any>({})
     const [disabled, setDisabled] = useState<any>({})
+    const router = useRouter()
+    useEffect(()=>{
+        async function a(){
+            await router.push('/')
+        }
+        if ((isLoaded && !isSignedIn) || (isSignedIn && user.publicMetadata.role !== 'parent')){
+            a()
+        }
+        return () => {}
+    }, [isLoaded])
     if (!isLoaded){
         return <>Loading...</>
     }
 
     return (
-        <motion.div className="h-fit w-screen relative">
-            <motion.div className="bg-white border-4 relative border-indigo-500 h-fit max-w-4xl w-full mx-auto rounded left-0 bottom-0 my-12">
-                <motion.div className="flex flex-col items-center justify-start h-36 mt-5">
+        <motion.div className="min-h-screen h-fit w-screen relative">
+            <motion.div className="bg-white aspect-[3/1] border-4 relative border-indigo-500 h-full max-w-4xl w-full mx-auto rounded left-0 bottom-0 my-12">
+                <motion.div className="flex flex-col items-center justify-start h-fit mt-5">
                     <motion.h1 className="text-2xl font-semibold text-gray-900">Subscription Plans</motion.h1>
                     <motion.p className="text-gray-500 max-w-[90%] my-2">Choose what makes sense for you and/or your dependents.</motion.p>
                     <motion.p className="text-gray-500 break-words max-w-[90%] text-center">If you made it here by mistake, please click <Link href="/" className="text-black font-semibold">here</Link> to return to a familiar place 😉.</motion.p>
                 </motion.div>
-                <motion.div className="grid grid-cols-3 h-fit">
+                <motion.div className="grid grid-cols-3 h-full">
                     {prods.map((i : Stripe.Price, index: number)=>{
                         const formatter = Intl.NumberFormat(navigator.languages[0], {currency : i.currency, style : "currency"})
                         return (

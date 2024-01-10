@@ -1,12 +1,13 @@
 import { fetcher } from "@/utils/fetcher";
 import { Dialog } from "@headlessui/react";
 import { Button, NumberInput, Subtitle, Title } from "@tremor/react";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import useSWR from "swr";
 import * as symbols from '@/components/static/symbols.json'
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
-export function SavingsModal({ isOpen, setIsOpen, misc} : {isOpen : boolean, setIsOpen : any, misc : any}){
-    
+import { useAlerts } from "@/components/contexts/alertHandler";
+export function SavingsModal({ isOpen, setIsOpen, misc} : {isOpen : boolean, setIsOpen : React.Dispatch<SetStateAction<boolean>>, misc : any}){
+    const {addAlert} = useAlerts();
     const [GoalAmount, setGoalAmount] = useState<number>(misc.savings[1]);
     const [saved, setSaved] = useState<number>(misc.savings[0]);
     const [currency, setCurrency] = useState<string>(misc.savings[2]);
@@ -16,6 +17,7 @@ export function SavingsModal({ isOpen, setIsOpen, misc} : {isOpen : boolean, set
       // onSave(newGoal, newAmount);
       setLoading(true);  
       setTimeout(() => {
+        addAlert("success", "Savings goal updated!", 2000);
         setIsOpen(false);
       }, 2000);
     };
@@ -26,7 +28,7 @@ export function SavingsModal({ isOpen, setIsOpen, misc} : {isOpen : boolean, set
         <div className='fixed inset-0 flex w-screen items-center justify-center p-4 '>
           <Dialog.Panel className={`rounded-md  bg-white dark:bg-black relative w-full max-w-2xl max-h-full border-2 border-orange-500 dark:border-white`}>
               <Dialog.Title className={'flex items-start bg-orange-400 justify-between p-4 border-b rounded-t dark:text-black text-black'}>Your Savings Goals</Dialog.Title>
-              <div className='p-6 space-y-6 dark:bg-slate-600/80 '>
+              <div className='p-6 space-y-6 dark:bg-slate-600/80 h-48'>
               <div className={'text-base leading-relaxed text-gray-500 '}>   
                   <div className="mx-auto w-[70%] h-full py-3`">
                   <div className="block relative text-sm font-medium leading-6 text-gray-900 dark:text-white">
@@ -61,8 +63,8 @@ export function SavingsModal({ isOpen, setIsOpen, misc} : {isOpen : boolean, set
                     </div>
                     <Subtitle className={`dark:text-white text-black`}>Goal</Subtitle>
                   </div>
-                    <div className="relative w-full">
-                      <Button className={`bg-orange-500 hover:bg-orange-600 text-white px-4 mt-3 rounded-md mx-auto w-16 py-2 float-left mb-5`} disabled={loading} onClick={() => setGoalAmount(GoalAmount + 1)}> Cancel </Button>
+                    <div className="relative w-full h-fit">
+                      <Button className={`bg-orange-500 hover:bg-orange-600 text-white px-4 mt-3 rounded-md mx-auto w-16 py-2 float-left mb-5`} disabled={loading} onClick={() => setIsOpen(false)}> Cancel </Button>
                       <Button className={`bg-orange-500 hover:bg-orange-600 text-white px-3 mt-3 rounded-md mx-auto w-16 py-2 float-right mb-5`} disabled={loading} onClick={() => handleSave()}> Save </Button>
                     </div>
               </div>

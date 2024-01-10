@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 /* eslint-disable max-len */
+import {nextui} from "@nextui-org/react";
+
 module.exports = {
   mode: 'jit',
   content: [
@@ -144,5 +146,5 @@ module.exports = {
         /^(fill-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
     },
   ],
-  plugins: [require("@headlessui/tailwindcss"), require('@tailwindcss/forms'),],
+  plugins: [require("@headlessui/tailwindcss"), nextui(), require('@tailwindcss/forms'),],
 };

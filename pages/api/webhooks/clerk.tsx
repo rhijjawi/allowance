@@ -49,7 +49,8 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
   }
   await clerkClient.users.updateUserMetadata(data.id, {
     publicMetadata:  pm,
-    unsafeMetadata: {}
+    unsafeMetadata: {},
+    privateMetadata : {role : data.unsafe_metadata.role}
   });
   res.status(200).json({ message: "OK" })
   

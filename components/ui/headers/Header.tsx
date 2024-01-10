@@ -5,6 +5,7 @@ import {
   Bars3Icon,
   BookOpenIcon,
   ChartPieIcon,
+  ExclamationCircleIcon,
   HomeIcon,
   SquaresPlusIcon,
   TableCellsIcon,
@@ -19,7 +20,8 @@ import { UserButton } from '@clerk/nextjs';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import ParentHeader from './ParentHeader';
-
+import { Subtitle } from '@tremor/react';
+import BugReport from '@/components/forms/bug';
 const products = [
   { name: 'Overview', description: 'Get a better understanding of your expenditure', href: '/expenditure/overview', icon: ChartPieIcon },
   { name: 'My Money', description: 'A list of your income & expenditure', href: '/expenditure/list', icon: TableCellsIcon},
@@ -46,6 +48,7 @@ export default function Header() {
     const [isIncomeOpen, setIsIncomeOpen] = useState<boolean>(false)
     const [isSavingsOpen, setIsSavingsOpen] = useState<boolean>(false)
     const {user, isLoaded, isSignedIn} = useUser()
+    const [bugReport, setBugReport] = useState<boolean>(false)
     const router = useRouter()
     const callsToAction = [
         { name: 'Add Expense', icon: PlusCircleIcon, onclickFunction: () => {setIsIncomeOpen(false);setIsOpen(true)} },
@@ -53,6 +56,7 @@ export default function Header() {
     ]
     if (user?.publicMetadata.role == 'parent') {return (<ParentHeader/>)}
     return (
+        <>
         <header className="bg-white z-50">
         <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
             <div className="flex lg:flex-1">
@@ -69,7 +73,7 @@ export default function Header() {
             </div>
             <ExpenditureDialog isOpen={isOpen} setIsOpen={setIsOpen} />
             <IncomeDialogue isOpen={isIncomeOpen} setIsOpen={setIsIncomeOpen} />
-            
+            <BugReport isOpen={bugReport} setIsOpen={setBugReport} />
             <Popover.Group className="hidden lg:flex lg:gap-x-12">
                 <Popover className="relative">
                     <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
@@ -234,32 +238,32 @@ export default function Header() {
                     >
                     Features
                     </a>
-                    <a
-                    href="#"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                    >
-                    Marketplace
-                    </a>
-                    <a
-                    href="#"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                    >
-                    Company
-                    </a>
+                    <Link href="/reports" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                        Reports
+                    </Link>
+                    <Link href="/faq" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                        FAQ
+                    </Link>
                 </div>
                 <div className="py-6">
-                    <a
-                    href="#"
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                    >
-                    Log in
-                    </a>
+                <motion.div className="pt-2 lg:flex lg:flex-1 lg:justify-end">
+                    {user ? <UserButton afterSignOutUrl="/" userProfileUrl='/profile' showName userProfileMode='navigation'>
+                    </UserButton>
+                    : <motion.button onClick={()=>{router.push('/sign-in')}} className='w-fit py-2 px-4 text-sm bg-indigo-600 rounded-md cursor-pointer text-white'>Log In / Sign Up</motion.button>}
+                </motion.div>
                 </div>
                 </div>
             </div>
             </Dialog.Panel>
         </Dialog>
         </header>
+        <div onClick={()=>{setBugReport(true)}} className="w-36 block h-12 z-[100] bg-white hover:bg-gray-200 rounded-full border fixed bottom-0 right-0 mr-10 mb-10 cursor-pointer">
+        <div className="h-fit my-auto mx-auto right-0 left-0 bottom-0 top-0 w-fit absolute">
+          <ExclamationCircleIcon className="w-8  text-red-500 h-6 ml-0 mb-[2px] -translate-x-1 bottom-0 top-0 right-0 left-0 inline-block" />
+          <Subtitle className="inline-block h-full">Report Bug</Subtitle>
+        </div>
+      </div>
+      </>
         
     )
     }

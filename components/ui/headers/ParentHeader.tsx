@@ -7,6 +7,7 @@ import {
     BookOpenIcon,
     ChartPieIcon,
     Cog8ToothIcon,
+    ExclamationCircleIcon,
     HomeIcon,
     SquaresPlusIcon,
     TableCellsIcon,
@@ -15,7 +16,8 @@ import {
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon, PlusCircleIcon, CalendarDaysIcon } from '@heroicons/react/20/solid'
 import { Fragment, useEffect, useState } from 'react'
 import { motion } from "framer-motion";
-
+import { Subtitle } from "@tremor/react";
+import BugReport from "@/components/forms/bug";
 const products = [
     { name: 'Overview', description: 'Get a better understanding of your expenditure', href: '/expenditure/overview', icon: ChartPieIcon },
     { name: 'My Money', description: 'A list of your income & expenditure', href: '/expenditure/list', icon: TableCellsIcon},
@@ -37,10 +39,12 @@ function classNames(...classes : any[]) {
 export default function ParentHeader() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     let [isOpen, setIsOpen] = useState<boolean>(false)
+    const [bugReport, setBugReport] = useState<boolean>(false)
     let [isIncomeOpen, setIsIncomeOpen] = useState<boolean>(false)
     const {user, isLoaded, isSignedIn} = useUser()
     const router = useRouter()
     return (
+    <>
     <header className="bg-white z-50">
     <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex lg:flex-1">
@@ -96,13 +100,8 @@ export default function ParentHeader() {
                 </Popover>
             </Popover.Group>
         <motion.div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            {user ? <UserButton afterSignOutUrl="/">
-            <UserProfile.Page label="Subscription" labelIcon={<HomeIcon />}>
-                        <><img src="https://picsum.photos/500/500"/></>
-                    </UserProfile.Page>
-                    <UserProfile.Page label="account" />
-                    <UserProfile.Page label="security" />
-            </UserButton> : <motion.button onClick={()=>{router.push('/sign-in')}} className='w-fit py-2 px-4 text-sm bg-indigo-600 rounded-md cursor-pointer text-white'>Log In / Sign Up</motion.button>}
+        {user ? <UserButton afterSignOutUrl="/" userProfileUrl='/profile/manage' showName userProfileMode='navigation' />
+                    : <motion.button onClick={()=>{router.push('/sign-in')}} className='w-fit py-2 px-4 text-sm bg-indigo-600 rounded-md cursor-pointer text-white'>Log In / Sign Up</motion.button>}
         </motion.div>
     </nav>
     <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -186,5 +185,13 @@ export default function ParentHeader() {
         </div>
         </Dialog.Panel>
     </Dialog>
-    </header>);
+    
+    </header>
+    <BugReport isOpen={bugReport} setIsOpen={setBugReport}/>
+    <div onClick={()=>{setBugReport(true)}} className="w-36 block h-12 z-[100] bg-white hover:bg-gray-200 rounded-full border fixed bottom-0 right-0 mr-10 mb-10 cursor-pointer">
+        <div className="h-fit my-auto mx-auto right-0 left-0 bottom-0 top-0 w-fit absolute">
+          <ExclamationCircleIcon className="w-8  text-red-500 h-6 ml-0 mb-[2px] -translate-x-1 bottom-0 top-0 right-0 left-0 inline-block" />
+          <Subtitle className="inline-block h-full">Report Bug</Subtitle>
+        </div>
+      </div></>);
 }

@@ -10,7 +10,9 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { GuardianOnboardingProvider } from '@/components/contexts/GuardianOnboardingCTX';
 import Script from 'next/script';
 import Head from 'next/head';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { ChatBubbleLeftRightIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import { Subtitle } from '@tremor/react';
 const raleway = Raleway({ subsets: ['latin'] })
 
 
@@ -23,6 +25,7 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
       localStorage.setItem("modals", JSON.stringify([]))
     }
   }, [])
+  
   return (
     <>
       {/* <UserProvider> */}
@@ -54,7 +57,6 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
                             <meta name="twitter:title" content="LogMoney.app | The better money app"/>
                             <meta name="twitter:description" content="Discover LogMoney.app - the smart choice for responsible financial oversight. Discover how students and spenders across the world keep themselves financially accountable."/>
                             <meta name="twitter:image" content="https://logmoney.app/og.png"/>
-
                           </Head>
                           <Script src="https://simple.logmoney.app/latest.js"  />
                           <noscript>
@@ -65,6 +67,7 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
                               referrerPolicy="no-referrer-when-downgrade"
                             />
                           </noscript>
+                          
                           <div className={raleway.className}>
                             <Component {...pageProps} />
                           </div>

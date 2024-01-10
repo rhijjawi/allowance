@@ -6,6 +6,7 @@ import { Card, Metric, Subtitle, Text, Title, Callout} from "@tremor/react";
 import { ExclamationCircleIcon} from "@heroicons/react/24/solid";
 import {CheckIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import { getSupabase } from "@/utils/supabase";
+import ModifyCategory from "@/components/forms/ModifyCategory";
 const TransactionHandlerCTX = createContext<any>([])
 export function TransactionHandlerProvider({children} : {children: React.ReactNode}){
     const { user, isSignedIn, isLoaded } = useUser()
@@ -15,30 +16,41 @@ export function TransactionHandlerProvider({children} : {children: React.ReactNo
 
     let { expenseData, setExpenseData } = useExpenses()
 
-    const functions = {
-        'delete' : async() => {
+    const functions : { [key: string]: () => Promise<any> } = {
+        'delete' : async() : Promise<undefined> => {
             await (await getSupabase(await getToken({template: "supabase"}))).from('expenses').delete().eq('id', handlerMode[1])
             setExpenseData(expenseData.filter((e : ExpenseType) => {return e.id != Number(handlerMode[1])}))
-            setHandlerMode([null, null])
-
+            setHandlerMode([null, null]);
+            return;
         },
-        'edit' : async() => {
+        'edit' : async() : Promise<undefined> => {
 
         }, 
-        'add' : async() => {
+        'add' : async() : Promise<undefined> => {
             
-        }
+        },
+        'modifyCategory' : async() : Promise<undefined|{data : null, error: any}> => {
+            console.log(handlerMode,resolvedExpense)
+            if (!resolvedExpense){return};
+            const {data, error} = await (await getSupabase(await getToken({template: "supabase"}))).from('expenses').update({category: resolvedExpense!.category}).eq('id', handlerMode[1])
+            setHandlerMode([null, null]);
+            return {data : data, error : error};
+        },
     }
     useEffect(() => {
         expenseData.forEach((e : ExpenseType) => {
             if (e.id == Number(handlerMode[1])){
                 setResolvedExpense(e)
             }
+            if (e.id == Number(handlerMode[1]) && handlerMode[0] == "modifyCategory"){
+                setResolvedExpense(e)
+            }
         })
     }, [handlerMode])
     return (
         <TransactionHandlerCTX.Provider value={{handlerMode, setHandlerMode}}>
-            <Dialog open={!(handlerMode[0] == null)} onClose={() => {setHandlerMode([null, null])}
+            {handlerMode[0] == "modifyCategory" ? <ModifyCategory handlerMode={handlerMode} resolvedExpense={resolvedExpense!} setHandlerMode={setHandlerMode} setResolvedExpense={setResolvedExpense} _function={functions['modifyCategory']} />: null}
+            <Dialog open={(handlerMode[0] == 'delete')} onClose={() => {setHandlerMode([null, null])}
                 } className="">
                 <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-black/70">
                     <Dialog.Panel className="max-w-sm rounded-md h-fit w-72 aspect-square bg-white border-2 border-black py-3 px-2">
@@ -68,7 +80,7 @@ export function TransactionHandlerProvider({children} : {children: React.ReactNo
                     </div>
                     </Dialog.Panel>
                 </div>
-                </Dialog>
+            </Dialog>
             {children}
         </TransactionHandlerCTX.Provider>
     )

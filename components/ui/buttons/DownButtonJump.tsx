@@ -3,7 +3,6 @@ import { useEffect, useState } from "react"
 
 export default function CircleJumpingButton(){
     const [visiblity, setVisiblity] = useState(true)
-
     function changeVis(){
         
         if (document.getElementById('cta-box')?.getClientRects()[0]!.y!-window.scrollY > 500){
@@ -26,7 +25,7 @@ export default function CircleJumpingButton(){
     }
     return (
         <>
-            {visiblity && <div onClick={()=>{scrolltoBottom()}} className="w-12 h-12 z-[100] bg-white rounded-full border border-indigo-40/30 fixed bottom-0 left-0 right-0 mx-auto mb-10 cursor-pointer">
+            {visiblity && <div onClick={()=>{scrolltoBottom()}} className="w-12 h-12 z-[100] bg-white rounded-full border fixed bottom-0 left-0 right-0 mx-auto mb-10 cursor-pointer">
                 <ArrowDownIcon className="w-6 animate-bounce text-indigo-500 h-6 mx-auto my-auto bottom-0 top-0 right-0 left-0 absolute" />
             </div>}
         </>
