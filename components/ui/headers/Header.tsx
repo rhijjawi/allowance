@@ -178,7 +178,7 @@ export default function Header() {
             </Link>
             </Popover.Group>
             <motion.div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                {user ? <UserButton afterSignOutUrl="/" userProfileUrl='/profile' showName userProfileMode='navigation'>
+                {user ? <UserButton afterSignOutUrl="/" userProfileUrl='/profile/manage' showName userProfileMode='navigation'>
                 </UserButton>
                 : <motion.button onClick={()=>{router.push('/sign-in')}} className='w-fit py-2 px-4 text-sm bg-indigo-600 rounded-md cursor-pointer text-white'>Log In / Sign Up</motion.button>}
             </motion.div>
@@ -247,7 +247,7 @@ export default function Header() {
                 </div>
                 <div className="py-6">
                 <motion.div className="pt-2 lg:flex lg:flex-1 lg:justify-end">
-                    {user ? <UserButton afterSignOutUrl="/" userProfileUrl='/profile' showName userProfileMode='navigation'>
+                    {user ? <UserButton afterSignOutUrl="/" userProfileUrl='/profile/manage' showName userProfileMode='navigation'>
                     </UserButton>
                     : <motion.button onClick={()=>{router.push('/sign-in')}} className='w-fit py-2 px-4 text-sm bg-indigo-600 rounded-md cursor-pointer text-white'>Log In / Sign Up</motion.button>}
                 </motion.div>

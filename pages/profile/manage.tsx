@@ -1,12 +1,11 @@
 "use client";
 import { UserProfile, useUser } from "@clerk/nextjs";
-import { User } from "@clerk/nextjs/server";
 import { Dialog } from "@headlessui/react";
 import { CalendarIcon, CurrencyDollarIcon, UserIcon, WalletIcon } from "@heroicons/react/24/outline";
 import { Button, NumberInput, Text } from "@tremor/react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import symbols from "@/components/static/symbols.json";
 import { useAlerts } from "@/components/contexts/alertHandler";
 function nth(number: number){
@@ -32,7 +31,22 @@ export default function ManageProfile(){
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [wasOpened, setWasOpened] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
+    const [misc, setMisc] = useState<any>(null)
     const { addAlert } = useAlerts()
+    useEffect(()=>{
+        let active = true;
+        if (misc == null){
+            fetch('/api/user/misc').then((res)=>{
+                if (res.status == 200){
+                    res.json().then((data)=>{
+                        if (active){
+                            setMisc(data)
+                        }
+                    })
+                }
+            })
+        }
+    }, [])
     if (!isLoaded)return (<></>)
 
     return (
@@ -57,7 +71,7 @@ export default function ManageProfile(){
                 <div className="grid grid-cols-10">
                 <div className="col-span-10 h-10 relative text-sm font-medium leading-6 text-gray-900">
                         <NumberInput
-                            ref={MonthlyBudget}
+                            value={misc.budget[0]}
                             icon={CurrencyDollarIcon}
                             placeholder="Amount..."
                             enableStepper={false}
@@ -74,7 +88,7 @@ export default function ManageProfile(){
                             }
                                 }
                             className="h-full dark:text-white absolute right-0 top-0 float-right rounded-md border-0 bg-transparent text-gray-500 focus:ring-transparent sm:text-sm"
-                            value={budgetCurrency}
+                            value={misc.budget[1]}
                         >
                             {Object.keys(symbols).map((currency:string, index:number) => (
                                 <option key={index} value={currency}>{currency}</option>
@@ -97,7 +111,7 @@ export default function ManageProfile(){
                             icon={CurrencyDollarIcon}
                             placeholder="Amount..."
                             enableStepper={false}
-                            value={monthlyIncome}
+                            value={misc.budget[1]}
                             className="border-2 border-green-400 dark:border-green-400"
                             onValueChange={(e)=>{
                                 setMonthlyIncome(e);

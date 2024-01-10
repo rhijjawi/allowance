@@ -6,16 +6,13 @@ const footerItems = [
         {name : "About", link: "/about"}, {name: "FAQ", link: "/faq"}, {name: "Privacy Policy", link: "/privacy-policy"}, {name: "Terms of Service", link: "/terms-of-service"}
     ],
     [
-        {name: "Blog", link: "/blog"}, {name: "Careers", link: "/careers"}, {name: "Press", link: "/press"}
+        {name: "Blog", link: "/blog"}, {name: "Careers (Coming soon)", link: "#"}, {name: "Press", link: "/press"}
     ],
     [
-        {name: "Contact", link: "/contact"}, {name: "Donate", link: "https://buy.stripe.com/cN25lTc8w0D7eyY6oo"}
+        {name: "Contact", link: "mailto:contact@logmoney.app"}, {name: "Donate", link: "https://buy.stripe.com/cN25lTc8w0D7eyY6oo"}
     ],
 ]
 
-// return (<motion.div className={`${["col-start-2","col-start-4","col-start-6"][index]} col-span-1`}>
-                        
-//                     </motion.div>)
 
 export default function Footer(){
     return (

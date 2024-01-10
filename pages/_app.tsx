@@ -13,10 +13,11 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { ChatBubbleLeftRightIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { Subtitle } from '@tremor/react';
+import { useRouter } from 'next/router';
 const raleway = Raleway({ subsets: ['latin'] })
 
-
 export default function MyApp({Component, pageProps }: {Component: any, pageProps: any}) {
+  const router = useRouter();
   useEffect(()=>{
     if (typeof localStorage === 'undefined') {
       return
@@ -25,7 +26,6 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
       localStorage.setItem("modals", JSON.stringify([]))
     }
   }, [])
-  
   return (
     <>
       {/* <UserProvider> */}
@@ -44,7 +44,7 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
                             <meta property='og:url' content='https://logmoney.app' key='url' />
                             <meta property='og:type' content='website' key='type' />
                             <meta property='og:site_name' content='LogMoney' key='site_name' />
-
+                            {router.asPath !== "/" && <meta name="robots" content="noindex" />}
                             <meta name="description" content="Discover LogMoney.app - the smart choice for responsible financial oversight. Discover how students and spenders across the world keep themselves financially accountable."/>
 
                             <meta property="og:description" content="Discover LogMoney.app - the smart choice for responsible financial oversight. Discover how students and spenders across the world keep themselves financially accountable."/>

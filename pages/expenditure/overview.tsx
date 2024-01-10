@@ -1,6 +1,6 @@
 'use client';
 import { Card, Title, LineChart, Button, BarChart, Grid, Col, Color, ProgressCircle, Metric, ProgressBar, Subtitle, Text} from "@tremor/react";
-import { PlusCircleIcon, InformationCircleIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { PlusCircleIcon, InformationCircleIcon, PencilIcon, ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { useUser, useAuth } from "@clerk/nextjs";
 import { getSupabase } from "../../utils/supabase";
 import { useEffect, useState } from "react";
@@ -15,6 +15,7 @@ import { isMobile } from "react-device-detect"
 import { MonthExpenses } from "@/utils/functions/filterData";
 import {BudgetStatus, BudgetMath} from "@/utils/functions/math"
 import { SavingsModal } from "@/components/forms/savingsDialogue";
+import EmergencyFundModal from "@/components/forms/EmergencyFund";
 const chartVariants = {
     animate : {opacity: 1, width: "99%"},
     initial : {opacity: 0, width: "100%"}
@@ -37,7 +38,9 @@ export default function Expenditure() {
     const CustomBarChart = motion(BarChart, {forwardMotionProps: true})
     const [hideRent, setHideRent] = useState<boolean>(false)
     const [isSavingsOpen, setIsSavingsOpen] = useState<boolean>(false)
+    const [isEmergencyOpen, setIsEmergencyOpen] = useState<boolean>(false)
     const [sum, setSum] = useState<number>(0)
+
     const router = useRouter()
     useEffect(()=>{
         if (expenseData.length > 0){
@@ -161,8 +164,8 @@ return (
                 <Title color="red" className="mb-2">Emergency Fund</Title>
                 <p className="text-2xl font-semibold text-left">{currFormatter(misc.emergency[0], user?.publicMetadata.currency as string)} in cash</p>
                 <p className="text-2xl font-semibold text-left">{currFormatter(misc.emergency[1], user?.publicMetadata.currency as string)} in bank account</p>
-                <Button className="absolute bottom-0 left-0 mb-5 ml-5" iconPosition="left" icon={InformationCircleIcon}>More Info</Button>
-                <Button className="absolute bottom-0 right-0 mb-5 mr-5" iconPosition="right" icon={PencilIcon}>Edit</Button>
+                <EmergencyFundModal isOpen={isEmergencyOpen} setIsOpen={setIsEmergencyOpen} />
+                <Button className="absolute bottom-0 right-0 mb-5 mr-5" iconPosition="left" onClick={()=>{setIsEmergencyOpen(true)}} icon={ArrowsPointingOutIcon}>Edit</Button>
             </CustomCard>
         </Grid>
         <Card className="h-fit relative max-md:h-fit">
