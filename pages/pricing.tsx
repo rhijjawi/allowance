@@ -14,7 +14,7 @@ export const getStaticProps = (async (context : any) => {
         data = await res.json()
     }
     catch (e){
-        data = {}
+        data = [];
     }
     return {props: {prods : data}, revalidate: 60}
 })

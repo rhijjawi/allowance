@@ -178,7 +178,7 @@ export default function ListPage(){
                         </Select>
                     </div>
                     <div className="block">
-                        {expenseData.length > 0 ? <ExpenseTable setSortBy={setSortBy} setExpenseFU={setExpense} sortBy={sortBy} setHandlerMode={setHandlerMode} expenseData={expenseData}/> 
+                        {expenseData.length > 0 ? <ExpenseTable setSortBy={setSortBy} setExpenseFU={setExpense} sortBy={sortBy} expenseData={expenseData}/> 
                         : <motion.div className="h-full text-center w-full block mt-5">No data. To get started, go to the overview tab via the tab list above.</motion.div>}
                     </div>
             </Card>

@@ -1,7 +1,8 @@
 import { useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
+import React, { Dispatch } from "react";
 
-export default function ReportABug({isOpen, setIsOpen}){
+export default function ReportABug({isOpen, setIsOpen} : {isOpen : boolean, setIsOpen : Dispatch<boolean>}) {
     const {user, isSignedIn} = useUser();
     const postURL = isSignedIn ? "https://eoq198g7ikfeqsy.m.pipedream.net/submit-bug?user=" + user?.id : "https://eoq198g7ikfeqsy.m.pipedream.net/submit-bug"
     return (
