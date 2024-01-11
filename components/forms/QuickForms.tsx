@@ -1,4 +1,4 @@
-import * as symbols from '../static/symbols.json';
+import  symbols from '../static/symbols.json';
 import { useState, useEffect } from 'react';
 import { DatePicker, DatePickerValue, NumberInput, SearchSelect, SearchSelectItem, Select, SelectItem, TextInput } from '@tremor/react';
 import { CurrencyDollarIcon } from '@heroicons/react/24/solid';

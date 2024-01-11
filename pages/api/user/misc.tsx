@@ -25,7 +25,7 @@ async function PUT(req: NextApiRequest, res : NextApiResponse){
     const {data, error} = await supabase.from('misc').select('savings, emergency').eq('clerk_id', userId);
     if (error){res.status(500).send("Error retrieving misc data"); return}
     if (data.length == 0){res.status(404).end(); return}
-    const {error: error2} = await supabase.from('misc').update({savings: savings, emergency: emergency}).eq('clerk_id', userId);
+    const {error: error2} = await supabase.from('misc').update(req.body).eq('clerk_id', userId);
     if (error2){res.status(500).send("Error updating misc data"); return}
     return res.status(200).json({message: "OK"});
 }

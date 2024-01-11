@@ -5,7 +5,7 @@ import { useUser, useAuth } from "@clerk/nextjs";
 import { getSupabase } from "../../utils/supabase";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import {currFormatter, standardizeCurrency, NumToMonth, MonthToNum} from "@/utils/functions/valueFormatters"
+import {currFormatter, standardizeCurrency, NumToMonth, MonthToNum, standardizeCurrencyGeneral} from "@/utils/functions/valueFormatters"
 import { ExpenseType, useExpenses } from "@/components/contexts/expenseCTX";
 import { getColor } from "@/components/static/categories";
 import { CategorySchema, IncomeSchema } from "@/types/supabase";
@@ -40,7 +40,7 @@ export default function Expenditure() {
     const [isSavingsOpen, setIsSavingsOpen] = useState<boolean>(false)
     const [isEmergencyOpen, setIsEmergencyOpen] = useState<boolean>(false)
     const [sum, setSum] = useState<number>(0)
-
+    const [emergencySum, setEmergencySum] = useState<number>(0)
     const router = useRouter()
     useEffect(()=>{
         if (expenseData.length > 0){
@@ -71,7 +71,7 @@ export default function Expenditure() {
                 }
             })
         }
-    }, [])
+    }, [isLoaded])
     useEffect(()=>{
         let active = true
         let categoryList : any = {}
@@ -106,14 +106,16 @@ export default function Expenditure() {
         }
     }, [expenseData, categoryData])
 useEffect(()=>{
-    if (!misc){return }
+    if (misc == null){
+        return 
+    }
     async function a(){
         setPercentage([0, 0])
         const budgetMath = await BudgetMath(sum, user?.publicMetadata.currency as string, misc.budget)
         setPercentage(budgetMath)
     }
     a();
-}, [misc])
+}, [sum])
 
 if(!isLoaded || loading || misc == null ) return <></>;
 return (
@@ -155,16 +157,17 @@ return (
                 </div>
                 <Button className="absolute bottom-0 float-left left-0 mb-3 ml-3 md:mb-5 md:ml-5" iconPosition="right" onClick={()=>setIsSavingsOpen(true)} icon={PencilIcon}>Edit Goal</Button>
                 <Button className="absolute bottom-0 float-right right-0 mb-3 mr-3 md:mb-5 md:mr-5" iconPosition="right" icon={PencilIcon}>Edit</Button>
-                <SavingsModal isOpen={isSavingsOpen} setIsOpen={setIsSavingsOpen} misc={misc}/>
+                <SavingsModal isOpen={isSavingsOpen} setIsOpen={setIsSavingsOpen} misc={misc} setMisc={setMisc}/>
             </CustomCard>
             <CustomCard
             className="relative max-md:h-[200px]"
             variants={cardVariants}
             >
                 <Title color="red" className="mb-2">Emergency Fund</Title>
-                <p className="text-2xl font-semibold text-left">{currFormatter(misc.emergency[0], user?.publicMetadata.currency as string)} in cash</p>
-                <p className="text-2xl font-semibold text-left">{currFormatter(misc.emergency[1], user?.publicMetadata.currency as string)} in bank account</p>
-                <EmergencyFundModal isOpen={isEmergencyOpen} setIsOpen={setIsEmergencyOpen} />
+                <p className="text-2xl font-semibold text-left">{currFormatter(misc.emergency[0], misc.emergency[2])} in cash</p>
+                <p className="text-2xl font-semibold text-left">{currFormatter(misc.emergency[1], misc.emergency[2])} in bank account</p>
+                <EmergencyFundModal misc={misc} setMisc={setMisc} isOpen={isEmergencyOpen} setIsOpen={setIsEmergencyOpen} />
+                {misc.emergency[0]+misc.emergency[1] > 0 && <Metric className="absolute bottom-0 left-0 m-5">{currFormatter(misc.emergency[0]+misc.emergency[1], misc.emergency[2] as string)}</Metric>}
                 <Button className="absolute bottom-0 right-0 mb-5 mr-5" iconPosition="left" onClick={()=>{setIsEmergencyOpen(true)}} icon={ArrowsPointingOutIcon}>Edit</Button>
             </CustomCard>
         </Grid>

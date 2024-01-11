@@ -2,11 +2,10 @@ import { fetcher } from "@/utils/fetcher";
 import { Dialog } from "@headlessui/react";
 import { Button, NumberInput, Subtitle, Title } from "@tremor/react";
 import { SetStateAction, useState } from "react";
-import useSWR from "swr";
-import * as symbols from '@/components/static/symbols.json'
+import symbols from '@/components/static/symbols.json'
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { useAlerts } from "@/components/contexts/alertHandler";
-export function SavingsModal({ isOpen, setIsOpen, misc} : {isOpen : boolean, setIsOpen : React.Dispatch<SetStateAction<boolean>>, misc : any}){
+export function SavingsModal({ isOpen, setIsOpen, misc, setMisc} : {isOpen : boolean, setIsOpen : React.Dispatch<SetStateAction<boolean>>, misc : any, setMisc : React.Dispatch<SetStateAction<any>>}){
     const {addAlert} = useAlerts();
     const [GoalAmount, setGoalAmount] = useState<number>(misc.savings[1]);
     const [saved, setSaved] = useState<number>(misc.savings[0]);
@@ -14,8 +13,9 @@ export function SavingsModal({ isOpen, setIsOpen, misc} : {isOpen : boolean, set
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleSave = () => {
-      // onSave(newGoal, newAmount);
-      setLoading(true);  
+
+      setLoading(true); 
+      setMisc({...misc, savings: [saved, GoalAmount, currency]});
       setTimeout(() => {
         addAlert("success", "Savings goal updated!", 2000);
         setIsOpen(false);

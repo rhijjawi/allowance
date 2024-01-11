@@ -28,7 +28,6 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
   }, [])
   return (
     <>
-      {/* <UserProvider> */}
       <ClerkProvider>
           <ExpenseCTXProvider>
               <FileManagerProvider>
@@ -78,7 +77,6 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
               </FileManagerProvider>
           </ExpenseCTXProvider>
       </ClerkProvider>
-      {/* </UserProvider> */}
     </>
   )
 }
