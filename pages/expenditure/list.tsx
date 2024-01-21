@@ -20,6 +20,7 @@ import ExpenseTable from "@/components/charts/ExpenseTable"
 import React from "react";
 import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
 import { useRouter } from "next/router"
+import { useAlerts } from "@/components/contexts/alertHandler"
 
 let ChevronStyle = ["absolute w-8 aspect-square rounded-full right-0 bottom-0 top-0 my-auto mr-4","w-8 h-8 border-2 rounded-full absolute"]
 
@@ -43,6 +44,7 @@ export default function ListPage(){
     const [sum, setSum] = useState<any[]|null>(null);
 
     const chevrons = [null, <ChevronUpIcon className={ChevronStyle[1]}/>, <ChevronDownIcon className={ChevronStyle[1]}/>]
+    const {addAlert} = useAlerts()
     const {error : error, loading, setExpense} = useFileUpload()
     const {handlerMode, setHandlerMode} = useTransactionHandler() as {handlerMode : string|null, setHandlerMode: React.Dispatch<React.SetStateAction<any[]>>}
     const [categorySums, setCategorySums] = useState([{}])
@@ -67,6 +69,35 @@ export default function ListPage(){
             }
         });
     }, []);
+    const sendForm = async () => {
+        if (!bank){
+            addAlert("warning", "Please select a bank!")
+            return
+        }
+        const form = new FormData();
+        const file = (document.getElementById("file") as HTMLInputElement).files![0];
+        if (file.type !== "text/csv"){
+            addAlert("warning", "Please upload a .csv file!")
+            return
+        }
+        console.log(file)
+        form.append("csvFile", file as File);
+        form.append("bank", bank as string);
+        const res = await fetch('/api/expenses/add', {
+            method: 'POST',
+            body: form
+        });
+        if (res.status === 304){
+            addAlert("warning", `Not a valid ${bank.charAt(0).toUpperCase()+bank.slice(1)} transaction file.`)
+            return
+        }
+        if (res.status === 200){
+            res.json().then((data)=>{
+                setExpenseData([...expenseData, ...data.results])
+            })
+            return
+        }
+    }
     useEffect(() => {
         if (!expenseData){return}
         setSum([])
@@ -139,7 +170,7 @@ export default function ListPage(){
                     transition={{ duration: 1.2 }}
                     animate={uncategorized.length > 0 ? "visible" : "hidden"}
                     >
-                        <Subtitle className="select-none dark:text-slate-300 text-center">It seems that you have <b>{currFormatter(expenseData.filter((item)=>{return item.category[0]==0}).reduce((a, b)=>{return a + b.standardizedCurrency!}, 0), user?.publicMetadata.currency as string)}</b> in uncategorized expenses. Click <a className="text-blue-500 cursor-pointer hover:underline" onClick={()=>{setTab(4)}}>here</a> to assign them categories.</Subtitle>
+                        <Subtitle className="select-none dark:text-slate-300 text-center">It seems that you have <b>{currFormatter(expenseData.filter((item)=>{return item.category[0]==0}).reduce((a, b)=>{return a + b.standardizedCurrency!}, 0), user?.publicMetadata.currency as string)}</b> in uncategorized expenses. Click <a className="text-blue-500 cursor-pointer hover:underline" onClick={()=>{setTab(5)}}>here</a> to assign them categories.</Subtitle>
                     </motion.div>
                 </Card>
                     <div className="">
@@ -158,7 +189,7 @@ export default function ListPage(){
                     </div>
                 <Card className="w-full shadow-md bg-white border-slate-400 border-2">
                     <Title>Money In vs. Money Out</Title>
-                    <MIMO expenses={expenseData} income={incomeData} currency={user!.publicMetadata.currency as string}/>
+                    <MIMO income={incomeData} currency={user!.publicMetadata.currency as string}/>
                 </Card>
                 <Col numColSpan={3} numColSpanLg={3}>
                     <Card className="w-full shadow-md bg-white border-slate-400 border-2">
@@ -178,22 +209,21 @@ export default function ListPage(){
                         </Select>
                     </div>
                     <div className="block">
-                        {expenseData.length > 0 ? <ExpenseTable setSortBy={setSortBy} setExpenseFU={setExpense} sortBy={sortBy} expenseData={expenseData}/> 
+                        {expenseData.length > 0 ? <ExpenseTable setSortBy={setSortBy} setExpenseFU={setExpense} sortBy={sortBy}/> 
                         : <motion.div className="h-full text-center w-full block mt-5">No data. To get started, go to the overview tab via the tab list above.</motion.div>}
                     </div>
             </Card>
           </TabPanel>
           <TabPanel>
-          <Grid numItemsMd={2} numItemsLg={3} className="gap-6 mt-6 ">
+          <Grid numItemsSm={1} numItemsMd={1} numItemsLg={3} className="gap-6 mt-6 ">
                 <Col numColSpan={1} numColSpanLg={3}>
-                <Card className=" dark:border-2 relative">
-                    <div className="w-full ml-5 my-5"><Text className="inline-block pr-2">Previous Period:</Text><Text className="inline-block dark:text-white"> {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[0])} - {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[1])}</Text><div><Text className="inline-block pr-2">Current Period:</Text><Text className="inline-block dark:text-white"> {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[2])} - {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[3])}</Text></div></div>
-                    <div className="grid grid-cols-3 relative">
-                        {categoryData.map((item: CategorySchema, index: number)=>{return (<ExpenditureDelta category={item} key={index} expenses={expenseData}/>)})}
-                        <IncomeDelta category={{category: "Income", id: 0, subcategories: []}} incomes={incomeData}/>
-                    </div>
-                    
-                </Card>
+                    <Card className=" dark:border-2 relative">
+                        <div className="w-full ml-5 my-5"><Text className="inline-block pr-2">Previous Period:</Text><Text className="inline-block dark:text-white"> {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[0])} - {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[1])}</Text><div><Text className="inline-block pr-2">Current Period:</Text><Text className="inline-block dark:text-white"> {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[2])} - {(new Intl.DateTimeFormat('en-DE' , {dateStyle : 'long'})).format(daterange[3])}</Text></div></div>
+                        <div className="grid grid-cols-1 md:lg:grid-cols-3 relative">
+                            {categoryData.map((item: CategorySchema, index: number)=>{return (<ExpenditureDelta category={item} key={index} expenses={expenseData}/>)})}
+                            <IncomeDelta category={{category: "Income", id: 0, subcategories: []}} incomes={incomeData}/>
+                        </div>
+                    </Card>
                 </Col>
             </Grid>
         </TabPanel>
@@ -222,8 +252,14 @@ export default function ListPage(){
                         <Select className="my-3" value={bank} onValueChange={(e)=>setBank(e)}>
                             {supportedBanks.length > 0 && supportedBanks.sort().map((bank)=>(<SelectItem className="cursor-pointer" value={bank}>{bank.charAt(0).toUpperCase()+bank.slice(1)}</SelectItem>))}
                         </Select>
+                        <motion.div variants={{
+                            hidden: { height: 0, opacity: 0 },
+                            visible: { style : {height: "h-fit", opacity : 1} },
+                        }} animate={supportedBanks.indexOf(bank as string) == -1 ? "hidden" : "visible"} className="w-full my-3 h-fit">
+                            <input accept=".csv" type={"file"} id={"file"} className="mx-auto bg-indigo-400 block w-fit h-fit max-h-full py-2 px-3 rounded-md max-w-full"/>
+                        </motion.div>
                         <div className="block w-full">
-                            <Button className="mx-auto block left-0 right-0 " onClick={()=>{}}>Import Bank Statement</Button>
+                            <Button className="mx-auto block left-0 right-0 " onClick={async()=>{await sendForm()}}>Import Bank Statement</Button>
                         </div>
                         
                     </Card>
@@ -237,7 +273,7 @@ export default function ListPage(){
                     </div>
                     <Title className="mb-4">Uncategorized Transactions</Title>
                     {!(uncategorized.length > 0) ? <><Subtitle className="cursor-pointer select-none">You have no uncategorized transactions. These only appear when you have imported transactions through a bank statement.</Subtitle><Subtitle>Click <b><a className="cursor-pointer " onClick={()=>setTab(1)}>here</a></b> to return</Subtitle></> : null}
-                    <ExpenseTable expenseData={uncategorized} sortBy={sortBy} setSortBy={setSortBy} setExpenseFU={setExpense}/>
+                    <ExpenseTable filter={"uncategorized"} sortBy={sortBy} setSortBy={setSortBy} setExpenseFU={setExpense}/>
                 </Card>
             </Col>
 

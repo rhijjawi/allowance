@@ -18,7 +18,7 @@ export default async function handler(req : NextApiRequest, res : NextApiRespons
     let userId;
     form.parse(req, async (err, fields, files) => {
         try{
-            userId = ((getAuth(req)).userId) ? (getAuth(req)).userId : 'user_2Xw3FfsPSQMf9eYenARiJIFRN09';
+            userId = ((getAuth(req)).userId);
         }
         catch (e){
             return res.status(401).json({ error: "Unauthorized" });
@@ -32,15 +32,17 @@ export default async function handler(req : NextApiRequest, res : NextApiRespons
             if (!supportedBanks.includes(fields.bank![0])){
                 return res.status(400).json({ error: 'Unsupported bank' });
             }
-            const result = convertCsvToJson(fields.csvFile![0], userId!, fields.bank![0]);
+            console.log()
+            const result = convertCsvToJson(files.csvFile![0].toString(), userId!, fields.bank![0]);
             if (result == null){
                 return res.status(400).json({ error: 'Unsupported bank' });
             }
             const { data, error } = await supabase.from('expenses').insert(result);
-            if (error) {
-                return res.status(500).json({ error: 'Internal Server Error' });
-            }
-            res.status(200).json({results: result, count: result.length});
+            // if (error) {
+            //     return res.status(500).json({ error: 'Internal Server Error' });
+            // }
+
+            result.length > 0 ? res.status(200).json({results: result, count: result.length}) : res.status(304).json({results: result, count: result.length});
         } catch (error) {
             console.log(error);
           res.status(500).json({ error: 'Internal Server Error' });

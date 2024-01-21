@@ -3,7 +3,7 @@ import { ExpenseSchema } from '@/types/supabase';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { TrashIcon } from '@heroicons/react/24/solid';
 import HoverSwitchCurr from '../ui/buttons/hoverSwitchCurr';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { getColor, getBadge, getBadgeByCategoryName, getIDByCategoryName } from '../static/categories';
 import { useExpenses } from '../contexts/expenseCTX';
 import { useTransactionHandler } from '../contexts/transactionHandler';
@@ -11,9 +11,27 @@ let TableHeadStyle = ["dark:bg-black bg-white select-none","h-6 relative right-0
 let ChevronStyle = ["absolute w-8 aspect-square rounded-full right-0 bottom-0 top-0 my-auto mr-4","w-8 h-8 border-2 rounded-full absolute"]
 const chevrons = [null, <ChevronUpIcon className={ChevronStyle[1]}/>, <ChevronDownIcon className={ChevronStyle[1]}/>]
 
-export default function ExpTable({expenseData, sortBy, setSortBy, setExpenseFU} : {expenseData : ExpenseSchema[], sortBy : [number, number], setSortBy:Dispatch<SetStateAction<[number, number]>>, setExpenseFU: Dispatch<SetStateAction<number>>}) {
+export default function ExpTable({filter, sortBy, setSortBy, setExpenseFU} : {filter? : "uncategorized", sortBy : [number, number], setSortBy:Dispatch<SetStateAction<[number, number]>>, setExpenseFU: Dispatch<SetStateAction<number>>}) {
     const {handlerMode, setHandlerMode} = useTransactionHandler() as {handlerMode : string|null, setHandlerMode: React.Dispatch<React.SetStateAction<any[]>>}
-    const {categoryData, incomeData, _error, setExpenseData} = useExpenses()
+    const {expenseData, categoryData, incomeData, _error, setExpenseData} = useExpenses()
+    const [data, setData] = useState<ExpenseSchema[]>([])
+    useEffect(()=>{
+        if (filter){
+            switch (filter){
+                case "uncategorized":
+                    setData(expenseData.filter((expense : ExpenseSchema)=>{
+                        return ((expense.category[0] == 0) && (expense.category[1] == 0))
+                    }))
+                    break;
+                default:
+                    setData(expenseData)
+                    break;
+            }
+        }
+        else {
+            setData(expenseData)
+        }
+    }, [expenseData])
     return (
         <Table className="grid mt-5 w-full rounded-b-md border-2 rounded-md">
     <TableHead>
@@ -66,17 +84,17 @@ export default function ExpTable({expenseData, sortBy, setSortBy, setExpenseFU} 
     </TableHead>
     
     <TableBody className="h-fit dark:divide-white divide-y  divide-black">
-        {expenseData.map((item : ExpenseSchema, index : number) => {
+        {data.map((item : ExpenseSchema, index : number) => {
             let date = "unknown"
             let formatter = Intl.NumberFormat('en-US', {})
-            if (expenseData.length == 0){
+            if (data.length == 0){
                 return (<TableRow key={index}>
                         <TableCell className="w-full">
                             <Text className="w-fit mx-auto right-0" >No Expenses</Text>
                         </TableCell>
                     </TableRow>)
                 }
-            if (!expenseData[0].transaction_date){}
+            if (!data[0].transaction_date){}
             else {
                 
                 date = (new Intl.DateTimeFormat(navigator.languages[0], {dateStyle : 'long'}).format(new Date(item.transaction_date)))

@@ -1,5 +1,5 @@
 import { BarChart } from "@tremor/react";
-import { ExpenseType } from "../contexts/expenseCTX";
+import { ExpenseType, useExpenses } from "../contexts/expenseCTX";
 import { currFormatter } from "@/utils/functions/valueFormatters";
 import { useUser } from "@clerk/nextjs"
 
@@ -7,15 +7,15 @@ import { useUser } from "@clerk/nextjs"
 import UserType from "../interfaces/userwithMetadata";
 import { useEffect, useState } from "react";
 import { IncomeSchema } from "@/types/supabase";
-export default function MIMO(props: {expenses : ExpenseType[], income : IncomeSchema[], currency : string}){
-    
+export default function MIMO(props: {income : IncomeSchema[], currency : string}){
+    const {expenseData} = useExpenses()
     const [moneyOut, setmoneyOut] = useState<number>(0)
     const [moneyIn, setMoneyIn] = useState<number>(0)
     useEffect(()=>{
         async function handle(){
             setmoneyOut(0)
             setMoneyIn(0)
-            props.expenses.map((expense)=>{
+            expenseData.map((expense : ExpenseType)=>{
                 if (new Date(expense.transaction_date).getUTCMonth() == new Date().getUTCMonth() || expense.recurring == true){
                     setmoneyOut((prev)=>{return prev + expense.standardizedCurrency!})
                 }
@@ -29,7 +29,7 @@ export default function MIMO(props: {expenses : ExpenseType[], income : IncomeSc
 
         }
         handle()
-    },[props.expenses])
+    },[expenseData])
     return (
     <BarChart
     data={[{

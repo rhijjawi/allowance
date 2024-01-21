@@ -7,14 +7,16 @@ import { ExclamationCircleIcon} from "@heroicons/react/24/solid";
 import {CheckIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import { getSupabase } from "@/utils/supabase";
 import ModifyCategory from "@/components/forms/ModifyCategory";
+import { useAlerts } from "./alertHandler";
 const TransactionHandlerCTX = createContext<any>([])
 export function TransactionHandlerProvider({children} : {children: React.ReactNode}){
     const { user, isSignedIn, isLoaded } = useUser()
+    const { addAlert } = useAlerts()
     const {getToken} = useAuth()
     const [handlerMode, setHandlerMode] = useState<any[]>([null, null])
     const [resolvedExpense, setResolvedExpense] = useState<ExpenseType|null>(null)
 
-    let { expenseData, setExpenseData } = useExpenses()
+    const { expenseData, setExpenseData } = useExpenses()
 
     const functions : { [key: string]: () => Promise<any> } = {
         'delete' : async() : Promise<undefined> => {
@@ -33,8 +35,22 @@ export function TransactionHandlerProvider({children} : {children: React.ReactNo
             console.log(handlerMode,resolvedExpense)
             if (!resolvedExpense){return};
             const {data, error} = await (await getSupabase(await getToken({template: "supabase"}))).from('expenses').update({category: resolvedExpense!.category}).eq('id', handlerMode[1])
-            setHandlerMode([null, null]);
-            return {data : data, error : error};
+            if (!error){
+                addAlert("success", "Category updated successfully.")
+                setHandlerMode([null, null]);
+                setExpenseData(expenseData.map((e : ExpenseType) => {
+                    if (e.id == Number(handlerMode[1])){
+                        return {...e, category : resolvedExpense!.category}
+                    }
+                    else {
+                        return e
+                    }
+                }));
+                return {data : data, error : error};
+            }
+            else {
+                await addAlert("warning", "There was an error updating the category. Please try again later.");
+            }
         },
     }
     useEffect(() => {

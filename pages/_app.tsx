@@ -31,9 +31,9 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
       <ClerkProvider>
           <ExpenseCTXProvider>
               <FileManagerProvider>
-                <TransactionHandlerProvider>
+                <AlertProvider>
+                  <TransactionHandlerProvider>
                     <Layout>
-                      <AlertProvider>
                         <GuardianOnboardingProvider>
                           <Head>
                             <title key="main">LogMoney.app | The better money app</title>
@@ -47,7 +47,6 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
                             <meta name="description" content="Discover LogMoney.app - the smart choice for responsible financial oversight. Discover how students and spenders across the world keep themselves financially accountable."/>
 
                             <meta property="og:description" content="Discover LogMoney.app - the smart choice for responsible financial oversight. Discover how students and spenders across the world keep themselves financially accountable."/>
-                            <meta property="og:image" content="https://logmoney.app/og.png"/>
 
 
                             <meta name="twitter:card" content="summary_large_image"/>
@@ -71,9 +70,9 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
                             <Component {...pageProps} />
                           </div>
                         </GuardianOnboardingProvider>
-                      </AlertProvider>
                     </Layout>
-                </TransactionHandlerProvider>
+                  </TransactionHandlerProvider>
+                </AlertProvider>
               </FileManagerProvider>
           </ExpenseCTXProvider>
       </ClerkProvider>
