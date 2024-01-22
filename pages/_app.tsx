@@ -48,7 +48,6 @@ export default function MyApp({Component, pageProps }: {Component: any, pageProp
 
                             <meta property="og:description" content="Discover LogMoney.app - the smart choice for responsible financial oversight. Discover how students and spenders across the world keep themselves financially accountable."/>
 
-
                             <meta name="twitter:card" content="summary_large_image"/>
                             <meta property="twitter:domain" content="logmoney.app"/>
                             <meta property="twitter:url" content="https://logmoney.app"/>

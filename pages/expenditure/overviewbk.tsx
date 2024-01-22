@@ -173,7 +173,7 @@ return (
                 </div>
                 <Button className="absolute bottom-0 left-0 mb-5 ml-5" iconPosition="right" onClick={()=>setIsSavingsOpen(true)} icon={PencilIcon}>Edit Goal</Button>
                 <Button className="absolute bottom-0 right-0 mb-5 mr-5" iconPosition="right" icon={PencilIcon}>Edit</Button>
-                <SavingsModal isOpen={isSavingsOpen} setIsOpen={setIsSavingsOpen} misc={misc}/>
+                <SavingsModal setMisc={setMisc} isOpen={isSavingsOpen} setIsOpen={setIsSavingsOpen} misc={misc}/>
             </CustomCard>
             <CustomCard
             className="relative"
