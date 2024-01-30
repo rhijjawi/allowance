@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "start-backend": "bun --watch ../backend/mitm/cache.js",
+    "dev": "bun run start-backend && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postbuild": "next-sitemap"
+    "postbuild": "next-sitemap && bun ./.build-scripts/success.js"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.1.0",
@@ -30,6 +31,7 @@
     "axios": "^1.5.1",
     "csv-parse": "^5.5.3",
     "csv-parser": "^3.0.0",
+    "discord-webhook-node": "^1.1.8",
     "express": "^4.18.2",
     "formidable": "^3.5.1",
     "framer-motion": "^10.17.12",
