@@ -58,7 +58,8 @@ async function GET(req: NextApiRequest, res: NextApiResponse) {
   const user = getAuth(req);
   const { userId } = user;
   if (!userId) return res.status(401).send("Unauthorized");
-  if (user.sessionClaims.metadata!.role == "parent") {
+  //@ts-ignore
+  if (user!.sessionClaims!.metadata!.role == "parent") {
     const { data, error } = await supabase
       .from("oversight")
       .select("childId")

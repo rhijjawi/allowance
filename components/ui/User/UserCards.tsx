@@ -87,8 +87,8 @@ export function UserAddCard(props: {
               disabled={props.isReadOnly}
               defaultValue={code[e] || ""}
               onInput={() => {
-                let _code = Object.assign([], code);
-                _code[e] = String(
+                let _code = Object.assign([], code) as string[];
+                _code[e as number] = String(
                   (document.getElementById(String(e)) as HTMLInputElement)
                     .value,
                 ).toUpperCase();

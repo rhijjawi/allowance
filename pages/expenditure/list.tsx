@@ -426,10 +426,9 @@ export default function ListPage() {
                   {/* @ts-ignore */}
                   <Select
                     className="relative top-1 float-right h-12 w-[20%]"
-                    value={filtermode}
+                    value={String(filtermode)}
                     onValueChange={(v) => {
-                      setFiltermode(v);
-                      console.log(v);
+                      setFiltermode(Number(v));
                     }}
                   >
                     {/* @ts-ignore */}
@@ -438,7 +437,7 @@ export default function ListPage() {
                         <SelectItem
                           key={index}
                           className="bg-gray-800/30 text-stone-700 hover:cursor-pointer"
-                          value={index}
+                          value={String(index)}
                         >
                           {item}
                         </SelectItem>

@@ -49,8 +49,11 @@ export default function Index() {
   }, [email]);
   useEffect(() => {
     if (user?.publicMetadata.reports) {
+      //@ts-ignore
       setLanguage(user.publicMetadata.reports.language ?? "en");
+      //@ts-ignore
       setCurrency(user.publicMetadata.reports.currency ?? "EUR");
+      //@ts-ignore
       setEmail(user.publicMetadata.reports.email ?? "");
     }
   }, [user]);
