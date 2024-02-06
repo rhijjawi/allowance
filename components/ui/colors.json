@@ -1,0 +1,37 @@
+{
+  "light": {
+  "brand_color": "#3E5F6F",
+  "brand_secondary_color": "#64BDB0",
+  "brand_text_color": "",
+  "brand_text_secondary_color": "#3E5F6F",
+  "brand_text_tertiary_color": "#000000",
+  "cards": {
+    "outline": "#000000",
+    "text": "#000000",
+    "text_secondary": "#000000"
+  },
+  "modals": {
+    "background": "#000000",
+    "text": "#000000",
+    "header": "#000000",
+    "header_text": "#000000"
+  }
+},
+  "dark": {
+  "brand_color": "#3E5F6F",
+  "brand_secondary_color": "#64BDB0",
+  "brand_text_color": "#ffffff",
+  "brand_text_secondary_color": "#000000",
+  "brand_text_tertiary_color": "#000000",
+  "cards": {
+    "outline": "#000000",
+    "text": "#000000",
+    "text_secondary": "#000000"
+  },
+  "modals": {
+    "background": "#000000",
+    "text": "#000000",
+    "header": "#000000",
+    "header_text": "#000000"
+  }}
+}

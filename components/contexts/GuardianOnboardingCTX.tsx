@@ -6,7 +6,6 @@ import { getSupabase } from '@/utils/supabase'
 import { Button } from '@tremor/react'
 import { useRouter } from 'next/router'
 import { useAlerts } from './alertHandler'
-import {AlertProvider} from '../interfaces/alertProviderType'
 const GuardianOnboardingContext = createContext<any>([])
 const exemptedRoutes = ['/subscription/manage', '/404', '/sign-in/[[...index]]', '/sign-in', '/sign-up', '/sign-up/[[...index]]', '/forgot-password', '/reset-password', '/verify-email', '/verify-phone', '/', '/privacy-policy', '/_error', '/terms-of-service', '/contact-us', '/about-us', '/faq', '/pricing', '/debt/literature']
 

@@ -15,7 +15,7 @@ export default function FourOhFour({ errorCode } : {errorCode : number}){
         <>
             <div className="min-h-screen bg-gray-500/10">
                 <div className="bg-white dark:bg-gray-600/20 border border-black dark:border-white h-fit w-fit absolute right-0 left-0 top-0 bottom-0 mx-auto my-auto pt-3 pb-8 px-5 rounded-md">
-                    <div className="w-full text-white">
+                    <div className="w-full text-black dark:text-white">
                         <p className="text-2xl font-bold">/404</p>
                         <p className="font-bold">Page Not Found</p>
                         <p className="text-sm">The page you are looking for does not exist.</p>

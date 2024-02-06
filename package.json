@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start-backend": "bun --watch ../backend/mitm/cache.js",
-    "dev": "bun run start-backend && next dev",
+    "backend": "bun --watch ../backend/mitm/cache.ts",
+    "report": "bun --watch ../backend/report-gen/react-email-starter/index.ts",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

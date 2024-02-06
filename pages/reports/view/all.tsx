@@ -1,17 +1,16 @@
-import { Button } from "@tremor/react";
+import { Button, Card, Title } from "@tremor/react";
 import { useRouter } from "next/router";
 
 export default function Manage() {
     const router = useRouter()
 
     return (
-        <div className="min-h-screen h-12 flex justify-center align-middle">
-            <div className="w-[80%] relative mx-auto my-auto bottom-0 h-[70%] rounded-md border border-indigo-300 bg-white">
-                <div className="">
-                    <p className="text-center mx-auto text-2xl pt-2"><b>View all reports</b></p>
-
-                </div>
-                <Button onClick={()=>{router.push("/reports/manage")}} className="right-0 h-12 top-0 bottom-0 mx-3 my-3 absolute">Manage linked accounts</Button>
+        <div className="h-fit w-full overflow-hidden border-t-2 bg-white dark:bg-black">
+            <div className="mx-auto mb-5 min-h-screen max-w-[88rem] px-6  lg:px-8">
+            <Card className={`mx-auto  my-auto mt-5 w-full max-w-[80%] divide-y divide-gray-200 rounded-lg border-2 shadow-2xl `}>
+                <Title>All Reports</Title>
+                
+            </Card>
             </div>
         </div>
     )
