@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://logmoney.app</loc><lastmod>2024-01-30T10:56:36.077Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://logmoney.app/expenditure/list</loc><lastmod>2024-01-30T10:56:36.077Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app</loc><lastmod>2024-02-06T15:10:01.181Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/debt</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/debt/calculator</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/debt/literature</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/expenditure/add</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/expenditure/list</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/expenditure/overview</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/expenditure/overviewbk</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/faq</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/pricing</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/profile</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/profile/manage</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/reports</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/reports/manage</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/reports/view/all</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/subscription/manage</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://logmoney.app/success</loc><lastmod>2024-02-06T15:10:01.182Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>
