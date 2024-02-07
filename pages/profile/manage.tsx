@@ -48,7 +48,7 @@ export default function ManageProfile(){
         }
     }, [])
     if (!isLoaded)return (<></>)
-
+    if (isLoaded && !isSignedIn){router.push("/")}
     return (
         <motion.div
         initial={{ opacity: 0 }}

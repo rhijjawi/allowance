@@ -1,7 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSupabase } from "@/utils/supabase";
 import { clerkClient } from "@clerk/nextjs";
-import { UserJSON } from "@clerk/nextjs/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 
@@ -73,11 +71,16 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
       oversight: [],
     };
   }
-  await clerkClient.users.updateUserMetadata(data.id, {
-    publicMetadata: pm,
-    unsafeMetadata: {},
-    privateMetadata: { role: data.unsafe_metadata.role },
-  });
+  try{
+    await clerkClient.users.updateUserMetadata(data.id, {
+      publicMetadata: pm,
+      unsafeMetadata: {},
+      privateMetadata: { role: data.unsafe_metadata.role },
+    });
+  }
+  catch (e : any|unknown) {
+    res.status(500).json({ message: e });
+  }
   res.status(200).json({ message: "OK" });
 }
 export default async function handler(
