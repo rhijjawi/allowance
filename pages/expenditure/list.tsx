@@ -122,11 +122,11 @@ export default function ListPage() {
     .map((i) => {
       let date = new Date();
       let month = new Date(
-        date.setUTCMonth(date.getUTCMonth() - i),
-      ).getUTCMonth();
+        date.setUTCMonth(date.getMonth() - i),
+      ).getMonth();
       let year = new Date(
-        date.setUTCMonth(date.getUTCMonth() - i),
-      ).getUTCFullYear();
+        date.setUTCMonth(date.getMonth() - i),
+      ).getFullYear();
       return [month, year];
     })
     .reverse();
@@ -198,7 +198,7 @@ export default function ListPage() {
       let sum = expenses.reduce(
         (a: number, b: ExpenseSchema) => a + b.standardizedCurrency!,
         0,
-      );
+        );
       setSum((prev) => [
         ...prev!,
         {

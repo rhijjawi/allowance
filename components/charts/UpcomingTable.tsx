@@ -10,7 +10,6 @@ export default function table(props : {expenses : ExpenseType[], categories : an
     let {expenses, categories} = props
     const [modalOpen, setModalOpen] = useState<any>(false)
     const [recurring, setRecurring] = useState<any>([])
-    //important info
     useEffect(()=>{
         let active = true
         setRecurring([])
@@ -18,12 +17,17 @@ export default function table(props : {expenses : ExpenseType[], categories : an
             let date = new Date(expense.transaction_date)
             date.setUTCMonth(new Date().getUTCMonth())
             let DateDelta = Number(new Date(date)) - Number(new Date())
-            if (DateDelta < 0){return}
+            if (DateDelta < 0){
+                return
+            }
+            else {
+            }
             if (expense.recurring || ((Number(new Date(expense.transaction_date)) - Number(new Date())) > 0)){
                 setRecurring((prevState : any) => [...prevState, expense])}
         })
     }, [props.expenses])
     useEffect(()=>{
+
     }, [recurring])
     const closeModal = (): any => setModalOpen(false);
     return (
@@ -64,7 +68,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
                         <TableRow key={index}>
                             <TableCell className="w-full"><div className="min-w-12 break-normal whitespace-pre-wrap">{item.label}</div></TableCell>
                             <TableCell>
-                            <Text>In {Math.round(DateDelta/(1000*3600*24))} days</Text>
+                            <Text>In {Math.ceil(DateDelta/(1000*3600*24))} day{Math.ceil(DateDelta/(1000*3600*24)) > 1 ? "s" : ""}</Text>
                             </TableCell>
                             <TableCell>
                             <Text className={`dark:text-white`}><HoverSwitchCurr size={'md'} expense={item}/></Text>

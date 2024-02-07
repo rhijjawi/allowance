@@ -10,7 +10,6 @@ export default function ModifyCategory({handlerMode, setHandlerMode, resolvedExp
     const [category, setCategory] = useState<any>([0,0])
     useEffect(()=>{
         if (category[0] == 0 && category[1] == 0){return}
-        console.log(category)
         setResolvedExpense({...resolvedExpense, category: category});
     }, [category])
     return (

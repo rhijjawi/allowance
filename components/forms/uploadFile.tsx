@@ -17,7 +17,6 @@ export function DragAndDrop(props: {id : number, user : any}) {
   function handleChange(e: any) {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
-      console.log(e.target.files);
       for (let i = 0; i < e.target.files["length"]; i++) {
         setFilesArr((prevState: any) => [...prevState, e.target.files[i]]);
       }
@@ -35,7 +34,7 @@ export function DragAndDrop(props: {id : number, user : any}) {
         if (url){await axios.get(`/api/generate-temporary-url?key=${key}`)}
       }
       let {data, error} = await (await getSupabase(await getToken({template: "supabase"}))).from('expenses').update({files: fileKeys}).eq('id', props.id).select()
-      console.log(data, error)
+      return {error : !(error == null)}
     }
   }
 

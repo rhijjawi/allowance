@@ -31,7 +31,7 @@ export default function DC(props : any){
                     let catString = categoryData.find((element) => {return element.id === exp.category[0]})!.category
                 if (!(catSums[catString])){
                     catSums[catString] = 0
-                    console.log(catSums[catString])
+
                 }
                 catSums[catString] = catSums[catString] + exp.standardizedCurrency!}
             }
@@ -44,7 +44,6 @@ export default function DC(props : any){
                 Object.keys(d[0]).forEach((c)=>{
                     sumsArr.push({label : c, value : d[0][c]})
                 })
-                console.log(sumsArr)
                 setDonut(sumsArr)
             })
         }

@@ -19,7 +19,6 @@ export function ExpenditureDelta(props: {category : CategorySchema, expenses : E
     }
     if (lastMonthSum < thisMonthSum){
         direction = 'more'
-        console.log(lastMonthSum, thisMonthSum)
         ExpenditureDelta = thisMonthSum - lastMonthSum
     }
     let percentageChange = ((thisMonthSum - lastMonthSum) / lastMonthSum) * 100

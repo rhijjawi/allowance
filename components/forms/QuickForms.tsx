@@ -26,13 +26,10 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
     const {expenseData, categoryData, loading, setExpenseData} = useExpenses()
     const { user, isSignedIn, isLoaded } = useUser()
     const { getToken} = useAuth();
-    async function submitForm(fields : {label : string, amount : number, category : number[], date : DatePickerValue, currency : string, whoPaid : string|number, [index: string]: any}){
-        
+    async function submitForm(fields : {label : string, amount : number, category : number[], date : DatePickerValue, currency : string, [index: string]: any}){
         let inv = false
         Object.keys(fields).forEach((key : string)=>{
-                console.log(key, fields[key])
                 if (fields[key] == '' || fields[key] == null || fields[key] == undefined){
-                    console.log(key)
                     inv = true;
                     return setisFormValid(false)
                 }
@@ -54,7 +51,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                     user_id: user!.id,
                     files: []
                 }
-                console.log(data)
+
                 supabase.from('expenses').insert(data).select().then(async(data)=>{
                     if (data.data){
                         setExpenseData([])
@@ -86,7 +83,6 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
     }, [isFormValid])
     useEffect(()=>{
         let date = new Date(transactionDate as Date)
-        console.log(date.getDate(), date.getMonth(), date.getFullYear())
     }, [transactionDate])
     return (
     <Dialog open={props.isOpen} onClose={() => props.setIsOpen(false)} className={'relative z-[500] '}>
@@ -95,7 +91,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
         <Dialog.Panel className={`rounded-md  bg-white dark:bg-black relative w-full max-w-2xl max-h-full border-2 border-red-600 dark:border-red-600`}>
             <Dialog.Title className={'flex items-start bg-red-500 justify-between p-4 border-b rounded-t dark:text-black text-black'}>Record an Expense</Dialog.Title>
             <div className='p-6 space-y-6 dark:bg-slate-600/80 '>
-            <div className={'text-base leading-relaxed text-gray-500 '}>    
+            <div className='text-base leading-relaxed text-gray-500 '>    
                 <div>
                     <label htmlFor="expLabel" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                         Expenditure Label
@@ -110,7 +106,6 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                         value={transactionLabel}
                         onChange={(e)=>{
                             if (e.target.value == ""){
-                                console.log('asdnoano')
                                 e.target.classList.add('border-red-500')
                                 e.target.classList.add('border-2')
                             }
@@ -118,7 +113,6 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                                 e.target.classList.remove('border-red-500')
                                 e.target.classList.remove('border-2')
                             }
-                            console.log(e.target.value)
                             setTransactionLabel(e.target.value)
                         }}
                         />
@@ -173,16 +167,6 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                             setisSub(e.target.checked)
                         }}
                         />
-                        {/* <div className="relative max-w-md" hidden={!isSub}>
-                            <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-                                    <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                                    </svg>
-                                </div>
-                            <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter recurrence date (DD-MM-YYYY)"/>
-                        </div> */}
-                    
-                    
                     <div className='h-12 grid grid-cols-2 grid-rows-1 mb-5 gap-3'>
                     <div className='col-start-1 col-span-1 '>
                     <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900 pt-3 dark:text-white">
@@ -219,17 +203,6 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
 
                     </div>
                     </div>
-                    <div className='col-span-1 col-start-2'>
-                    <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900 pt-3 dark:text-white">
-                        Who paid?
-                    </label>
-                    <div className="max-w-sm mx-auto space-y-6">
-                        <Select onValueChange={(e)=>setWhoPaid(e)} value={String(whoPaid)!}>
-                            <SelectItem value={"0"} className='z-[100] hover:cursor-pointer'>Me</SelectItem>
-                            <SelectItem value={"1"} className='z-[100] hover:cursor-pointer'>Parent/Guardian</SelectItem>
-                        </Select>
-                    </div>
-                    </div>
                     </div>
                 </div>
             </div>
@@ -247,7 +220,6 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                                 amount: AmountValue,
                                 date : transactionDate,
                                 currency : currency,
-                                whoPaid : whoPaid!,
                                 category: category!,
                             })
                         }}>
@@ -283,9 +255,8 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
         }
         let inv = false
         Object.keys(fields).forEach((key : string)=>{
-                console.log(key, fields[key])
+
                 if (fields[key] == '' || fields[key] == null || fields[key] == undefined){
-                    console.log(key)
                     inv = true;
                     return setisFormValid(false)
                 }
@@ -305,7 +276,6 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                     transaction_date: `${((new Date(date)).toISOString()).toLocaleString()}`,
                     files: []
                 }
-                console.log(data)
                 supabase.from('income').insert(data).select().then(async(data)=>{
                     if (data.data){
                         setIncomeData([])
@@ -363,7 +333,6 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                                 e.target.classList.remove('border-red-500')
                                 e.target.classList.remove('border-2')
                             }
-                            console.log(e.target.value)
                             setTransactionLabel(e.target.value)
                         }}
                         />
@@ -462,17 +431,6 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
 
                     </div>
                     </div>
-                    {/* <div className='col-span-1 col-start-2'>
-                    <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900 pt-3 dark:text-white">
-                        Who paid?
-                    </label>
-                    <div className="max-w-sm mx-auto space-y-6">
-                        <Select onValueChange={(e)=>setWhoPaid(e)} value={String(whoPaid)!}>
-                            <SelectItem value={"0"} className='z-[100] hover:cursor-pointer'>Me</SelectItem>
-                            <SelectItem value={"1"} className='z-[100] hover:cursor-pointer'>Parent/Guardian</SelectItem>
-                        </Select>
-                    </div>
-                    </div> */}
                     </div>
                 </div>
             </div>

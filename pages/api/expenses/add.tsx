@@ -32,7 +32,6 @@ export default async function handler(req : NextApiRequest, res : NextApiRespons
             if (!supportedBanks.includes(fields.bank![0])){
                 return res.status(400).json({ error: 'Unsupported bank' });
             }
-            console.log()
             const result = convertCsvToJson(files.csvFile![0].toString(), userId!, fields.bank![0]);
             if (result == null){
                 return res.status(400).json({ error: 'Unsupported bank' });
