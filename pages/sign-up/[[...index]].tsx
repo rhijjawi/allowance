@@ -15,7 +15,6 @@ function SignUpPage() {
   const currencies = Object.keys(symbols).map((key : string)=>[(symbols as any)[key], key])
   if (!isLoaded) return <div>Loading...</div>;
   if (user){
-    console.log(user)
     return (
       <div className="">
         <div className="absolute top-0 bottom-0 right-0 left-0 w-screen h-screen bg-white z-[50]">
@@ -61,6 +60,7 @@ function SignUpPage() {
           {/* <Subtitle>If you are not a parent, select no.</Subtitle> */}
           <Button icon={ArrowRightIcon} iconPosition="right" disabled={roleType == 0} className="float-right dark:text-white" onClick={()=>{
             if (roleType != 0){
+              alert()
               setOnboardingStep(1)
             }
             else if (roleType == 0)
@@ -82,11 +82,14 @@ function SignUpPage() {
           </div>
           <p className="my-2">This doesn't have to be the currency of the country you're residing in, just one you're comfortable with and understand</p>
           <Button disabled={roleType == 0} className="float-right py-2" onClick={()=>{
+
             if (roleType != 0){
+              alert("1")
               setOnboardingStep(2)
               setBoardingComplete(true)
             }
             else if (roleType == 0)
+              alert("2")
               setBoardingComplete(false)
             }
           }>Continue to Sign Up</Button>
@@ -108,7 +111,7 @@ function SignUpPage() {
               formFieldInput: "rounded-md border border-indigo-600/30",
               card: "overflow-hidden m-0"
             }
-          }} path="/sign-up" routing="path" signInUrl="/sign-in" />
+          }} path="/sign-up" routing="virtual" signInUrl="/sign-in" />
         </motion.div>}
       </div>
     </div>

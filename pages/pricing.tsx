@@ -63,7 +63,6 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
                     if (res.status == 200) {
                       setLoading({ ...loading, [i.id]: false });
                       const resp = await res.json();
-                      console.log(resp);
                       window.open(resp.goto, "_self");
                     } else {
                       addAlert(

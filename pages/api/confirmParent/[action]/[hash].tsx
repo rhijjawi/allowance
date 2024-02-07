@@ -73,7 +73,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse ) => {
 
 async function GET(req: NextApiRequest, res: NextApiResponse) {
   const {action, hash} = req.query as {action : string, hash : string}
-  console.log(hash)
   if (["approve", "reject"].indexOf(action!) == -1){
     return res.status(400).send("nuh uh");
   }
