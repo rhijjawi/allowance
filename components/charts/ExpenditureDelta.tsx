@@ -11,14 +11,14 @@ export function ExpenditureDelta(props: {category : CategorySchema, expenses : E
     const thisMonthSum = categorySum[0].reduce((a, b) => a + b.standardizedCurrency!, 0)
     const {user, isSignedIn, isLoaded} = useUser()
     let ExpenditureDelta = 0
-    let direction;
+    let direction = null;
     if (lastMonthSum > thisMonthSum){
-        direction = 'less'
+        direction = 'less than last period'
         ExpenditureDelta = lastMonthSum - thisMonthSum
         
     }
-    if (lastMonthSum < thisMonthSum){
-        direction = 'more'
+    else if (lastMonthSum < thisMonthSum){
+        direction = 'more than last period'
         ExpenditureDelta = thisMonthSum - lastMonthSum
     }
     let percentageChange = ((thisMonthSum - lastMonthSum) / lastMonthSum) * 100
@@ -68,14 +68,13 @@ export function ExpenditureDelta(props: {category : CategorySchema, expenses : E
                     {percentageChange && percentageChange.toFixed(2)}%
                 </BadgeDelta>
             </Flex>
-            <Text className="dark:text-slate-300">{currFormatter(ExpenditureDelta, user?.publicMetadata!.currency as string)} {direction} than last period</Text>
+            <Text className="dark:text-slate-300">{direction ? <> {currFormatter(ExpenditureDelta, user?.publicMetadata!.currency as string)} {direction}</> : "No Change compared to last period"}</Text>
         </Card>
     )
 }
 
 export function IncomeDelta(props: {category : CategorySchema, incomes : IncomeType[]}){
     const categorySum = From1sttoNowINC(props.incomes, props.category)
-    console.log(categorySum)
     const lastMonthSum = categorySum[1].reduce((a, b) => a + b.standardizedCurrency!, 0)
     const thisMonthSum = categorySum[0].reduce((a, b) => a + b.standardizedCurrency!, 0)
     const {user} = useUser()

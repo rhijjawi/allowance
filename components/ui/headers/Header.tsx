@@ -71,8 +71,6 @@ export default function Header() {
                 <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
             </div>
-            <ExpenditureDialog isOpen={isOpen} setIsOpen={setIsOpen} />
-            <IncomeDialogue isOpen={isIncomeOpen} setIsOpen={setIsIncomeOpen} />
             <BugReport isOpen={bugReport} setIsOpen={setBugReport} />
             <Popover.Group className="hidden lg:flex lg:gap-x-12">
                 <Popover className="relative">

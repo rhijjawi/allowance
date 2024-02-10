@@ -117,7 +117,8 @@ export default function Expenditure() {
         let recurranceDate: Date = new Date(
           Date.parse(e.transaction_date as string),
         );
-        return recurranceDate.getDate() >= new Date().getDate();
+        console.log(e.label, recurranceDate.getDate(), new Date().getDate(), recurranceDate.getDate() <= new Date().getDate())
+        return recurranceDate.getDate() <= new Date().getDate();
       }
       return Date.parse(e.transaction_date as string) > new Date().setDate(1);
     });

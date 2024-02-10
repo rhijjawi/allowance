@@ -1,16 +1,17 @@
 import  symbols from '../static/symbols.json';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { DatePicker, DatePickerValue, NumberInput, SearchSelect, SearchSelectItem, Select, SelectItem, TextInput } from '@tremor/react';
 import { CurrencyDollarIcon } from '@heroicons/react/24/solid';
 import { useAuth, useUser } from '@clerk/nextjs';
-import { Dialog } from '@headlessui/react';
+import { Dialog, Transition } from '@headlessui/react';
 import { useRouter } from 'next/router';
 import { getSupabase } from '@/utils/supabase';
 import { useExpenses, ExpenseType } from '../contexts/expenseCTX'
 import { CategorySchema, IncomeSchema } from '@/types/supabase';
 import { standardizeCurrency } from '@/utils/functions/valueFormatters';
+import { useAlerts } from '../contexts/alertHandler';
 
-export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
+export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.Dispatch<React.SetStateAction<boolean>>}) {
     const router = useRouter()
     const [isloading, setLoading] = useState<boolean>(false)
     const getCurrencySymbol = (locale : string, currency: string) => (0).toLocaleString(locale, { style: 'currency', currency, minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace(/\d/g, '').trim();
@@ -19,13 +20,17 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
     const [isAmountInvalid, setisAmountInvalid] = useState(false);
     const [AmountValue, setAmountValue] = useState(0);
     const [whoPaid, setWhoPaid] = useState<null|string>(null);
-    const [transactionDate, setTransactionDate] = useState<DatePickerValue|Date>();
+    const [transactionDate, setTransactionDate] = useState<DatePickerValue|Date>(new Date());
     const [transactionLabel, setTransactionLabel] = useState('');
     const [category, setCategory] = useState<null|[number, number]>(null)
     const [isFormValid, setisFormValid] = useState<Boolean|null>(null);
     const {expenseData, categoryData, loading, setExpenseData} = useExpenses()
     const { user, isSignedIn, isLoaded } = useUser()
+    const {addAlert} = useAlerts()
     const { getToken} = useAuth();
+    useEffect(()=>{
+        console.log(props.isOpen)
+    },[props.isOpen])
     async function submitForm(fields : {label : string, amount : number, category : number[], date : DatePickerValue, currency : string, [index: string]: any}){
         let inv = false
         Object.keys(fields).forEach((key : string)=>{
@@ -58,9 +63,9 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                         const _data = Object.assign({}, data.data[0])
                         _data['standardizedCurrency'] = await standardizeCurrency(data.data[0], user!.publicMetadata!.currency as string)
                         setExpenseData([...expenseData, _data])
+                        await addAlert("success", "Added transaction to Database", 4000)
                     }
                 })
-                
                 setLoading(false)
                 props.setIsOpen(false)
             })
@@ -69,6 +74,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
     }
     useEffect(()=>{
         if (isFormValid == false){
+            alert()
                 document.getElementById('submit')!.classList.toggle('animate-x_shake')
                 document.getElementById('submit')!.classList.add('border-2')
                 document.getElementById('submit')!.classList.add('border-red-500')
@@ -85,11 +91,38 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
         let date = new Date(transactionDate as Date)
     }, [transactionDate])
     return (
-    <Dialog open={props.isOpen} onClose={() => props.setIsOpen(false)} className={'relative z-[500] '}>
-        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-        <div className='fixed inset-0 flex w-screen items-center justify-center p-4 '>
-        <Dialog.Panel className={`rounded-md  bg-white dark:bg-black relative w-full max-w-2xl max-h-full border-2 border-red-600 dark:border-red-600`}>
-            <Dialog.Title className={'flex items-start bg-red-500 justify-between p-4 border-b rounded-t dark:text-black text-black'}>Record an Expense</Dialog.Title>
+        <Transition appear show={props.isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={()=>{props.setIsOpen(false)}}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                    <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                    >
+                        Record an Expense (Money In)
+                    </Dialog.Title>
             <div className='p-6 space-y-6 dark:bg-slate-600/80 '>
             <div className='text-base leading-relaxed text-gray-500 '>    
                 <div>
@@ -99,9 +132,11 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                     <div className="mt-2">
                         <TextInput
                         type="text"
+                        error={!(transactionLabel.length > 0)}
                         name="expLabel"
                         id="expLabel"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:text-white"
+                        required
+                        className=""
                         placeholder="Monthly Rent"
                         value={transactionLabel}
                         onChange={(e)=>{
@@ -126,7 +161,6 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                         weekStartsOn={1}
                         id="datePicker"
                         value={transactionDate}
-                        defaultValue={new Date()}
                         onValueChange={(e)=>{
                             if (e == null || e == undefined){
                                 document.getElementById('datePicker')!.classList.add('border-red-500')
@@ -143,12 +177,15 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                     <label htmlFor="expLabel" className="row-span-1 col-span-1 row-start-1 col-start-2 text-sm font-medium leading-6 text-gray-900 pt-3 dark:text-white">
                         Category
                     </label>
-                    <select onChange={(e : any)=>{setCategory(JSON.parse(e.target.value))}} className='max-w-sm h-fit px-2 outline-none text-left whitespace-nowrap truncate focus:ring-2 transition duration-100 rounded-tremor-default flex flex-nowrap shadow-tremor-input focus:border-tremor-brand-subtle dark:shadow-dark-tremor-input dark:focus:border-dark-tremor-brand-subtle pl-3 pr-8 py-2 border bg-tremor-background dark:bg-dark-tremor-background hover:bg-tremor-background-muted dark:hover:bg-dark-tremor-background-muted text-tremor-content dark:text-dark-tremor-content border-tremor-border dark:border-dark-tremor-border'>
+                    <select onChange={(e : any)=>{
+                        alert(JSON.parse(e.target.value))
+                        setCategory(JSON.parse(e.target.value))}
+                        } className='max-w-sm h-fit px-2 outline-none text-left whitespace-nowrap truncate focus:ring-2 transition duration-100 rounded-tremor-default flex flex-nowrap shadow-tremor-input focus:border-tremor-brand-subtle dark:shadow-dark-tremor-input dark:focus:border-dark-tremor-brand-subtle pl-3 pr-8 py-2 border bg-tremor-background dark:bg-dark-tremor-background hover:bg-tremor-background-muted dark:hover:bg-dark-tremor-background-muted text-tremor-content dark:text-dark-tremor-content border-tremor-border dark:border-dark-tremor-border'>
                             <option>Select a category...</option>
                             
                             {categoryData.map((a : CategorySchema, indexa : number)=>{
                             //@ts-ignore 
-                            return (<optgroup label={a.category} key={indexa}>{a.subcategories.map((b : string, indexb : number)=>{return (<option key={indexb} value={JSON.stringify([indexa+1, indexb])}>{b}</option>)})}
+                            return (<optgroup label={a.category} key={indexa}>{a.subcategories.map((b : string, indexb : number)=>{return (<option key={indexb} value={JSON.stringify([indexa, indexb])}>{b}</option>)})}
                             </optgroup>)
                         }
 
@@ -179,6 +216,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                             enableStepper={false}
                             value={AmountValue}
                             error={isAmountInvalid}
+                            required
                             onValueChange={(e)=>{
                                 setAmountValue(e);
                             }}
@@ -207,14 +245,14 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                 </div>
             </div>
             </div>
-            <div className='items-center p-6 bg-red-500 space-x-2 border-t border-gray-200 rounded-b dark:border-white grid grid-cols-3 grid-rows-1'>
+            <div className="relative h-12 w-full px-6">
                 <button 
                     disabled={loading ? true : false} 
                     id={'submit'}
                     data-modal-hide="defaultModal" type="button" 
-                    className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 row-start-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center col-start-3 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-blue-600/30 disabled:dark:hover:bg-blue-600/30`}
+                    className={`inline-flex float-right justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2`}
                     onClick={async()=>{
-                            setLoading(!loading)
+                            setLoading(true)
                             await submitForm({
                                 label: transactionLabel,
                                 amount: AmountValue,
@@ -223,14 +261,32 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : any}) {
                                 category: category!,
                             })
                         }}>
-                        {loading ? <svg aria-hidden="true" role="status" className="w-4 h-4 mr-3  text-white animate-spin dark:text-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="#1C64F2"/></svg>: null}
+                        {loading || isloading ? <svg aria-hidden="true" role="status" className="w-4 h-4 mr-3  text-white animate-spin dark:text-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="#1C64F2"/></svg>: null}
                         Add Expense
                 </button>
-                <button data-modal-hide="defaultModal" type="button" className="text-gray-500 bg-white col-start-1 row-start-1 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600" onClick={()=>{props.setIsOpen(false)}}>Nevermind</button>
+                <button  
+                    id={'cancel'}
+                    data-modal-hide="defaultModal" type="button" 
+                    className={`inline-flex float-left justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2`}
+                    onClick={async()=>{
+                            setLoading(true)
+                            await submitForm({
+                                label: transactionLabel,
+                                amount: AmountValue,
+                                date : transactionDate,
+                                currency : currency,
+                                category: category!,
+                            })
+                        }}>
+                        Cancel
+                </button>
             </div>
         </Dialog.Panel>
+        </Transition.Child>
+        </div>
         </div>
     </Dialog>
+    </Transition>
     )
 }
 export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Dispatch<any>}){
@@ -250,9 +306,7 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
     const {user, isLoaded, isSignedIn} = useUser();
     const {getToken} = useAuth();
     async function submitForm(fields : {label : string, amount : number, category : [number, number], date : DatePickerValue, currency : string, [index: string]: any}){
-        if (!user){
-            
-        }
+        if (!user) {return;};
         let inv = false
         Object.keys(fields).forEach((key : string)=>{
 

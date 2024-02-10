@@ -45,6 +45,7 @@ import {
   MagnifyingGlassCircleIcon,
   PlusCircleIcon,
   QuestionMarkCircleIcon,
+  TableCellsIcon,
 } from "@heroicons/react/24/outline";
 import { useFileUpload } from "@/components/contexts/fileManagerCTX";
 import { useTransactionHandler } from "@/components/contexts/transactionHandler";
@@ -80,7 +81,7 @@ let ChevronStyle = [
 export default function ListPage() {
   const { user, isSignedIn, isLoaded } = useUser();
   const router = useRouter();
-  const [filtermode, setFiltermode] = useState<number>(0); // 0: all, 1: past 2 weeks, 2: past month, 3: past year
+  const [filtermode, setFiltermode] = useState<0|1|2|3>(1); // 0: all, 1: past 2 weeks, 2: past month, 3: past year
   const filterlabels = [
     "All Expenditure",
     "Expenditure in the past 2 weeks",
@@ -89,9 +90,7 @@ export default function ListPage() {
   ];
   const selectLabels = ["All", "14 days", "30 days", "365 days"];
   const [supportedBanks, setSupportedBanks] = useState<string[]>([]);
-  // const [filtered, setFiltered] = useState<any>([])
-  // const [originalState, setOriginalState] = useState<any>([])
-  // const [search, setSearch] = useState<string>("")
+  const [search, setSearch] = useState<string>("")
   const { expenseData, categoryData, incomeData, _error, setExpenseData } =
     useExpenses();
   const [sortBy, setSortBy] = useState<[number, number]>([0, 0]);
@@ -111,7 +110,7 @@ export default function ListPage() {
   const { error: error, loading, setExpense } = useFileUpload();
   const { handlerMode, setHandlerMode } = useTransactionHandler() as {
     handlerMode: string | null;
-    setHandlerMode: React.Dispatch<React.SetStateAction<any[]>>;
+    setHandlerMode: React.Dispatch<React.SetStateAction<[string, number[]]>>;
   };
   const [categorySums, setCategorySums] = useState([{}]);
   const [uncategorized, setUncategorized] = useState<ExpenseSchema[]>([]);
@@ -153,23 +152,26 @@ export default function ListPage() {
       addAlert("warning", "Please upload a .csv file!");
       return;
     }
-    console.log(file);
     form.append("csvFile", file as File);
     form.append("bank", bank as string);
+    console.log(form);
     const res = await fetch("/api/expenses/add", {
       method: "POST",
-      body: form,
+      body: form
     });
-    if (res.status === 304) {
-      addAlert(
-        "warning",
-        `Not a valid ${bank.charAt(0).toUpperCase() + bank.slice(1)} transaction file.`,
-      );
-      return;
-    }
     if (res.status === 200) {
       res.json().then((data) => {
-        setExpenseData([...expenseData, ...data.results]);
+        console.log(data.results.length)
+        if (data.results.length > 0){
+          addAlert("success", "Sucessfully added transactions from file", 3500, ()=>{setTab(0)})
+          setExpenseData([...expenseData, ...data.results]);
+        }
+        else {
+          addAlert(
+            "warning",
+            `Not a valid ${bank.charAt(0).toUpperCase() + bank.slice(1)} transaction file.`,
+          );
+        }
       });
       return;
     }
@@ -256,10 +258,10 @@ export default function ListPage() {
               Overview
             </Tab>
             <Tab
-              icon={MagnifyingGlassCircleIcon}
+              icon={TableCellsIcon}
               className="text-white hover:text-slate-400"
             >
-              Details
+              Table
             </Tab>
             <Tab
               icon={CalendarDaysIcon}
@@ -418,6 +420,7 @@ export default function ListPage() {
               </Grid>
             </TabPanel>
             <TabPanel>
+            <Col numColSpan={1} numColSpanLg={3} className="mt-6 gap-6">
               <Card className="mt-6 border-2 border-slate-400 bg-white">
                 <div className="flex justify-between">
                   <Title className="relative float-left w-fit">
@@ -436,7 +439,7 @@ export default function ListPage() {
                       return (
                         <SelectItem
                           key={index}
-                          className="bg-gray-800/30 text-stone-700 hover:cursor-pointer"
+                          className="text-stone-700 hover:cursor-pointer"
                           value={String(index)}
                         >
                           {item}
@@ -445,9 +448,10 @@ export default function ListPage() {
                     })}
                   </Select>
                 </div>
-                <div className="block">
+                <div className="block ">
                   {expenseData.length > 0 ? (
                     <ExpenseTable
+                      filter={filtermode}
                       setSortBy={setSortBy}
                       setExpenseFU={setExpense}
                       sortBy={sortBy}
@@ -460,6 +464,7 @@ export default function ListPage() {
                   )}
                 </div>
               </Card>
+              </Col>
             </TabPanel>
             <TabPanel>
               <Grid
@@ -611,15 +616,18 @@ export default function ListPage() {
             </TabPanel>
             <TabPanel>
               <Col numColSpan={1} numColSpanLg={3} className="mt-6 gap-6 ">
-                <Card className=" relative dark:border-2">
-                  <div className="float-right aspect-square h-9">
-                    <QuestionMarkCircleIcon className="float-right aspect-square h-full w-fit" />
+                <Card className="mt-6 border-2 border-slate-400 bg-white">
+                  <div className="flex justify-between">
+                  <Title className="mb-6">Uncategorized Transactions</Title>
+                    <Select
+                      hidden={true}
+                      className="relative top-1 float-right h-12 w-[20%]"
+                    ><></></Select>
                   </div>
-                  <Title className="mb-4">Uncategorized Transactions</Title>
                   {!(uncategorized.length > 0) ? (
                     <>
                       <Subtitle className="cursor-pointer select-none">
-                        You have no uncategorized transactions. These only
+                        You have no uncategorized transactions. These should only
                         appear when you have imported transactions through a
                         bank statement.
                       </Subtitle>
@@ -637,12 +645,14 @@ export default function ListPage() {
                       </Subtitle>
                     </>
                   ) : null}
-                  <ExpenseTable
-                    filter={"uncategorized"}
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
-                    setExpenseFU={setExpense}
-                  />
+                  <div className="block">
+                    <ExpenseTable
+                      filter={"uncategorized"}
+                      sortBy={sortBy}
+                      setSortBy={setSortBy}
+                      setExpenseFU={setExpense}
+                    />
+                  </div>
                 </Card>
               </Col>
             </TabPanel>

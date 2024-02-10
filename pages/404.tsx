@@ -3,14 +3,20 @@ import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import Error from "next/error";
 import { useUser } from "@clerk/nextjs";
+import { useExpenses } from "@/components/contexts/expenseCTX";
+import { useEffect } from "react";
 
 export const getStaticProps = ({ res }: {res: any}) => {
-    return { props: {errorCode : 100}};
+    return { props: {errorCode : 404}};
 };
 export default function FourOhFour({ errorCode } : {errorCode : number}){
-    const router = useRouter();
     const {user, isLoaded, isSignedIn} = useUser();
+    const {_error, _setError} = useExpenses()
+    const router = useRouter();
     if (!isLoaded) return <></>
+    useEffect(()=>{
+        _setError(true)
+    }, [isLoaded])
     return (
         <>
             <div className="min-h-screen bg-gray-500/10">

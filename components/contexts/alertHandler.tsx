@@ -23,7 +23,7 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
       type: "success" | "warning" | "error";
       message: string;
       timeout: number;
-      callback?: Promise<any>;
+      callback?: (()=>Promise<any>)|(()=>void);
     }[]
   >([]);
   const addAlert = useCallback(
@@ -31,7 +31,7 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
       type: "success" | "warning" | "error",
       message: string,
       arbitraryResoleTimeoutms: number = 2000,
-      callback?: Promise<any>,
+      callback?: (()=>Promise<any>)|(()=>void),
     ) => {
       setAlerts((prevState) => {
         const id =
@@ -43,13 +43,16 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
             type: type,
             message: message,
             timeout: arbitraryResoleTimeoutms,
+            callback : callback
           },
         ];
       });
       return new Promise((resolve) => {
         setTimeout(() => {
-          resolve(callback);
-        }, arbitraryResoleTimeoutms);
+          if (callback){
+            callback();
+          }
+        }, arbitraryResoleTimeoutms+500);
       });
     },
     [],

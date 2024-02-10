@@ -7,5 +7,5 @@ export default async function handler(req : NextApiRequest, res : NextApiRespons
 }
 
 async function GET(req : NextApiRequest, res : NextApiResponse){
-    return res.status(200).json({banks: ['revolut', 'commerzbank']})
+    return res.status(200).json({banks: ['revolut', 'commerzbank', 'wise']})
 }

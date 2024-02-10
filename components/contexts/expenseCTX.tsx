@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { ExpenseSchema, CategorySchema, IncomeSchema } from "@/types/supabase";
 import { ExpenseProvider } from "../interfaces/ExpenseProviderType";
 import { standardizeCurrency } from "@/utils/functions/valueFormatters";
+import { useAlerts } from "./alertHandler";
 
 const ExpenseCTX = createContext<ExpenseProvider>([] as unknown as ExpenseProvider)
 
@@ -18,7 +19,11 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
     const router = useRouter()
     const { user, isSignedIn, isLoaded } = useUser()
     const {getToken} = useAuth()
+    const {addAlert} = useAlerts()
+    const disabledRoutes = ['/', '/404', '/debt/literature']
     useEffect(() => {
+        console.log(router)
+        if (_error == true || disabledRoutes.indexOf(router.route) != -1) return;
         if (!user && isLoaded){
             setLoading(false)
             _setError(true)
@@ -34,9 +39,8 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
             const incomeCategories  = await supabase.from('incomeCategories').select('*').order('id', { ascending: true })
             let standardizedIncomes : IncomeSchema[] = []
             let standardizedExpenses : ExpenseSchema[] = []
-            if (categories.data){
-            }
-            if (categories.error){
+            if (categories.error || error){
+                await addAlert("error", "Error fetching data. Check your internet connection.", 50000);
                 _setError(true)
             }
             if (incomeCategories.data){
@@ -66,16 +70,25 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
             incomeCategories.data ? setIncomeCategoryData(incomeCategories.data) : setIncomeCategoryData([])
             setLoading(false)
         }
-        if (user && isLoaded){
+        if (user && isLoaded && !_error){
             fetchExpenses()
         }
         
-    }, [user])
+    }, [isLoaded])
     return (
-        <ExpenseCTX.Provider value={{expenseData:expenseData, categoryData:categoryData, incomeData:incomeData, incomeCategoryData:incomeCategoryData, _error:_error, loading:loading, setExpenseData:setExpenseData, setIncomeData:setIncomeData}}>
+        <ExpenseCTX.Provider value={{expenseData:expenseData, categoryData:categoryData, incomeData:incomeData, incomeCategoryData:incomeCategoryData, _error:_error, _setError: _setError, loading:loading, setExpenseData:setExpenseData, setIncomeData:setIncomeData}}>
             {children}
         </ExpenseCTX.Provider>
     )
+}
+export type InsertExp = {
+    amount: number,
+    category: [number, number],
+    currency: string,
+    label: string,
+    transaction_date: string|Date,
+    recurring : boolean,
+    files : string[]
 }
 export type ExpenseType = ExpenseSchema
 export type IncomeType = IncomeSchema

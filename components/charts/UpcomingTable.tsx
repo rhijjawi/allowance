@@ -32,7 +32,8 @@ export default function table(props : {expenses : ExpenseType[], categories : an
     const closeModal = (): any => setModalOpen(false);
     return (
         <>
-            {recurring.length > 0 ? <Table className="mt-5 max-w-full w-full border border-slate-400 rounded-md max-h-fit ">
+            
+            {recurring.length > 0 ? <Table className="mt-5 max-w-full w-full border border-slate-400 rounded-md max-h-fit ">    
             <TableHead className="border-b border-black bg-white">
                 <TableRow>
                     <TableHeaderCell className={`w-8 relative ${TableHeadStyle[0]}`}>

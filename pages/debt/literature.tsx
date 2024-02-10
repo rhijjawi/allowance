@@ -2,6 +2,8 @@ import { AnimatePresence, motion } from "framer-motion"
 import { ArrowTrendingDownIcon, ArrowTrendingUpIcon, CalculatorIcon } from "@heroicons/react/24/outline"
 import { useUser } from "@clerk/nextjs"
 import { Button, Icon } from "@tremor/react"
+import { useEffect, useState } from "react"
+import LegalModal from "@/components/ui/modals/LegalDebtDisc"
 export default function Index() {
     const methods = [
         {
@@ -21,6 +23,14 @@ export default function Index() {
     ]
     const {user, isLoaded, isSignedIn} = useUser()
     const MotionButton = motion(Button)
+    const [visible, setVisible] = useState(false)
+    useEffect(()=>{
+        if (typeof localStorage === "undefined") return;
+        const hasAgreedDisclaimer = localStorage.getItem('modals')?.indexOf('disclaimer') != -1
+        if (!hasAgreedDisclaimer){
+            setVisible(true)
+        }
+    }, [])
     if (!isLoaded) return (<div className="mx-auto max-w-[88rem] min-h-screen px-6 lg:px-8  mb-5"></div>)
     if (isLoaded && !isSignedIn) return (
     <motion.div className="mx-auto max-w-[88rem] min-h-screen px-6 lg:px-8  mb-5">
@@ -29,6 +39,7 @@ export default function Index() {
     )
     return (
         <AnimatePresence>
+            <LegalModal isOpen={visible} setIsOpen={setVisible} />
             {<div className="mx-auto max-w-[88rem] min-h-screen px-6 lg:px-8  mb-5">
                 <motion.div
                     initial={{ opacity: 0 }}

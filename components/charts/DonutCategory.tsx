@@ -1,5 +1,5 @@
 
-import { Color, DonutChart, Title, Text, Bold } from "@tremor/react"
+import { Color, DonutChart, Title, Text, Bold, Card } from "@tremor/react"
 import { useEffect, useState } from "react"
 import { CategorySchema, ExpenseSchema } from "@/types/supabase"
 import { useUser } from "@clerk/nextjs"
@@ -64,9 +64,9 @@ export default function DC(props : any){
                     category="value"
                     variant="donut"
                     onValueChange={(v) => setSlice(v)}/>
-                {slice ? <div className="py-3 px-2 min-h-12 bg-white rounded-md text-black ">
-                    <Text className="leading-6">{Badge} account for {((slice?.value/totalExpenditure)*100).toFixed(1)}% of your total expenditure this month</Text>
-                </div>: <></>}
+                {slice ? <Card className="py-5 px-2 min-h-12 mb-2 rounded-md dark:text-slate-300">
+                    <Text className="leading-6 dark:text-slate-300">{Badge} accounts for {((slice?.value/totalExpenditure)*100).toFixed(1)}% of your total expenditure this month</Text>
+                </Card>: <></>}
         </>
     )
 }

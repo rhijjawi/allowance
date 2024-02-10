@@ -18,7 +18,6 @@ export function FileManagerProvider({children} : {children: React.ReactNode}){
     const [resolvedExpense, setResolvedExpense] = useState<ExpenseType|null>(null)
     useEffect(() => {
         expenseData.forEach((e : ExpenseType) => {
-
             if (e.id == Number(expense)){
                 setResolvedExpense(e)
             }
