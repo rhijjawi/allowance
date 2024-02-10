@@ -431,7 +431,7 @@ export default function ListPage() {
                     className="relative top-1 float-right h-12 w-[20%]"
                     value={String(filtermode)}
                     onValueChange={(v) => {
-                      setFiltermode(Number(v));
+                      setFiltermode(Number(v) as 0|1|2|3);
                     }}
                   >
                     {/* @ts-ignore */}

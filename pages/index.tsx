@@ -26,7 +26,7 @@ export default function Home(props: any) {
   return (
     <>
       <DownButtonJump />
-      <div className="w-full overflow-hidden border-t-2 bg-white dark:bg-black">
+      <div className="w-full overflow-hidden border-t-2 bg-white dark:bg-dark-tremor-background-muted/75">
         <div className="mb-5 h-fit border-b-2 py-5">
           <div className="mx-auto max-w-fit">
             <Select

@@ -10,11 +10,11 @@ export default function Calculator(){
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [avData, setav] = useState<calc.Debt[]>([])
     const [snowData, setSnow] = useState<calc.Debt[]>([])
-    const [avalanche, setAvalanche] = useState<{monthlyBalances : {}[], totalInterestPaid: Number}>({monthlyBalances : [], totalInterestPaid: 0})
-    const [snowball, setSnowball] = useState<{monthlyBalances : {}[], totalInterestPaid: Number}>({monthlyBalances : [], totalInterestPaid: 0})
-    const [name, setName] = useState(null)
-    const [bal, setBal] = useState(null)
-    const [int, setInt] = useState(null)
+    const [avalanche, setAvalanche] = useState<{monthlyBalances : {}[], totalInterestPaid: number}>({monthlyBalances : [], totalInterestPaid: 0})
+    const [snowball, setSnowball] = useState<{monthlyBalances : {}[], totalInterestPaid: number}>({monthlyBalances : [], totalInterestPaid: 0})
+    const [name, setName] = useState<string|null>(null)
+    const [bal, setBal] = useState<number|null>(null)
+    const [int, setInt] = useState<number|null>(null)
     useEffect(()=>{
         const {monthlyBalances, totalInterestPaid} = calc.simulateRepayments(avData, 3000, 'avalanche');
         setAvalanche({monthlyBalances, totalInterestPaid})
@@ -32,7 +32,7 @@ export default function Calculator(){
                         <>
                             <Card className="max-w-sm dark:ring-amber-300">
                                 <p className="text-3xl mb-2 leading-6">{debt.name}</p>
-                                <p className="text-base">{currFormatter(debt.original.balance, ((user && isSignedIn) ? user?.publicMetadata?.currency : "EUR")! )}</p>
+                                <p className="text-base">{currFormatter(debt.original.balance, ((user && isSignedIn) ? user?.publicMetadata?.currency as string : "EUR")! )}</p>
                                 <p className="text-base">{debt.interestRate}% APY</p>
                             </Card>
                         </>
@@ -41,14 +41,14 @@ export default function Calculator(){
                 <Card className="max-w-sm h-fit mb-12">
                     <TextInput className="mb-4" placeholder="Debt Label" value={name ? name : ""} onValueChange={(e)=>{setName(e)}} />
                     <div className="grid grid-rows-2 grid-cols-1 gap-y-5">
-                        <NumberInput placeholder="Debt Balance" min={0} error={int > 9999999 || int < 0} max={999999999999} value={bal ? bal : undefined} onValueChange={(e)=>{setBal(e)}} />
-                        <NumberInput placeholder="Debt Interest APY (%)" min={0} error={int > 99 || int < 0} max={99} step={"1"} value={int ? int : undefined} onValueChange={(e)=>{setInt(e)}} />
+                        <NumberInput placeholder="Debt Balance" min={0} error={int == null || int > 9999999 || int < 0} max={999999999999} value={bal ? bal : undefined} onValueChange={(e)=>{setBal(e)}} />
+                        <NumberInput placeholder="Debt Interest APY (%)" min={0} error={int == null || int > 99 || int < 0} max={99} step={"1"} value={int ? int : undefined} onValueChange={(e)=>{setInt(e)}} />
                     </div>
                     <div className="w-full mt-5">
-                        <button disabled={name == null || bal == 0 || (int == 0 || int > 100)} onClick={()=>{
-                            if (name == null || bal == 0 || int == 0) return;
-                            setav((prev)=>{return prev.concat(new calc.Debt(name, bal, int))})
-                            setSnow((prev)=>{return prev.concat(new calc.Debt(name, bal, int))})
+                        <button disabled={name == null || bal == 0 || (int == null || int == 0 || int > 100)} onClick={()=>{
+                            if (name == null || bal == 0 || int == 0 || int == null) return;
+                            setav((prev)=>{return prev.concat(new calc.Debt(name, bal!, int))})
+                            setSnow((prev)=>{return prev.concat(new calc.Debt(name, bal!, int))})
                             setName(null)
                             setBal(null)
                             setInt(null)
@@ -59,7 +59,7 @@ export default function Calculator(){
                     <Flex justifyContent="between" alignItems="center">
                     <p>Interest Paid</p>
                     </Flex>
-                    <Metric>{currFormatter(avalanche.totalInterestPaid, (user && isSignedIn) ? user.publicMetadata.currency : "EUR" )}</Metric>
+                    <Metric>{currFormatter(avalanche.totalInterestPaid, (user && isSignedIn) ? user.publicMetadata.currency as string : "EUR" )}</Metric>
                 </Card>
                 <div className="w-full h-1"></div>
                 <AreaChart 
@@ -77,7 +77,7 @@ export default function Calculator(){
                     <Flex justifyContent="between" alignItems="center">
                     <p>Interest Paid</p>
                     </Flex>
-                    <Metric>{currFormatter(snowball.totalInterestPaid, (user && isSignedIn) ? user.publicMetadata.currency : "EUR" )}</Metric>
+                    <Metric>{currFormatter(snowball.totalInterestPaid, (user && isSignedIn) ? user.publicMetadata.currency as string : "EUR"  )}</Metric>
                 </Card>
                 <AreaChart 
                 showAnimation

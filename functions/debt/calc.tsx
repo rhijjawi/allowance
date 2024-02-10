@@ -16,7 +16,6 @@ export class Debt {
       this.priority = this.balance * this.interestRate;
     }
   
-    // Calculate monthly interest for a debt
     monthlyInterest() {
       return (this.balance * (this.interestRate / 100)) / 12;
     }
@@ -27,16 +26,14 @@ export class Debt {
         return this.balance;
     }
   }
-  // Custom rounding function to handle extremely small numbers
-function customRound(num : Number) {
-  if (Math.abs(num) < 0.01) { // Adjust this threshold as needed
+function customRound(num : number) {
+  if (Math.abs(num) < 0.01) { 
       return 0;
   }
   return Number(num.toFixed(2));
 }
 
-export function simulateRepayments(debts, totalMonthlyPayment, strategy) {
-  // Sort debts based on the selected strategy
+export function simulateRepayments(debts : Debt[], totalMonthlyPayment : number, strategy: string) {
   let sortedDebts : Debt[];
   if (strategy === 'avalanche') {
 
@@ -48,31 +45,31 @@ export function simulateRepayments(debts, totalMonthlyPayment, strategy) {
       throw new Error('Invalid repayment strategy');
   }
 
-  let totalInterestPaid = 0; // Initialize total interest paid
+  let totalInterestPaid = 0;
 
-  const monthlyBalances = [{ month: 'Month 0', ...debts.reduce((acc, curr) => ({ ...acc, [curr.name]: customRound(curr.balance) }), {}) }];
+  const monthlyBalances : any[] = [{ month: 'Month 0', ...debts.reduce((acc, curr) => ({ ...acc, [curr.name]: customRound(curr.balance) }), {}) }];
   let month = 0;
 
-  while (sortedDebts.some(debt => customRound(debt.balance) > 0)) { // Continue until all debts are paid off
+  while (sortedDebts.some(debt => customRound(debt.balance) > 0)) { 
       month++;
       let remainingPayment = totalMonthlyPayment;
-      let monthlyInterestPaid = 0; // Initialize monthly interest paid
+      let monthlyInterestPaid = 0;
 
-      const currentMonthBalances = { month: `Month ${month}` };
+      const currentMonthBalances : {[index : string] : string|number} = { month: `Month ${month}` };
 
       for (const debt of sortedDebts) {
-          if (debt.balance === 0) continue; // Skip already paid off debts
+          if (debt.balance === 0) continue; 
 
-          const payment = Math.min(debt.balance, remainingPayment); // Pay the remainingPayment or the full debt balance if less
+          const payment = Math.min(debt.balance, remainingPayment); 
           const interest = debt.monthlyInterest();
-          monthlyInterestPaid += interest; // Accumulate monthly interest
+          monthlyInterestPaid += interest;
           debt.applyPayment(payment);
           remainingPayment -= payment;
-          currentMonthBalances[debt.name] = customRound(debt.balance); // Round using custom rounding function
+          currentMonthBalances[debt.name] = customRound(debt.balance);
       }
 
       monthlyBalances.push(currentMonthBalances);
-      totalInterestPaid += monthlyInterestPaid; // Accumulate total interest paid
+      totalInterestPaid += monthlyInterestPaid; 
   }
   console.log(monthlyBalances)
   return { monthlyBalances, totalInterestPaid };
@@ -96,15 +93,15 @@ export function avalancheStrategy(debts : Debt[], totalMonthlyPayment : number) 
     const sortedDebts = [...debts].sort((a, b) => b.interestRate - a.interestRate);
     return allocatePayments(sortedDebts, totalMonthlyPayment);
   }
-export function snowballStrategy(debts, totalMonthlyPayment) {
+export function snowballStrategy(debts : Debt[], totalMonthlyPayment : number) {
     // Sort debts by balance, ascending
     const sortedDebts = [...debts].sort((a, b) => a.balance - b.balance);
     return allocatePayments(sortedDebts, totalMonthlyPayment);
   }
 
-  export function allocatePayments(debts, totalMonthlyPayment) {
+  export function allocatePayments(debts : Debt[], totalMonthlyPayment : number) {
     let remainingPayment = totalMonthlyPayment;
-    const paymentPlan = debts.map(debt => {
+    const paymentPlan = debts.map((debt : Debt) => {
         console.log(debt.balance, debt.monthlyInterest(), remainingPayment)
       const payment = Math.min(debt.balance + debt.monthlyInterest(), remainingPayment);
       remainingPayment -= payment;
@@ -113,7 +110,7 @@ export function snowballStrategy(debts, totalMonthlyPayment) {
   
     // Check for any leftover payment and distribute it
     if (remainingPayment > 0) {
-      paymentPlan.forEach((plan) => {
+      paymentPlan.forEach((plan : {debt : Debt, payment : number} ) => {
         if (remainingPayment > 0) {
           const extraPayment = Math.min(plan.debt.balance - plan.payment, remainingPayment);
           plan.payment += extraPayment; // Apply the extra payment to the plan
@@ -127,7 +124,7 @@ export function snowballStrategy(debts, totalMonthlyPayment) {
   }
   
 
-export function calculateRepaymentRatios(debts) {
+export function calculateRepaymentRatios(debts : Debt[]) {
     const totalPriority = debts.reduce((sum, debt) => sum + debt.priority, 0);
     return debts.map(debt => debt.priority / totalPriority);
 } 
