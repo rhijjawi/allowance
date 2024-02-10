@@ -31,6 +31,7 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
 
         async function fetchExpenses(){
             setLoading(true)
+            if (user?.publicMetadata.role == "parent") return null;
             const token = await getToken({template: "supabase"})
             const supabase = await getSupabase(token)
             const { data, error } = await supabase.from('expenses').select('*').order('transaction_date', { ascending: false }) as {data : ExpenseSchema[], error:any}

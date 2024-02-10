@@ -61,7 +61,7 @@ export default function ManageProfile(){
             <UserProfile path="/profile/manage" routing="virtual" appearance={{elements: {rootBox : "mx-auto h-fit my-10"}}}>
                 <UserProfile.Page label="account" />
                 <UserProfile.Page label="security" />
-                <UserProfile.Page label="Expenditure" url="expenditure" labelIcon={<WalletIcon />}>
+                {user && user.publicMetadata.role !== "parent" && <UserProfile.Page label="Expenditure" url="expenditure" labelIcon={<WalletIcon />}>
                     <div className="w-full h-fit">
                     <div className="my-3 max-w-sm mx-auto">
                 
@@ -168,7 +168,7 @@ export default function ManageProfile(){
                     </div>
                 </div>
                     </div>
-                </UserProfile.Page>
+                </UserProfile.Page>}
                 <UserProfile.Page label="Subscription" url="subscription" labelIcon={<UserIcon />}>
                     <div className="w-full h-24">
                         <p className="text-black font-semibold text-2xl">Manage your Subscription</p>

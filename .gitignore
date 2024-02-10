@@ -35,3 +35,4 @@ yarn-error.log*
 next-env.d.ts
 bun.lockb
 .env.production
+public/sitemap-0.xml
