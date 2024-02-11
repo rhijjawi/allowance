@@ -28,7 +28,7 @@ export default function Index() {
     data: data,
     isLoading: loading,
     error: error,
-  } = useSWR(`/api/user/assignParent`, fetcher);
+  } = useSWR(`/api/user/assignParent`, fetcher, {revalidateOnFocus : false});
   const [isEmailValid, setIsEmailValid] = useState(false);
   useEffect(() => {
     if (data && !loading) {
