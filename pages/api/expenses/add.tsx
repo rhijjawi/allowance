@@ -2,7 +2,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import formidable from "formidable";
 import {parse} from 'csv-parse/sync';
-import { getAuth } from "@clerk/nextjs/server";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import { createClient } from "@supabase/supabase-js";
 import { ExpenseSchema } from '@/types/supabase';
 import {readFile} from "fs/promises"

@@ -30,7 +30,6 @@ async function GET(req: NextApiRequest, res: NextApiResponse){
         })
     }).flat();
     const pricesStripe = await stripe.prices.list({lookup_keys: allPrices, expand : ["data.product"]})
-    console.log(pricesStripe)
     return res.send(pricesStripe.data)
 }
 

@@ -14,7 +14,7 @@ export const getStaticProps = async (context: any) => {
   let data;
   try {
     const res = await fetch(
-      process.env.NODE_ENV ? "http://expenses.ramzihijjawi.me:3000/api/stripe/getProds" :  "https://logmoney.app/api/stripe/getProds",
+      process.env.NODE_ENV == "development" ? "http://expenses.ramzihijjawi.me:3000/api/stripe/getProds" :  "https://logmoney.app/api/stripe/getProds",
     );
     data = await res.json();
     console.log(data)
@@ -49,7 +49,7 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
                   <Title className="mx-auto w-fit">
                     {(i.product as { name: string; }).name.split(" - ")[1]}
                   </Title>
-                  <p className="select-none text-xs text-black">
+                  <p className="select-none text-xs  dark:text-stone-200">
                     {(i.product as { description: string; }).description}
                   </p>
                   <p className="select-none py-1 text-emerald-500">
@@ -95,7 +95,7 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
                     icon={ArrowRightIcon}
                     iconPosition="right"
                   >
-                    {i.type == "recurring" ? `Subscribe` : "Pay"}
+                      {i.type == "recurring" ? `Subscribe` : "Pay"}
                   </MotionButton>
                 </Card>
               );
