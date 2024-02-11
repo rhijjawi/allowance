@@ -24,10 +24,12 @@ async function POST(req: NextApiRequest, res: NextApiResponse){
             customer: data![0]['stripe_id'],
             return_url: `https://logmoney.app${req.query.backurl}`,
         });
-        return res.status(200).json({message: "OK", portalSession : portalSession.url})
+        return res.status(200).json({message: "OK", portalSession : portalSession.url, error : null})
+    }
+    else if (data!.length == 0){
+        return res.status(404).json({message : "Questo utente non esiste", error: "DNE"})
     }
     else {
-        console.log(userId, data, error)
         return res.status(500).json({message: "oh sheiße", data: data, error: error})
     }
 }

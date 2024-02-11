@@ -62,7 +62,7 @@ export function UserAddCard(props: {
   ]);
   useEffect(() => {
     if (props.isReadOnly) {
-      const data = fetch("/api/user/parent").then(async (res) => {
+        fetch("/api/user/parent").then(async (res) => {
         if (res.status == 200) {
           const r = await res.json();
           setCode(r.code.split(""));

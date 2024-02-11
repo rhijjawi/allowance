@@ -2,7 +2,7 @@ import { getAuth } from "@clerk/nextjs/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
-
+import { generateRandom } from "@/utils/functions/rndm";
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_SUPABASE_SECRET_KEY!,
@@ -62,17 +62,20 @@ async function GET(req: NextApiRequest, res: NextApiResponse) {
     .select("code")
     .eq("parentId", userId);
   if (error) return res.status(500).send("Internal Server Error");
-  if (data.length === 0) return res.status(404).send("Not Found");
+  if (data.length === 0) {
+    const data = await supabase.from("codes").insert({code : generateRandom(6)}).eq("parentId", userId).select()
+    return res.status(200).send({code : data!.data![0].code})
+  };
   const { code } = data![0];
   return res.status(200).send({ code });
 }
 
 async function POST(req: NextApiRequest, res: NextApiResponse) {
   const { userId } = getAuth(req);
-  const { code } = req.body;
+  const { code } : {code : string} = req.body;
   if (!userId) return res.status(401).send("Unauthorized");
   if (!code) return res.status(400).send("shite Request");
-  const { data, error } = await supabase.from("codes").select("*").eq("code", code);
+  const { data, error } = await supabase.from("codes").select("*").eq("code", code.toUpperCase());
   if (error) return res.status(500).send("Internal Server Error");
   if (data.length === 0) return res.status(404).send("Not Found");
   const insertion = await insertRow(userId, data[0].parentId);

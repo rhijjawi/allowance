@@ -118,7 +118,7 @@ export default function MyApp({
                       />
                     </noscript>
 
-                    <div className={raleway.className}>
+                    <div className={`${raleway.className} antialiased`}>
                       <Component {...pageProps} />
                     </div>
                   </Layout>

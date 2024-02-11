@@ -77,6 +77,7 @@ async function GET(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { data, error } = await upsertRow(userId);
+  
   if (error) {
     return res.status(500).json({ error });
   }
