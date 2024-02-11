@@ -55,10 +55,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 async function GET(req: NextApiRequest, res: NextApiResponse) {
-  const user = getAuth(req);
-  const { userId } = user;
-  if (!userId) return res.status(403).send("Unauthorized");
-  if ((user?.sessionClaims!.metadata as {role : string}).role == "parent") {
+  const { userId, sessionClaims } = getAuth(req);
+  if (!userId) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+  if ((sessionClaims!.metadata as {role : string}).role == "parent") {
     const { data, error } = await supabase
       .from("oversight")
       .select("childId")
@@ -75,11 +76,10 @@ async function GET(req: NextApiRequest, res: NextApiResponse) {
         }
       }),
     );
-    return res.status(200).send({ role: (user?.sessionClaims!.metadata as {role : string}).role, oversight: data, supervisorProfiles : supervisorProfiles });
+    return res.status(200).send({ role: (sessionClaims!.metadata as {role : string}).role, oversight: data, supervisorProfiles : supervisorProfiles });
   }
   else {
-  const { data, error } = await upsertRow(userId);
-  
+    const { data, error } = await upsertRow(userId);
   if (error) {
     return res.status(500).json({ error });
   }
