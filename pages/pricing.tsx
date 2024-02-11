@@ -61,7 +61,7 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
                   </p>
                   <MotionButton
                     loading={loading[i.id]}
-                    disabled={loading[i.id] || (hasValidStripeSubscription && subscriptionId && subscriptionId?.filter((sub) => sub !== i.product.id).length > 0)}
+                    disabled={loading[i.id] || (hasValidStripeSubscription && subscriptionId && subscriptionId?.filter((sub) => sub !== (i.product as {id : string}).id).length > 0)}
                     //@ts-ignore
                     tooltip={ (hasValidStripeSubscription && subscriptionId && subscriptionId?.filter((sub) => sub !== i.product.id).length > 0) ? <div>You already have this subscription</div> : undefined}
                     onClick={async () => {
