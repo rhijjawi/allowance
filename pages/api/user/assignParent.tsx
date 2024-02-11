@@ -57,25 +57,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 async function GET(req: NextApiRequest, res: NextApiResponse) {
   const user = getAuth(req);
   const { userId } = user;
-  if (!userId) return res.status(401).send("Unauthorized");
-  //@ts-ignore
-  if (user!.sessionClaims!.metadata!.role == "parent") {
+  if (!userId) return res.status(403).send("Unauthorized");
+  if ((user?.sessionClaims!.metadata as {role : string}).role == "parent") {
     const { data, error } = await supabase
       .from("oversight")
       .select("childId")
       .or(`supervisors.cs.{${userId}}, unconfirmed.cs.{${userId}}`);
-      const supervisorProfiles = await Promise.all(
-        data!.map(async (supervisor: {childId : string}): Promise<any> => {
-          try {
-            return await clerkClient.users.getUser(supervisor.childId);
-          } catch {
-            return null;
-          }
-        }),
-      );
-    return res.status(200).send({ oversight: data, supervisorProfiles });
+    if (error){
+      return res.status(500).json({error})
+    }
+    const supervisorProfiles = await Promise.all(
+      data!.map(async (supervisor: {childId : string}): Promise<any> => {
+        try {
+          return await clerkClient.users.getUser(supervisor.childId);
+        } catch (e) {
+          return null;
+        }
+      }),
+    );
+    return res.status(200).send({ role: (user?.sessionClaims!.metadata as {role : string}).role, oversight: data, supervisorProfiles : supervisorProfiles });
   }
-
+  else {
   const { data, error } = await upsertRow(userId);
   
   if (error) {
@@ -93,6 +95,7 @@ async function GET(req: NextApiRequest, res: NextApiResponse) {
     );
     return res.status(200).json({ oversight: data[0], supervisorProfiles });
   }
+}
 }
 
 async function POST(req: NextApiRequest, res: NextApiResponse) {
