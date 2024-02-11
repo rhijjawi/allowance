@@ -4,13 +4,13 @@ import { getAuth } from '@clerk/nextjs/server';
 import { createClient } from '@supabase/supabase-js';
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_SUPABASE_SECRET_KEY!);
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2023-10-16' });
-const prices : {[index : string] : {monthly?: string, yearly?: string, one_time? : string}} = { //order by priority
+const prices : {[index : string] : {monthly?: string, yearly?: string, one_time? : string}} = {
     "standard" : {
-        "monthly" : "price_1JYz8kDgF5TjQX0EYJ0KZV4s",
-        "yearly" : "price_1O9HPuL03PLceRLO6av4PhNm"
+        "monthly" : "price_1OikXJL03PLceRLOxrEshHHC",
+        "yearly" : "price_1OikXJL03PLceRLOSrxI9oGb"
     },
     "early" : {
-        "one_time" : "price_1JYz8kDgF5TjQX0EYJ0KZV4s",
+        "one_time" : "price_1OikXEL03PLceRLOirvUBkJ6",
     },
 }
 

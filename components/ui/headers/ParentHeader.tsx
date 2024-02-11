@@ -29,7 +29,7 @@ const reports = [
     { name: 'Manage Reports', description: 'Manage your reports', href: '/reports/manage', icon: Cog8ToothIcon},
 ]
 const billing = [
-    { name: 'Pricing', description: '', href: '/pricing', icon : ReceiptPercentIcon },
+    { name: 'Pricing', description: 'Our Pricing Plans', href: '/pricing', icon : ReceiptPercentIcon },
 ]
 
 function classNames(...classes : any[]) {
