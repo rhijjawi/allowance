@@ -14,7 +14,7 @@ export const getStaticProps = async (context: any) => {
   let data;
   try {
     const res = await fetch(
-      "http://expenses.ramzihijjawi.me:3000/api/stripe/getProds",
+      process.env.NODE_ENV ? "http://expenses.ramzihijjawi.me:3000/api/stripe/getProds" :  "https://logmoney.app/api/stripe/getProds",
     );
     data = await res.json();
     console.log(data)
