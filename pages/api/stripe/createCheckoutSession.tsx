@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 import { User, getAuth } from '@clerk/nextjs/server';
 import { clerkClient } from '@clerk/nextjs';
 import { createClient } from '@supabase/supabase-js';
-import { assert } from 'console';
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2023-10-16' });
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_SUPABASE_SECRET_KEY!);
 
@@ -17,9 +17,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 async function POST(req: NextApiRequest, res: NextApiResponse){
-    const {userId} = getAuth(req);
+    const {userId} = getAuth(req);  
     const user = userId ? await clerkClient.users.getUser(userId) : null;
-    const {item} = JSON.parse(req.body);
+    const {item, backUrl} = req.body;
+    console.log(req.body)
     if (!user) return res.status(401).json({ error: "Unauthorized" });
     const {data, error} = await supabase.from('parents').select('*').eq('clerk_id', user.id);
     if (data!.length == 0){
@@ -35,7 +36,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse){
                 mode: item[1] ? 'subscription' : 'payment',
                 allow_promotion_codes : true,
                 success_url: `https://logmoney.app/success?session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: `https://logmoney.app/cancel`,
+                cancel_url: backUrl ? `https://logmoney.app${backUrl}` : `https://logmoney.app/cancel`,
             });
             return res.status(200).json({message: "OK", goto: session.url})
         }
@@ -53,7 +54,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse){
             mode: item[1] ? 'subscription' : 'payment',
             allow_promotion_codes : true,
             success_url: `https://logmoney.app/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `https://logmoney.app/cancel`,
+            cancel_url: backUrl ? `https://logmoney.app${backUrl}` : `https://logmoney.app/cancel`,
         });
         return res.status(200).json({message: "OK", goto: session.url})
     }

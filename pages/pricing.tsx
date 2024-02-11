@@ -9,7 +9,7 @@ import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 import { useGuardianOnboarding } from "@/components/contexts/GuardianOnboardingCTX";
-
+import axios from "axios";
 export const getStaticProps = async (context: any) => {
   let data;
   try {
@@ -72,16 +72,10 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
                         return addAlert("error", "You're not sign in with a parent account", 3000);
                       }
                       setLoading({ ...loading, [i.id]: true });
-                      fetch("/api/stripe/createCheckoutSession", {
-                        method: "POST",
-                        body: JSON.stringify({
-                          item: [i.id, Boolean(i.type == "recurring")],
-                        }) as any,
-                      }).then(async (res) => {
+                      axios.post("/api/stripe/createCheckoutSession", {item: [i.id, Boolean(i.type == "recurring")], backUrl : router.asPath}).then(async (res) => {
                         if (res.status == 200) {
                           setLoading({ ...loading, [i.id]: false });
-                          const resp = await res.json();
-                          window.open(resp.goto, "_self");
+                          window.open(res.data.goto, "_self");
                         } else {
                           addAlert(
                             "error",
@@ -101,6 +95,8 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
               );
             })}
             </div>
+            
+            <p className="mt-2 text-stone-500 text-center">Your payment information is handled by Stripe. We never see any of your sensitive payment information.</p>
           </Card>
         </div>
       </div>
