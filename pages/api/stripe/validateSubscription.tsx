@@ -34,7 +34,8 @@ async function GET(req: NextApiRequest, res : NextApiResponse){
     const active = (subscription.status === 'active' || subscription.status === 'trialing');
     const value = subscription.items.data.filter((item) => products.indexOf(item.price.product) !== -1);
     if (value.length > 0 && active){
-        return res.status(200).send(`${value.map((item) => item.price.product).join(",")},${active ? "active" : "inactive"}`);
+
+        return res.status(200).json({isActive : active, items: value.map((item) => item.price.product)});
     }
     else {
         return res.status(401).send("No active subscription");

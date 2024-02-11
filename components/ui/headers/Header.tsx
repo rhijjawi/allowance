@@ -171,6 +171,9 @@ export default function Header() {
             <Link href="/reports" className="text-sm font-semibold leading-6 text-gray-900">
                 Reports
             </Link>
+            <Link href="/pricing" className="text-sm font-semibold leading-6 text-gray-900">
+                Pricing
+            </Link>
             <Link href="/faq" className="text-sm font-semibold leading-6 text-gray-900">
                 FAQ
             </Link>
@@ -238,6 +241,9 @@ export default function Header() {
                     </a>
                     <Link href="/reports" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                         Reports
+                    </Link>
+                    <Link href="/pricing" className="text-sm font-semibold leading-6 text-gray-900">
+                        Pricing
                     </Link>
                     <Link href="/faq" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                         FAQ

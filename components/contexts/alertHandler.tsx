@@ -35,7 +35,7 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
     ) => {
       setAlerts((prevState) => {
         const id =
-          prevState.length > 0 ? prevState[prevState.length - 1].id + 1 : 0;
+          prevState.length > 0 ? prevState[prevState.length - 1].id + 1 : 1;
         return [
           ...prevState,
           {
@@ -106,7 +106,9 @@ export function AlertProvider({ children }: { children: React.ReactNode }) {
               <motion.div
                 onClick={() => {
                   let _alerts = Object.assign([], alerts);
-                  delete _alerts[alerts.indexOf(alert)];
+                  _alerts = _alerts.filter((_alert) =>{
+                    alert.id != alert.id
+                  })
                   setAlerts(_alerts);
                 }}
                 key={alert.id}

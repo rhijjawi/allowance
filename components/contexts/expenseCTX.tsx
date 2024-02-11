@@ -22,7 +22,6 @@ export function ExpenseCTXProvider({children} : {children: React.ReactNode}){
     const {addAlert} = useAlerts()
     const disabledRoutes = ['/', '/404', '/debt/literature']
     useEffect(() => {
-        console.log(router)
         if (_error == true || disabledRoutes.indexOf(router.route) != -1) return;
         if (!user && isLoaded){
             setLoading(false)
