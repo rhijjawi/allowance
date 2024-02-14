@@ -63,9 +63,9 @@ export async function getStaticProps(context : GetStaticPropsContext) {
 export default function Report(props : { expenses : ExpenseType[], _currency :  {[index : string] : number}, homeCurr : string}){
     const router = useRouter()
     //const uuid = router.query.uuid;
-    const [sum, setSum] = useState<number>(0)
+    const [sum, setSum] = useState<{[index : number] : (CategorySchema & {sum : number})}|null>(null)
     const [categories, setCategories] = useState<CategorySchema[]|null>(null)
-    const [categoryData, setCategoryData] = useState<CategorySchema[]|null>(null)
+    const [categoryData, setCategoryData] = useState<{[index : number] : CategorySchema}|null>(null)
     const supabase = noAuthSupaBase()
     const {addAlert} = useAlerts()
     useEffect(()=>{
@@ -89,23 +89,23 @@ export default function Report(props : { expenses : ExpenseType[], _currency :  
     useEffect(()=>{
         let active = true;
         if (!categories || router.isFallback)return
-        let expenseList : {[index : string] : number} = {}
-        console.log(props._currency)
+        let expenseList : {[index : number] : (CategorySchema & {sum : number})} = {}
         props.expenses.forEach(async(expense)=>{
             let category = categories.find((element: any) => {
                 return element.id === expense.category[0];
-            })?.category ?? "Unknown Category"
-            if (active){
-                expenseList[category] ? null : expenseList[category] = 0
-                expenseList[category] += expense.amount * props._currency[expense.currency]
-                setSum((prev)=> prev + expense.amount * props._currency[expense.currency])
+            }) ?? undefined;
+            if (active && category){
+                expenseList[category.id] ? null : expenseList[category.id] = {...category, sum : 0}
+                expenseList[category.id].sum ? null : expenseList[category.id].sum = 0
+                expenseList[category.id].sum += expense.amount * props._currency[expense.currency]
             }
         })
+        setSum(expenseList)
         return () => {
             active = false;
         };
     }, [props.expenses])
-    if (router.isFallback || !categoryData) {
+    if (router.isFallback || !categoryData || !sum) {
         return <div className="w-full overflow-hidden border-t-2 bg-white dark:bg-dark-tremor-background-muted/75">
         <div className="mx-auto py-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
             spinner 
@@ -118,31 +118,14 @@ export default function Report(props : { expenses : ExpenseType[], _currency :  
             <Card>
                 <div className="grid grid-cols-3 gap-y-5 w-full">
                         {Object.values(categoryData!).map((cat)=>{
-                            return (
+                        return (    
                             <Card className="w-[85%]">
-                                <h3 className="text-lg font-semibold mb-4 ">Housing Expenses</h3>
-                                <p>Rent: $800</p>
-                                <p>Utilities: $100</p>
-                                <p>Internet: $50</p>
+                                <h3 className="text-lg font-semibold mb-4 ">{cat.category}</h3>
+                                <p>This month: {sum[cat.id].sum}</p>
                                 <p className="mt-2 font-semibold">Total: $950</p>
-                            </Card>
-                            )
+                            </Card>)
                             }
                             )}
-                        <Card className="w-[85%]">
-                            <h3 className="text-lg font-semibold mb-4 ">Housing Expenses</h3>
-                            <p>Rent: $800</p>
-                            <p>Utilities: $100</p>
-                            <p>Internet: $50</p>
-                            <p className="mt-2 font-semibold">Total: $950</p>
-                        </Card>
-                        <Card className="w-[85%]">
-                            <h3 className="text-lg font-semibold mb-4 ">Housing Expenses</h3>
-                            <p>Rent: $800</p>
-                            <p>Utilities: $100</p>
-                            <p>Internet: $50</p>
-                            <p className="mt-2 font-semibold">Total: $950</p>
-                        </Card>
                 </div>
             </Card>
             </div>

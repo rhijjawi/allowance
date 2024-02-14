@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const footerItems = [
     [
-        {name : "About", link: "/about"}, {name: "FAQ", link: "/faq"}, {name: "Privacy Policy", link: "/privacy-policy"}, {name: "Terms of Service", link: "/terms-of-service"}
+        {name : "About", link: "/about"}, {name: "FAQ", link: "/faq"}, {name: "Privacy Policy", link: "/legal/privacy-policy"}, {name: "Terms of Service", link: "/legal/terms-of-service"}
     ],
     [
         {name: "Blog", link: "/blog"}, {name: "Careers (Coming soon)", link: "#"}, {name: "Press", link: "/press"}
