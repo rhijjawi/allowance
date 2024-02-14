@@ -74,7 +74,6 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
     }
     useEffect(()=>{
         if (isFormValid == false){
-            alert()
                 document.getElementById('submit')!.classList.toggle('animate-x_shake')
                 document.getElementById('submit')!.classList.add('border-2')
                 document.getElementById('submit')!.classList.add('border-red-500')
@@ -123,10 +122,10 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
                     >
                         Record an Expense (Money In)
                     </Dialog.Title>
-            <div className='p-6 space-y-6 dark:bg-slate-600/80 '>
+            <div className='p-6 space-y-6'>
             <div className='text-base leading-relaxed text-gray-500 '>    
                 <div>
-                    <label htmlFor="expLabel" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
+                    <label htmlFor="expLabel" className="block text-sm font-medium leading-6 text-gray-900">
                         Expenditure Label
                     </label>
                     <div className="mt-2">
@@ -153,7 +152,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
                         />
                     </div>
                     <div className="grid grid-cols-2 grid-rows-2">
-                    <label htmlFor="expLabel" className="row-span-1 col-span-1 text-sm font-medium leading-6 text-gray-900 pt-3 dark:text-white">
+                    <label htmlFor="expLabel" className="row-span-1 col-span-1 text-sm font-medium leading-6 text-gray-900 pt-3 ">
                         Date
                     </label>
                     <DatePicker 
@@ -174,11 +173,10 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
                         }}
                         className="max-w-sm px-2 rounded-lg row-span-1 col-span-1 col-start-1" 
                         />
-                    <label htmlFor="expLabel" className="row-span-1 col-span-1 row-start-1 col-start-2 text-sm font-medium leading-6 text-gray-900 pt-3 dark:text-white">
+                    <label htmlFor="expLabel" className="row-span-1 col-span-1 row-start-1 col-start-2 text-sm font-medium leading-6 text-gray-900 pt-3 ">
                         Category
                     </label>
                     <select onChange={(e : any)=>{
-                        alert(JSON.parse(e.target.value))
                         setCategory(JSON.parse(e.target.value))}
                         } className='max-w-sm h-fit px-2 outline-none text-left whitespace-nowrap truncate focus:ring-2 transition duration-100 rounded-tremor-default flex flex-nowrap shadow-tremor-input focus:border-tremor-brand-subtle dark:shadow-dark-tremor-input dark:focus:border-dark-tremor-brand-subtle pl-3 pr-8 py-2 border bg-tremor-background dark:bg-dark-tremor-background hover:bg-tremor-background-muted dark:hover:bg-dark-tremor-background-muted text-tremor-content dark:text-dark-tremor-content border-tremor-border dark:border-dark-tremor-border'>
                             <option>Select a category...</option>
@@ -192,7 +190,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
                         )}
                     </select>
                     </div>
-                    <label htmlFor="expLabel" className="inline-block text-sm font-medium relative leading-6 text-gray-900 mt-4 dark:text-white">
+                    <label htmlFor="expLabel" className="inline-block text-sm font-medium relative leading-6 text-gray-900 mt-4 ">
                         Is this a recurring Expense (Monthly)?
                     </label>
                         <input
@@ -206,10 +204,10 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
                         />
                     <div className='h-12 grid grid-cols-2 grid-rows-1 mb-5 gap-3'>
                     <div className='col-start-1 col-span-1 '>
-                    <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900 pt-3 dark:text-white">
+                    <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900 pt-3">
                         Cost
                     </label>
-                    <div className="block relative text-sm font-medium leading-6 text-gray-900 dark:text-white">
+                    <div className="block relative text-sm font-medium leading-6 text-gray-900">
                         <NumberInput
                             icon={CurrencyDollarIcon}
                             placeholder="Amount..."

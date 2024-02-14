@@ -60,7 +60,6 @@ function SignUpPage() {
           {/* <Subtitle>If you are not a parent, select no.</Subtitle> */}
           <Button icon={ArrowRightIcon} iconPosition="right" disabled={roleType == 0} className="float-right dark:text-white" onClick={()=>{
             if (roleType != 0){
-              alert()
               setOnboardingStep(1)
             }
             else if (roleType == 0)
@@ -84,12 +83,10 @@ function SignUpPage() {
           <Button disabled={roleType == 0} className="float-right py-2" onClick={()=>{
 
             if (roleType != 0){
-              alert("1")
               setOnboardingStep(2)
               setBoardingComplete(true)
             }
             else if (roleType == 0)
-              alert("2")
               setBoardingComplete(false)
             }
           }>Continue to Sign Up</Button>
