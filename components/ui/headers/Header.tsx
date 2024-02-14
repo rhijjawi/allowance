@@ -50,9 +50,9 @@ export default function Header() {
     const {user, isLoaded, isSignedIn} = useUser()
     const [bugReport, setBugReport] = useState<boolean>(false)
     const router = useRouter()
-    const callsToAction = [
-        { name: 'Add Expense', icon: PlusCircleIcon, onclickFunction: () => {setIsIncomeOpen(false);setIsOpen(true)} },
-        { name: 'Add Income', icon: PlusCircleIcon, onclickFunction: () => {setIsOpen(false);setIsIncomeOpen(true)} },
+    const callsToAction  = [
+        { name: 'Add Expense', icon: PlusCircleIcon, disabled : !isSignedIn, onclickFunction: () => {setIsIncomeOpen(false);setIsOpen(true)} },
+        { name: 'Add Income', icon: PlusCircleIcon, disabled : !isSignedIn, onclickFunction: () => {setIsOpen(false);setIsIncomeOpen(true)} },
     ]
     if (user?.publicMetadata.role == 'parent') {return (<ParentHeader/>)}
     return (
@@ -113,7 +113,8 @@ export default function Header() {
                             <button
                             key={item.name}
                             onClick={item.onclickFunction}
-                            className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
+                            disabled={item.disabled && item.disabled}
+                            className="flex disabled:cursor-not-allowed items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
                             >
                             <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
                             {item.name}
