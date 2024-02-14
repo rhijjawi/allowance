@@ -4,10 +4,19 @@ import { Button, Card, Icon, Title } from "@tremor/react";
 import axios from "axios";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-
+import { SignedOutAuthObject } from "@clerk/nextjs/server";
 export const getServerSideProps : GetServerSideProps = async (context: GetServerSidePropsContext) => {
     let data;
     const user = getAuth(context.req);
+    if (!((user as SignedOutAuthObject).userId)) {
+        return {
+            redirect: {
+              permanent: true,
+              destination: `/sign-in?afterlogin=${context.resolvedUrl}`,
+            },
+            props:{},
+        };
+    }
     if ((user?.sessionClaims?.metadata as {role : string}).role !== "parent"){
         return {
             redirect : {
@@ -15,15 +24,6 @@ export const getServerSideProps : GetServerSideProps = async (context: GetServer
                 destination: `/`
             }
         }
-    }
-    if (!user.userId) {
-        return {
-            redirect: {
-              permanent: false,
-              destination: `/sign-in?afterlogin=${context.resolvedUrl}`,
-            },
-            props:{},
-        };
     }
     try {
       const res = await axios.post(

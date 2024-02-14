@@ -94,18 +94,19 @@ export default function Report(props : { expenses : ExpenseType[], _currency :  
             let category = categories.find((element: any) => {
                 return element.id === expense.category[0];
             }) ?? undefined;
-            if (active && category){
+            if (category){
                 expenseList[category.id] ? null : expenseList[category.id] = {...category, sum : 0}
                 expenseList[category.id].sum ? null : expenseList[category.id].sum = 0
                 expenseList[category.id].sum += expense.amount * props._currency[expense.currency]
             }
         })
-        setSum(expenseList)
+        if (active) setSum(expenseList)
         return () => {
             active = false;
         };
     }, [props.expenses])
-    if (router.isFallback || !categoryData || !sum) {
+    console.log(router.isFallback, categoryData == null, sum == null)
+    if (router.isFallback || categoryData == null || sum == null) {
         return <div className="w-full overflow-hidden border-t-2 bg-white dark:bg-dark-tremor-background-muted/75">
         <div className="mx-auto py-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
             spinner 

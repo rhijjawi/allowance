@@ -1,16 +1,20 @@
 //@ts-nocheck
 import { Card } from "@tremor/react";
+import Link from "next/link";
+import { Metadata } from 'next'
+import Head from 'next/head'
+
 
 export default function PP(){
     return (<>
+        <Head>
+            <title>Our Privacy Policy | LogMoney.app</title>
+            <meta property="og:title" content="My new title" key="title" />
+        </Head>
         <style
-          dangerouslySetInnerHTML={{
-            __html:
-              "\n  [data-custom-class='body'], [data-custom-class='body'] * {\n          background: transparent !important;\n        }\n[data-custom-class='title'], [data-custom-class='title'] * {\n          font-family: Arial !important;\nfont-size: 26px !important;\ncolor: #000000 !important;\n        }\n[data-custom-class='subtitle'], [data-custom-class='subtitle'] * {\n          font-family: Arial !important;\ncolor: #595959 !important;\nfont-size: 14px !important;\n        }\n[data-custom-class='heading_1'], [data-custom-class='heading_1'] * {\n          font-family: Arial !important;\nfont-size: 19px !important;\ncolor: #000000 !important;\n        }\n[data-custom-class='heading_2'], [data-custom-class='heading_2'] * {\n          font-family: Arial !important;\nfont-size: 17px !important;\ncolor: #000000 !important;\n        }\n[data-custom-class='body_text'], [data-custom-class='body_text'] * {\n          color: #595959 !important;\nfont-size: 14px !important;\nfont-family: Arial !important;\n        }\n[data-custom-class='link'], [data-custom-class='link'] * {\n          color: #3030F1 !important;\nfont-size: 14px !important;\nfont-family: Arial !important;\nword-break: break-word !important;\n        }\n"
-          }}
         />
 
-        <Card className="w-[80%] mx-auto max-h-screen my-4 py-6 overflow-y-scroll">
+        <Card className="w-[80%] dark:!text-white mx-auto max-h-screen my-4 py-6 overflow-y-scroll">
           <div>
             <strong>
               <span style={{ fontSize: 26 }}>
@@ -26,7 +30,7 @@ export default function PP(){
             <br />
           </div>
           <div>
-            <span style={{ color: "rgb(127, 127, 127)" }}>
+            <span >
               <strong>
                 <span style={{ fontSize: 15 }}>
                   <span data-custom-class="subtitle">
@@ -46,8 +50,8 @@ export default function PP(){
             <br />
           </div>
           <div style={{ lineHeight: "1.5" }}>
-            <span style={{ color: "rgb(127, 127, 127)" }}>
-              <span style={{ color: "rgb(89, 89, 89)", fontSize: 15 }}>
+            <span >
+              <span style={{  fontSize: 15 }}>
                 <span data-custom-class="body_text">
                   This privacy notice for{" "}
                   <bdt className="question">
@@ -69,9 +73,9 @@ export default function PP(){
               </span>
             </span>
             <span style={{ fontSize: 15 }}>
-              <span style={{ color: "rgb(127, 127, 127)" }}>
+              <span >
                 <span data-custom-class="body_text">
-                  <span style={{ color: "rgb(89, 89, 89)" }}>
+                  <span style={{  }}>
                     <span data-custom-class="body_text">
                       <bdt className="block-component" />
                     </span>
@@ -82,12 +86,12 @@ export default function PP(){
           </div>
           <ul>
             <li style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     Visit our website
                     <bdt className="block-component" /> at{" "}
-                    <span style={{ color: "rgb(0, 58, 250)" }}>
+                    <span style={{  }}>
                       <bdt className="question">
                         <a
                           href="https://logmoney.app"
@@ -99,10 +103,10 @@ export default function PP(){
                       </bdt>
                     </span>
                     <span style={{ fontSize: 15 }}>
-                      <span style={{ color: "rgb(89, 89, 89)" }}>
+                      <span style={{  }}>
                         <span data-custom-class="body_text">
                           <span style={{ fontSize: 15 }}>
-                            <span style={{ color: "rgb(89, 89, 89)" }}>
+                            <span style={{  }}>
                               <bdt className="statement-end-if-in-editor">
                                 , or any website of ours that links to this privacy
                                 notice
@@ -121,9 +125,9 @@ export default function PP(){
             <bdt className="block-component">
               <span style={{ fontSize: 15 }}>
                 <span style={{ fontSize: 15 }}>
-                  <span style={{ color: "rgb(127, 127, 127)" }}>
+                  <span >
                     <span data-custom-class="body_text">
-                      <span style={{ color: "rgb(89, 89, 89)" }}>
+                      <span style={{  }}>
                         <span data-custom-class="body_text">
                           <bdt className="block-component" />
                         </span>
@@ -135,9 +139,9 @@ export default function PP(){
             </bdt>
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
-                <span style={{ color: "rgb(127, 127, 127)" }}>
+                <span >
                   <span data-custom-class="body_text">
-                    <span style={{ color: "rgb(89, 89, 89)" }}>
+                    <span style={{  }}>
                       <span data-custom-class="body_text">
                         <bdt className="block-component" />
                       </span>
@@ -148,16 +152,16 @@ export default function PP(){
             </div>
             <ul>
               <li style={{ lineHeight: "1.5" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                  <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                <span style={{ fontSize: 15,  }}>
+                  <span style={{ fontSize: 15,  }}>
                     <span data-custom-class="body_text">
                       Engage with us in other related ways, including any sales,
                       marketing, or events
                       <span style={{ fontSize: 15 }}>
-                        <span style={{ color: "rgb(89, 89, 89)" }}>
+                        <span style={{  }}>
                           <span data-custom-class="body_text">
                             <span style={{ fontSize: 15 }}>
-                              <span style={{ color: "rgb(89, 89, 89)" }}>
+                              <span style={{  }}>
                                 <bdt className="statement-end-if-in-editor" />
                               </span>
                             </span>
@@ -171,7 +175,7 @@ export default function PP(){
             </ul>
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
-                <span style={{ color: "rgb(127, 127, 127)" }}>
+                <span >
                   <span data-custom-class="body_text">
                     <strong>Questions or concerns?&nbsp;</strong>Reading this privacy
                     notice will help you understand your privacy rights and choices.
@@ -213,7 +217,7 @@ export default function PP(){
                 </span>
               </span>
               <a data-custom-class="link" href="#toc">
-                <span style={{ color: "rgb(0, 58, 250)", fontSize: 15 }}>
+                <span style={{  fontSize: 15 }}>
                   <span data-custom-class="body_text">
                     <strong>
                       <em>table of contents</em>
@@ -243,7 +247,7 @@ export default function PP(){
                 </span>
               </span>
               <a data-custom-class="link" href="#personalinfo">
-                <span style={{ color: "rgb(0, 58, 250)", fontSize: 15 }}>
+                <span style={{  fontSize: 15 }}>
                   <span data-custom-class="body_text">
                     personal information you disclose to us
                   </span>
@@ -292,7 +296,7 @@ export default function PP(){
                 </span>
               </span>
               <a data-custom-class="link" href="#infouse">
-                <span style={{ color: "rgb(0, 58, 250)", fontSize: 15 }}>
+                <span style={{  fontSize: 15 }}>
                   <span data-custom-class="body_text">
                     how we process your information
                   </span>
@@ -317,7 +321,7 @@ export default function PP(){
                 </span>
               </span>
               <a data-custom-class="link" href="#whoshare">
-                <span style={{ color: "rgb(0, 58, 250)", fontSize: 15 }}>
+                <span style={{  fontSize: 15 }}>
                   <span data-custom-class="body_text">
                     when and with whom we share your personal information
                   </span>
@@ -351,7 +355,7 @@ export default function PP(){
                 </span>
               </span>
               <a data-custom-class="link" href="#infosafe">
-                <span style={{ color: "rgb(0, 58, 250)", fontSize: 15 }}>
+                <span style={{  fontSize: 15 }}>
                   <span data-custom-class="body_text">
                     how we keep your information safe
                   </span>
@@ -377,7 +381,7 @@ export default function PP(){
                 </span>
               </span>
               <a data-custom-class="link" href="#privacyrights">
-                <span style={{ color: "rgb(0, 58, 250)", fontSize: 15 }}>
+                <span style={{  fontSize: 15 }}>
                   <span data-custom-class="body_text">your privacy rights</span>
                 </span>
               </a>
@@ -391,10 +395,10 @@ export default function PP(){
                 <span data-custom-class="body_text">
                   <strong>How do you exercise your rights?</strong> The easiest way to
                   exercise your rights is by <bdt className="block-component" />
-                  visiting{" "}
-                  <span style={{ color: "rgb(0, 58, 250)" }}>
+                  emailing{" "}
+                  <span style={{  }}>
                     <bdt className="question">
-                      mailto:dpo@ramzihijjawi.me?subject=Delete%2FEdit%2FView%20my%20Personal%20Information
+                      <Link href={"mailto:dpo@ramzihijjawi.me?subject=Delete%2FEdit%2FView%20my%20Personal%20Information"}>dpo@ramzihijjawi.me</Link>
                     </bdt>
                   </span>
                   <bdt className="else-block" />, or by contacting us. We will
@@ -414,7 +418,7 @@ export default function PP(){
                 </span>
               </span>
               <a data-custom-class="link" href="#toc">
-                <span style={{ color: "rgb(0, 58, 250)", fontSize: 15 }}>
+                <span style={{  fontSize: 15 }}>
                   <span data-custom-class="body_text">
                     Review the privacy notice in full
                   </span>
@@ -432,8 +436,8 @@ export default function PP(){
             </div>
             <div id="toc" style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
-                <span style={{ color: "rgb(127, 127, 127)" }}>
-                  <span style={{ color: "rgb(0, 0, 0)" }}>
+                <span >
+                  <span style={{  }}>
                     <strong>
                       <span data-custom-class="heading_1">TABLE OF CONTENTS</span>
                     </strong>
@@ -447,7 +451,7 @@ export default function PP(){
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
                 <a data-custom-class="link" href="#infocollect">
-                  <span style={{ color: "rgb(0, 58, 250)" }}>
+                  <span style={{  }}>
                     1. WHAT INFORMATION DO WE COLLECT?
                   </span>
                 </a>
@@ -456,7 +460,7 @@ export default function PP(){
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
                 <a data-custom-class="link" href="#infouse">
-                  <span style={{ color: "rgb(0, 58, 250)" }}>
+                  <span style={{  }}>
                     2. HOW DO WE PROCESS YOUR INFORMATION?
                     <bdt className="block-component" />
                   </span>
@@ -466,10 +470,10 @@ export default function PP(){
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
                 <a data-custom-class="link" href="#legalbases">
-                  <span style={{ color: "rgb(0, 58, 250)" }}>
+                  <span style={{  }}>
                     3.{" "}
                     <span style={{ fontSize: 15 }}>
-                      <span style={{ color: "rgb(0, 58, 250)" }}>
+                      <span style={{  }}>
                         WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR PERSONAL
                         INFORMATION?
                       </span>
@@ -481,17 +485,17 @@ export default function PP(){
             </div>
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
-                <span style={{ color: "rgb(0, 58, 250)" }}>
+                <span style={{  }}>
                   <a data-custom-class="link" href="#whoshare">
                     4. WHEN AND WITH WHOM DO WE SHARE YOUR PERSONAL INFORMATION?
                   </a>
                 </span>
                 <span data-custom-class="body_text">
                   <bdt className="block-component" />
-                  <span style={{ color: "rgb(127, 127, 127)" }}>
-                    <span style={{ color: "rgb(89, 89, 89)" }}>
+                  <span >
+                    <span style={{  }}>
                       <span data-custom-class="body_text">
-                        <span style={{ color: "rgb(89, 89, 89)" }}>
+                        <span style={{  }}>
                           <bdt className="block-component" />
                         </span>
                       </span>
@@ -503,21 +507,21 @@ export default function PP(){
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
                 <a data-custom-class="link" href="#cookies">
-                  <span style={{ color: "rgb(0, 58, 250)" }}>
+                  <span style={{  }}>
                     5. DO WE USE COOKIES AND OTHER TRACKING TECHNOLOGIES?
                   </span>
                 </a>
-                <span style={{ color: "rgb(127, 127, 127)" }}>
-                  <span style={{ color: "rgb(89, 89, 89)" }}>
+                <span >
+                  <span style={{  }}>
                     <span data-custom-class="body_text">
-                      <span style={{ color: "rgb(89, 89, 89)" }}>
+                      <span style={{  }}>
                         <bdt className="statement-end-if-in-editor" />
                       </span>
                     </span>
                     <span data-custom-class="body_text">
-                      <span style={{ color: "rgb(89, 89, 89)" }}>
-                        <span style={{ color: "rgb(89, 89, 89)" }}>
-                          <span style={{ color: "rgb(89, 89, 89)" }}>
+                      <span style={{  }}>
+                        <span style={{  }}>
+                          <span style={{  }}>
                             <bdt className="block-component" />
                           </span>
                         </span>
@@ -530,20 +534,20 @@ export default function PP(){
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
                 <a data-custom-class="link" href="#sociallogins">
-                  <span style={{ color: "rgb(0, 58, 250)" }}>
-                    <span style={{ color: "rgb(0, 58, 250)" }}>
-                      <span style={{ color: "rgb(0, 58, 250)" }}>
+                  <span style={{  }}>
+                    <span style={{  }}>
+                      <span style={{  }}>
                         6. HOW DO WE HANDLE YOUR SOCIAL LOGINS?
                       </span>
                     </span>
                   </span>
                 </a>
-                <span style={{ color: "rgb(127, 127, 127)" }}>
-                  <span style={{ color: "rgb(89, 89, 89)" }}>
+                <span >
+                  <span style={{  }}>
                     <span data-custom-class="body_text">
-                      <span style={{ color: "rgb(89, 89, 89)" }}>
-                        <span style={{ color: "rgb(89, 89, 89)" }}>
-                          <span style={{ color: "rgb(89, 89, 89)" }}>
+                      <span style={{  }}>
+                        <span style={{  }}>
+                          <span style={{  }}>
                             <bdt className="statement-end-if-in-editor" />
                           </span>
                         </span>
@@ -557,15 +561,15 @@ export default function PP(){
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
                 <a data-custom-class="link" href="#inforetain">
-                  <span style={{ color: "rgb(0, 58, 250)" }}>
+                  <span style={{  }}>
                     7. HOW LONG DO WE KEEP YOUR INFORMATION?
                   </span>
                 </a>
-                <span style={{ color: "rgb(127, 127, 127)" }}>
-                  <span style={{ color: "rgb(89, 89, 89)" }}>
+                <span >
+                  <span style={{  }}>
                     <span data-custom-class="body_text">
-                      <span style={{ color: "rgb(89, 89, 89)" }}>
-                        <span style={{ color: "rgb(89, 89, 89)" }}>
+                      <span style={{  }}>
+                        <span style={{  }}>
                           <bdt className="block-component" />
                         </span>
                       </span>
@@ -577,14 +581,14 @@ export default function PP(){
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
                 <a data-custom-class="link" href="#infosafe">
-                  <span style={{ color: "rgb(0, 58, 250)" }}>
+                  <span style={{  }}>
                     8. HOW DO WE KEEP YOUR INFORMATION SAFE?
                   </span>
                 </a>
-                <span style={{ color: "rgb(127, 127, 127)" }}>
-                  <span style={{ color: "rgb(89, 89, 89)" }}>
+                <span >
+                  <span style={{  }}>
                     <span data-custom-class="body_text">
-                      <span style={{ color: "rgb(89, 89, 89)" }}>
+                      <span style={{  }}>
                         <bdt className="statement-end-if-in-editor" />
                         <bdt className="block-component" />
                       </span>
@@ -595,7 +599,7 @@ export default function PP(){
             </div>
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
-                <span style={{ color: "rgb(0, 58, 250)" }}>
+                <span style={{  }}>
                   <a data-custom-class="link" href="#privacyrights">
                     9. WHAT ARE YOUR PRIVACY RIGHTS?
                   </a>
@@ -605,7 +609,7 @@ export default function PP(){
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
                 <a data-custom-class="link" href="#DNT">
-                  <span style={{ color: "rgb(0, 58, 250)" }}>
+                  <span style={{  }}>
                     10. CONTROLS FOR DO-NOT-TRACK FEATURES
                     <bdt className="block-component" />
                   </span>
@@ -615,7 +619,7 @@ export default function PP(){
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
                 <a data-custom-class="link" href="#uslaws">
-                  <span style={{ color: "rgb(0, 58, 250)" }}>
+                  <span style={{  }}>
                     11. DO UNITED STATES RESIDENTS HAVE SPECIFIC PRIVACY RIGHTS?
                   </span>
                 </a>
@@ -643,7 +647,7 @@ export default function PP(){
             <div style={{ lineHeight: "1.5" }}>
               <span style={{ fontSize: 15 }}>
                 <a data-custom-class="link" href="#policyupdates">
-                  <span style={{ color: "rgb(0, 58, 250)" }}>
+                  <span style={{  }}>
                     12. DO WE MAKE UPDATES TO THIS NOTICE?
                   </span>
                 </a>
@@ -651,14 +655,14 @@ export default function PP(){
             </div>
             <div style={{ lineHeight: "1.5" }}>
               <a data-custom-class="link" href="#contact">
-                <span style={{ color: "rgb(0, 58, 250)", fontSize: 15 }}>
+                <span style={{  fontSize: 15 }}>
                   13. HOW CAN YOU CONTACT US ABOUT THIS NOTICE?
                 </span>
               </a>
             </div>
             <div style={{ lineHeight: "1.5" }}>
               <a data-custom-class="link" href="#request">
-                <span style={{ color: "rgb(0, 58, 250)" }}>
+                <span style={{  }}>
                   14. HOW CAN YOU REVIEW, UPDATE, OR DELETE THE DATA WE COLLECT FROM
                   YOU?
                 </span>
@@ -671,11 +675,11 @@ export default function PP(){
               <br />
             </div>
             <div id="infocollect" style={{ lineHeight: "1.5" }}>
-              <span style={{ color: "rgb(0, 0, 0)" }}>
-                <span style={{ color: "rgb(0, 0, 0)", fontSize: 15 }}>
-                  <span style={{ fontSize: 15, color: "rgb(0, 0, 0)" }}>
-                    <span style={{ fontSize: 15, color: "rgb(0, 0, 0)" }}>
-                      <span id="control" style={{ color: "rgb(0, 0, 0)" }}>
+              <span style={{  }}>
+                <span style={{  fontSize: 15 }}>
+                  <span style={{ fontSize: 15,  }}>
+                    <span style={{ fontSize: 15,  }}>
+                      <span id="control" style={{  }}>
                         <strong>
                           <span data-custom-class="heading_1">
                             1. WHAT INFORMATION DO WE COLLECT?
@@ -691,7 +695,7 @@ export default function PP(){
               <br />
             </div>
             <div id="personalinfo" style={{ lineHeight: "1.5" }}>
-              <span data-custom-class="heading_2" style={{ color: "rgb(0, 0, 0)" }}>
+              <span data-custom-class="heading_2" style={{  }}>
                 <span style={{ fontSize: 15 }}>
                   <strong>Personal information you disclose to us</strong>
                 </span>
@@ -702,11 +706,11 @@ export default function PP(){
                 <br />
               </div>
               <div style={{ lineHeight: "1.5" }}>
-                <span style={{ color: "rgb(127, 127, 127)" }}>
-                  <span style={{ color: "rgb(89, 89, 89)", fontSize: 15 }}>
+                <span >
+                  <span style={{  fontSize: 15 }}>
                     <span data-custom-class="body_text">
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                        <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                      <span style={{ fontSize: 15,  }}>
+                        <span style={{ fontSize: 15,  }}>
                           <span data-custom-class="body_text">
                             <strong>
                               <em>In Short:</em>
@@ -716,8 +720,8 @@ export default function PP(){
                       </span>
                     </span>
                     <span data-custom-class="body_text">
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                        <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                      <span style={{ fontSize: 15,  }}>
+                        <span style={{ fontSize: 15,  }}>
                           <span data-custom-class="body_text">
                             <strong>
                               <em>&nbsp;</em>
@@ -737,8 +741,8 @@ export default function PP(){
               <br />
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     We collect personal information that you voluntarily provide to us
                     when you{" "}
@@ -766,8 +770,8 @@ export default function PP(){
               <br />
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <span style={{ fontSize: 15 }}>
                       <bdt className="block-component" />
@@ -777,8 +781,8 @@ export default function PP(){
               </span>
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <strong>Personal Information Provided by You.</strong> The
                     personal information that we collect depends on the context of
@@ -796,8 +800,8 @@ export default function PP(){
             </div>
             <ul>
               <li style={{ lineHeight: "1.5" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                  <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                <span style={{ fontSize: 15,  }}>
+                  <span style={{ fontSize: 15,  }}>
                     <span data-custom-class="body_text">
                       <span style={{ fontSize: 15 }}>
                         <span data-custom-class="body_text">
@@ -810,8 +814,8 @@ export default function PP(){
               </li>
             </ul>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <span style={{ fontSize: 15 }}>
                       <span data-custom-class="body_text">
@@ -824,8 +828,8 @@ export default function PP(){
             </div>
             <ul>
               <li style={{ lineHeight: "1.5" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                  <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                <span style={{ fontSize: 15,  }}>
+                  <span style={{ fontSize: 15,  }}>
                     <span data-custom-class="body_text">
                       <span style={{ fontSize: 15 }}>
                         <span data-custom-class="body_text">
@@ -838,8 +842,8 @@ export default function PP(){
               </li>
             </ul>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <span style={{ fontSize: 15 }}>
                       <span data-custom-class="body_text">
@@ -852,8 +856,8 @@ export default function PP(){
             </div>
             <ul>
               <li style={{ lineHeight: "1.5" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                  <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                <span style={{ fontSize: 15,  }}>
+                  <span style={{ fontSize: 15,  }}>
                     <span data-custom-class="body_text">
                       <span style={{ fontSize: 15 }}>
                         <span data-custom-class="body_text">
@@ -866,8 +870,8 @@ export default function PP(){
               </li>
             </ul>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <span style={{ fontSize: 15 }}>
                       <span data-custom-class="body_text">
@@ -880,8 +884,8 @@ export default function PP(){
             </div>
             <ul>
               <li style={{ lineHeight: "1.5" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                  <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                <span style={{ fontSize: 15,  }}>
+                  <span style={{ fontSize: 15,  }}>
                     <span data-custom-class="body_text">
                       <span style={{ fontSize: 15 }}>
                         <span data-custom-class="body_text">
@@ -894,8 +898,8 @@ export default function PP(){
               </li>
             </ul>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <span style={{ fontSize: 15 }}>
                       <span data-custom-class="body_text">
@@ -908,8 +912,8 @@ export default function PP(){
             </div>
             <ul>
               <li style={{ lineHeight: "1.5" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                  <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                <span style={{ fontSize: 15,  }}>
+                  <span style={{ fontSize: 15,  }}>
                     <span data-custom-class="body_text">
                       <span style={{ fontSize: 15 }}>
                         <span data-custom-class="body_text">
@@ -922,8 +926,8 @@ export default function PP(){
               </li>
             </ul>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <span style={{ fontSize: 15 }}>
                       <span data-custom-class="body_text">
@@ -936,8 +940,8 @@ export default function PP(){
             </div>
             <ul>
               <li style={{ lineHeight: "1.5" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                  <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                <span style={{ fontSize: 15,  }}>
+                  <span style={{ fontSize: 15,  }}>
                     <span data-custom-class="body_text">
                       <span style={{ fontSize: 15 }}>
                         <span data-custom-class="body_text">
@@ -950,8 +954,8 @@ export default function PP(){
               </li>
             </ul>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <span style={{ fontSize: 15 }}>
                       <span data-custom-class="body_text">
@@ -964,8 +968,8 @@ export default function PP(){
             </div>
             <ul>
               <li style={{ lineHeight: "1.5" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                  <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                <span style={{ fontSize: 15,  }}>
+                  <span style={{ fontSize: 15,  }}>
                     <span data-custom-class="body_text">
                       <span style={{ fontSize: 15 }}>
                         <span data-custom-class="body_text">
@@ -978,8 +982,8 @@ export default function PP(){
               </li>
             </ul>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <span style={{ fontSize: 15 }}>
                       <span data-custom-class="body_text">
@@ -1011,8 +1015,8 @@ export default function PP(){
                   <bdt className="else-block" />
                 </span>
               </span>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <span style={{ fontSize: 15 }}>
                       <span data-custom-class="body_text">
@@ -1024,16 +1028,16 @@ export default function PP(){
               </span>
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <strong>Payment Data.</strong> We may collect data necessary to
                     process your payment if you make purchases, such as your payment
                     instrument number, and the security code associated with your
                     payment instrument. All payment data is stored by
                     <bdt className="forloop-component" />
-                    <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                    <span style={{ fontSize: 15,  }}>
+                      <span style={{ fontSize: 15,  }}>
                         <span data-custom-class="body_text">
                           <span style={{ fontSize: 15 }}>
                             <span data-custom-class="body_text">
@@ -1044,11 +1048,11 @@ export default function PP(){
                       </span>
                     </span>{" "}
                     <bdt className="question">Stripe</bdt>
-                    <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                    <span style={{ fontSize: 15,  }}>
+                      <span style={{ fontSize: 15,  }}>
                         <span data-custom-class="body_text">
-                          <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                            <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                          <span style={{ fontSize: 15,  }}>
+                            <span style={{ fontSize: 15,  }}>
                               <span data-custom-class="body_text">
                                 <span style={{ fontSize: 15 }}>
                                   <span data-custom-class="body_text">
@@ -1058,13 +1062,13 @@ export default function PP(){
                               </span>
                               <span data-custom-class="body_text">
                                 <span style={{ fontSize: 15 }}>
-                                  <span style={{ color: "rgb(89, 89, 89)" }}>
+                                  <span style={{  }}>
                                     <span data-custom-class="body_text">
                                       <span style={{ fontSize: 15 }}>
-                                        <span style={{ color: "rgb(89, 89, 89)" }}>
+                                        <span style={{  }}>
                                           <span data-custom-class="body_text">
                                             <span
-                                              style={{ color: "rgb(89, 89, 89)" }}
+                                              style={{  }}
                                             >
                                               <span style={{ fontSize: 15 }}>
                                                 <span data-custom-class="body_text">
@@ -1082,15 +1086,15 @@ export default function PP(){
                             </span>
                           </span>
                           . You may find their privacy notice link(s) here:
-                          <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                            <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                          <span style={{ fontSize: 15,  }}>
+                            <span style={{ fontSize: 15,  }}>
                               <span data-custom-class="body_text">
                                 <bdt className="forloop-component" />
                                 <span
-                                  style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                  style={{ fontSize: 15,  }}
                                 >
                                   <span
-                                    style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                    style={{ fontSize: 15,  }}
                                   >
                                     <span data-custom-class="body_text">
                                       <span style={{ fontSize: 15 }}>
@@ -1104,7 +1108,7 @@ export default function PP(){
                               </span>
                             </span>
                           </span>{" "}
-                          <span style={{ color: "rgb(0, 58, 250)" }}>
+                          <span style={{  }}>
                             <bdt className="question">
                               <a
                                 href="https://stripe.com/privacy"
@@ -1115,26 +1119,26 @@ export default function PP(){
                               </a>
                             </bdt>
                           </span>
-                          <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                            <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                          <span style={{ fontSize: 15,  }}>
+                            <span style={{ fontSize: 15,  }}>
                               <span data-custom-class="body_text">
                                 <span
-                                  style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                  style={{ fontSize: 15,  }}
                                 >
                                   <span
-                                    style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                    style={{ fontSize: 15,  }}
                                   >
                                     <span data-custom-class="body_text">
                                       <span
                                         style={{
                                           fontSize: 15,
-                                          color: "rgb(89, 89, 89)"
+                                          
                                         }}
                                       >
                                         <span
                                           style={{
                                             fontSize: 15,
-                                            color: "rgb(89, 89, 89)"
+                                            
                                           }}
                                         >
                                           <span data-custom-class="body_text">
@@ -1169,8 +1173,8 @@ export default function PP(){
               <br />
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <span style={{ fontSize: 15 }}>
                       <span data-custom-class="body_text">
@@ -1184,8 +1188,8 @@ export default function PP(){
               </span>
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <strong>Social Media Login Data.&nbsp;</strong>We may provide you
                     with the option to register with us using your existing social
@@ -1196,7 +1200,7 @@ export default function PP(){
                     <span style={{ fontSize: 15 }}>
                       <span data-custom-class="body_text">
                         <span style={{ fontSize: 15 }}>
-                          <span style={{ color: "rgb(0, 58, 250)" }}>
+                          <span style={{  }}>
                             <a data-custom-class="link" href="#sociallogins">
                               HOW DO WE HANDLE YOUR SOCIAL LOGINS?
                             </a>
@@ -1214,8 +1218,8 @@ export default function PP(){
               <br />
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <span style={{ fontSize: 15 }}>
                       <bdt className="statement-end-if-in-editor">
@@ -1228,8 +1232,8 @@ export default function PP(){
               <bdt className="block-component" />
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     All personal information that you provide to us must be true,
                     complete, and accurate, and you must notify us of any changes to
@@ -1242,8 +1246,8 @@ export default function PP(){
               <br />
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <bdt className="block-component" />
                   </span>
@@ -1251,7 +1255,7 @@ export default function PP(){
               </span>
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span data-custom-class="heading_2" style={{ color: "rgb(0, 0, 0)" }}>
+              <span data-custom-class="heading_2" style={{  }}>
                 <span style={{ fontSize: 15 }}>
                   <strong>Information automatically collected</strong>
                 </span>
@@ -1262,11 +1266,11 @@ export default function PP(){
                 <br />
               </div>
               <div style={{ lineHeight: "1.5" }}>
-                <span style={{ color: "rgb(127, 127, 127)" }}>
-                  <span style={{ color: "rgb(89, 89, 89)", fontSize: 15 }}>
+                <span >
+                  <span style={{  fontSize: 15 }}>
                     <span data-custom-class="body_text">
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                        <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                      <span style={{ fontSize: 15,  }}>
+                        <span style={{ fontSize: 15,  }}>
                           <span data-custom-class="body_text">
                             <strong>
                               <em>In Short:</em>
@@ -1276,8 +1280,8 @@ export default function PP(){
                       </span>
                     </span>
                     <span data-custom-class="body_text">
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                        <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                      <span style={{ fontSize: 15,  }}>
+                        <span style={{ fontSize: 15,  }}>
                           <span data-custom-class="body_text">
                             <strong>
                               <em>&nbsp;</em>
@@ -1299,8 +1303,8 @@ export default function PP(){
               <br />
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     We automatically collect certain information when you visit, use,
                     or navigate the Services. This information does not reveal your
@@ -1320,8 +1324,8 @@ export default function PP(){
               <br />
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <bdt className="block-component" />
                   </span>
@@ -1329,8 +1333,8 @@ export default function PP(){
               </span>
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     Like many businesses, we also collect information through cookies
                     and similar technologies. <bdt className="block-component" />
@@ -1343,8 +1347,8 @@ export default function PP(){
               <br />
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     <bdt className="statement-end-if-in-editor">
                       <span data-custom-class="body_text" />
@@ -1357,8 +1361,8 @@ export default function PP(){
               </span>
             </div>
             <div style={{ lineHeight: "1.5" }}>
-              <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+              <span style={{ fontSize: 15,  }}>
+                <span style={{ fontSize: 15,  }}>
                   <span data-custom-class="body_text">
                     The information we collect includes:
                     <bdt className="block-component" />
@@ -1393,15 +1397,15 @@ export default function PP(){
                   </div>
                   <ul>
                     <li style={{ lineHeight: "1.5" }}>
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                        <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                      <span style={{ fontSize: 15,  }}>
+                        <span style={{ fontSize: 15,  }}>
                           <span data-custom-class="body_text">
                             <em>
                               <span
-                                style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                style={{ fontSize: 15,  }}
                               >
                                 <span
-                                  style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                  style={{ fontSize: 15,  }}
                                 >
                                   <span data-custom-class="body_text">
                                     <bdt className="question">
@@ -1412,9 +1416,9 @@ export default function PP(){
                               </span>
                             </em>
                             .{" "}
-                            <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                            <span style={{ fontSize: 15,  }}>
                               <span
-                                style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                style={{ fontSize: 15,  }}
                               >
                                 <span data-custom-class="body_text">
                                   <bdt className="question">
@@ -1433,30 +1437,30 @@ export default function PP(){
                     </li>
                   </ul>
                   <div style={{ lineHeight: "1.5" }}>
-                    <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                    <span style={{ fontSize: 15,  }}>
+                      <span style={{ fontSize: 15,  }}>
                         <span data-custom-class="body_text">
                           <bdt className="forloop-component">
                             <bdt className="statement-end-if-in-editor">
                               <bdt className="statement-end-if-in-editor">
                                 <span
-                                  style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                  style={{ fontSize: 15,  }}
                                 >
                                   <span
-                                    style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                    style={{ fontSize: 15,  }}
                                   >
                                     <span data-custom-class="body_text">
                                       <bdt className="question">
                                         <span
                                           style={{
                                             fontSize: 15,
-                                            color: "rgb(89, 89, 89)"
+                                            
                                           }}
                                         >
                                           <span
                                             style={{
                                               fontSize: 15,
-                                              color: "rgb(89, 89, 89)"
+                                              
                                             }}
                                           >
                                             <span data-custom-class="body_text">
@@ -1477,15 +1481,15 @@ export default function PP(){
                   </div>
                   <ul>
                     <li style={{ lineHeight: "1.5" }}>
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                        <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                      <span style={{ fontSize: 15,  }}>
+                        <span style={{ fontSize: 15,  }}>
                           <span data-custom-class="body_text">
                             <em>
                               <span
-                                style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                style={{ fontSize: 15,  }}
                               >
                                 <span
-                                  style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                  style={{ fontSize: 15,  }}
                                 >
                                   <span data-custom-class="body_text">
                                     <bdt className="question">
@@ -1496,9 +1500,9 @@ export default function PP(){
                               </span>
                             </em>
                             .{" "}
-                            <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                            <span style={{ fontSize: 15,  }}>
                               <span
-                                style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                style={{ fontSize: 15,  }}
                               >
                                 <span data-custom-class="body_text">
                                   <bdt className="question">
@@ -1523,30 +1527,30 @@ export default function PP(){
                     </li>
                   </ul>
                   <div style={{ lineHeight: "1.5" }}>
-                    <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                    <span style={{ fontSize: 15,  }}>
+                      <span style={{ fontSize: 15,  }}>
                         <span data-custom-class="body_text">
                           <bdt className="forloop-component">
                             <bdt className="statement-end-if-in-editor">
                               <bdt className="statement-end-if-in-editor">
                                 <span
-                                  style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                  style={{ fontSize: 15,  }}
                                 >
                                   <span
-                                    style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                    style={{ fontSize: 15,  }}
                                   >
                                     <span data-custom-class="body_text">
                                       <bdt className="question">
                                         <span
                                           style={{
                                             fontSize: 15,
-                                            color: "rgb(89, 89, 89)"
+                                            
                                           }}
                                         >
                                           <span
                                             style={{
                                               fontSize: 15,
-                                              color: "rgb(89, 89, 89)"
+                                              
                                             }}
                                           >
                                             <span data-custom-class="body_text">
@@ -1564,10 +1568,10 @@ export default function PP(){
                           </bdt>
                         </span>
                         <span data-custom-class="body_text">
-                          <span style={{ color: "rgb(89, 89, 89)", fontSize: 15 }}>
+                          <span style={{  fontSize: 15 }}>
                             <span data-custom-class="body_text">
                               <span
-                                style={{ color: "rgb(89, 89, 89)", fontSize: 15 }}
+                                style={{  fontSize: 15 }}
                               >
                                 <span data-custom-class="body_text">
                                   <bdt className="statement-end-if-in-editor">
@@ -1587,11 +1591,11 @@ export default function PP(){
                     </span>
                   </div>
                   <div id="infouse" style={{ lineHeight: "1.5" }}>
-                    <span style={{ color: "rgb(127, 127, 127)" }}>
-                      <span style={{ color: "rgb(89, 89, 89)", fontSize: 15 }}>
-                        <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                          <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                            <span id="control" style={{ color: "rgb(0, 0, 0)" }}>
+                    <span >
+                      <span style={{  fontSize: 15 }}>
+                        <span style={{ fontSize: 15,  }}>
+                          <span style={{ fontSize: 15,  }}>
+                            <span id="control" style={{  }}>
                               <strong>
                                 <span data-custom-class="heading_1">
                                   2. HOW DO WE PROCESS YOUR INFORMATION?
@@ -1608,12 +1612,12 @@ export default function PP(){
                       <br />
                     </div>
                     <div style={{ lineHeight: "1.5" }}>
-                      <span style={{ color: "rgb(127, 127, 127)" }}>
-                        <span style={{ color: "rgb(89, 89, 89)", fontSize: 15 }}>
+                      <span >
+                        <span style={{  fontSize: 15 }}>
                           <span data-custom-class="body_text">
-                            <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                            <span style={{ fontSize: 15,  }}>
                               <span
-                                style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                style={{ fontSize: 15,  }}
                               >
                                 <span data-custom-class="body_text">
                                   <strong>
@@ -1638,8 +1642,8 @@ export default function PP(){
                     <br />
                   </div>
                   <div style={{ lineHeight: "1.5" }}>
-                    <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                    <span style={{ fontSize: 15,  }}>
+                      <span style={{ fontSize: 15,  }}>
                         <span data-custom-class="body_text">
                           <strong>
                             We process your personal information for a variety of
@@ -1653,8 +1657,8 @@ export default function PP(){
                   </div>
                   <ul>
                     <li style={{ lineHeight: "1.5" }}>
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                        <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                      <span style={{ fontSize: 15,  }}>
+                        <span style={{ fontSize: 15,  }}>
                           <span data-custom-class="body_text">
                             <strong>
                               To facilitate account creation and authentication and
@@ -1663,16 +1667,16 @@ export default function PP(){
                             We may process your information so you can create and log
                             in to your account, as well as keep your account in
                             working order.
-                            <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                            <span style={{ fontSize: 15,  }}>
                               <span
-                                style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                style={{ fontSize: 15,  }}
                               >
                                 <span data-custom-class="body_text">
                                   <span style={{ fontSize: 15 }}>
-                                    <span style={{ color: "rgb(89, 89, 89)" }}>
+                                    <span style={{  }}>
                                       <span data-custom-class="body_text">
                                         <span style={{ fontSize: 15 }}>
-                                          <span style={{ color: "rgb(89, 89, 89)" }}>
+                                          <span style={{  }}>
                                             <span data-custom-class="body_text">
                                               <bdt className="statement-end-if-in-editor" />
                                             </span>
@@ -1690,16 +1694,16 @@ export default function PP(){
                     </li>
                   </ul>
                   <div style={{ lineHeight: "1.5" }}>
-                    <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                    <span style={{ fontSize: 15,  }}>
+                      <span style={{ fontSize: 15,  }}>
                         <span data-custom-class="body_text">
                           <bdt className="block-component" />
                         </span>
                       </span>
                     </span>
                     <div style={{ lineHeight: "1.5" }}>
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                        <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                      <span style={{ fontSize: 15,  }}>
+                        <span style={{ fontSize: 15,  }}>
                           <span data-custom-class="body_text">
                             <bdt className="block-component" />
                           </span>
@@ -1708,8 +1712,8 @@ export default function PP(){
                     </div>
                     <ul>
                       <li style={{ lineHeight: "1.5" }}>
-                        <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                          <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                        <span style={{ fontSize: 15,  }}>
+                          <span style={{ fontSize: 15,  }}>
                             <span data-custom-class="body_text">
                               <strong>
                                 To deliver and facilitate delivery of services to the
@@ -1718,51 +1722,51 @@ export default function PP(){
                               We may process your information to provide you with the
                               requested service.
                               <span style={{ fontSize: 15 }}>
-                                <span style={{ color: "rgb(89, 89, 89)" }}>
+                                <span style={{  }}>
                                   <span data-custom-class="body_text">
                                     <span
                                       style={{
                                         fontSize: 15,
-                                        color: "rgb(89, 89, 89)"
+                                        
                                       }}
                                     >
                                       <span
                                         style={{
                                           fontSize: 15,
-                                          color: "rgb(89, 89, 89)"
+                                          
                                         }}
                                       >
                                         <span data-custom-class="body_text">
                                           <span
                                             style={{
                                               fontSize: 15,
-                                              color: "rgb(89, 89, 89)"
+                                              
                                             }}
                                           >
                                             <span
                                               style={{
                                                 fontSize: 15,
-                                                color: "rgb(89, 89, 89)"
+                                                
                                               }}
                                             >
                                               <span data-custom-class="body_text">
                                                 <span
                                                   style={{
                                                     fontSize: 15,
-                                                    color: "rgb(89, 89, 89)"
+                                                    
                                                   }}
                                                 >
                                                   <span
                                                     style={{
                                                       fontSize: 15,
-                                                      color: "rgb(89, 89, 89)"
+                                                      
                                                     }}
                                                   >
                                                     <span data-custom-class="body_text">
                                                       <span style={{ fontSize: 15 }}>
                                                         <span
                                                           style={{
-                                                            color: "rgb(89, 89, 89)"
+                                                            
                                                           }}
                                                         >
                                                           <span data-custom-class="body_text">
@@ -1771,8 +1775,8 @@ export default function PP(){
                                                             >
                                                               <span
                                                                 style={{
-                                                                  color:
-                                                                    "rgb(89, 89, 89)"
+                                                                 
+                                                                    
                                                                 }}
                                                               >
                                                                 <span data-custom-class="body_text">
@@ -1801,16 +1805,16 @@ export default function PP(){
                       </li>
                     </ul>
                     <div style={{ lineHeight: "1.5" }}>
-                      <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                        <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                      <span style={{ fontSize: 15,  }}>
+                        <span style={{ fontSize: 15,  }}>
                           <span data-custom-class="body_text">
                             <bdt className="block-component" />
                           </span>
                         </span>
                       </span>
                       <div style={{ lineHeight: "1.5" }}>
-                        <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
-                          <span style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}>
+                        <span style={{ fontSize: 15,  }}>
+                          <span style={{ fontSize: 15,  }}>
                             <span data-custom-class="body_text">
                               <bdt className="block-component" />
                             </span>
@@ -1828,10 +1832,10 @@ export default function PP(){
                           <ul>
                             <li style={{ lineHeight: "1.5" }}>
                               <span
-                                style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                style={{ fontSize: 15,  }}
                               >
                                 <span
-                                  style={{ fontSize: 15, color: "rgb(89, 89, 89)" }}
+                                  style={{ fontSize: 15,  }}
                                 >
                                   <span data-custom-class="body_text">
                                     <strong>
@@ -1844,26 +1848,26 @@ export default function PP(){
                                     <span
                                       style={{
                                         fontSize: 15,
-                                        color: "rgb(89, 89, 89)"
+                                        
                                       }}
                                     >
                                       <span
                                         style={{
                                           fontSize: 15,
-                                          color: "rgb(89, 89, 89)"
+                                          
                                         }}
                                       >
                                         <span data-custom-class="body_text">
                                           <span
                                             style={{
                                               fontSize: 15,
-                                              color: "rgb(89, 89, 89)"
+                                              
                                             }}
                                           >
                                             <span
                                               style={{
                                                 fontSize: 15,
-                                                color: "rgb(89, 89, 89)"
+                                                
                                               }}
                                             >
                                               <span data-custom-class="body_text">
@@ -2290,8 +2294,8 @@ export default function PP(){
                                                               >
                                                                 <span
                                                                   style={{
-                                                                    color:
-                                                                      "rgb(0, 58, 250)",
+                                                                   
+                                                                      
                                                                     fontSize: 15
                                                                   }}
                                                                 >
@@ -2582,8 +2586,8 @@ export default function PP(){
                                                               <span data-custom-class="body_text">
                                                                 <span
                                                                   style={{
-                                                                    color:
-                                                                      "rgb(0, 58, 250)",
+                                                                   
+                                                                      
                                                                     fontSize: 15
                                                                   }}
                                                                 >
@@ -3106,36 +3110,35 @@ export default function PP(){
                                                           >
                                                             <span
                                                               style={{
-                                                                color:
-                                                                  "rgb(127, 127, 127)"
+                                                               
+                                                                  
                                                               }}
                                                             >
                                                               <span
                                                                 style={{
-                                                                  color:
-                                                                    "rgb(89, 89, 89)",
+                                                                  
                                                                   fontSize: 15
                                                                 }}
                                                               >
                                                                 <span
                                                                   style={{
                                                                     fontSize: 15,
-                                                                    color:
-                                                                      "rgb(89, 89, 89)"
+                                                                   
+                                                                      
                                                                   }}
                                                                 >
                                                                   <span
                                                                     style={{
                                                                       fontSize: 15,
-                                                                      color:
-                                                                        "rgb(89, 89, 89)"
+                                                                     
+                                                                        
                                                                     }}
                                                                   >
                                                                     <span
                                                                       id="control"
                                                                       style={{
-                                                                        color:
-                                                                          "rgb(0, 0, 0)"
+                                                                       
+                                                                          
                                                                       }}
                                                                     >
                                                                       <strong>
@@ -3169,15 +3172,15 @@ export default function PP(){
                                                             <span
                                                               style={{
                                                                 fontSize: 15,
-                                                                color:
-                                                                  "rgb(89, 89, 89)"
+                                                               
+                                                                  
                                                               }}
                                                             >
                                                               <span
                                                                 style={{
                                                                   fontSize: 15,
-                                                                  color:
-                                                                    "rgb(89, 89, 89)"
+                                                                 
+                                                                    
                                                                 }}
                                                               >
                                                                 <span data-custom-class="body_text">
@@ -3207,15 +3210,15 @@ export default function PP(){
                                                             <span
                                                               style={{
                                                                 fontSize: 15,
-                                                                color:
-                                                                  "rgb(89, 89, 89)"
+                                                               
+                                                                  
                                                               }}
                                                             >
                                                               <span
                                                                 style={{
                                                                   fontSize: 15,
-                                                                  color:
-                                                                    "rgb(89, 89, 89)"
+                                                                 
+                                                                    
                                                                 }}
                                                               >
                                                                 <span data-custom-class="body_text">
@@ -3382,8 +3385,7 @@ export default function PP(){
                                                                         </bdt>
                                                                         <span
                                                                           style={{
-                                                                            color:
-                                                                              "rgb(89, 89, 89)",
+                                                                            
                                                                             fontSize: 15
                                                                           }}
                                                                         >
@@ -3392,12 +3394,7 @@ export default function PP(){
                                                                               fontSize: 15
                                                                             }}
                                                                           >
-                                                                            <span
-                                                                              style={{
-                                                                                color:
-                                                                                  "rgb(89, 89, 89)"
-                                                                              }}
-                                                                            >
+                                                                            <span>
                                                                               <span
                                                                                 style={{
                                                                                   fontSize: 15
@@ -3405,8 +3402,8 @@ export default function PP(){
                                                                               >
                                                                                 <span
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <bdt className="block-component">
@@ -3435,36 +3432,36 @@ export default function PP(){
                                                                       >
                                                                         <span
                                                                           style={{
-                                                                            color:
-                                                                              "rgb(127, 127, 127)"
+                                                                           
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
-                                                                              color:
-                                                                                "rgb(89, 89, 89)",
+                                                                             
+                                                                                
                                                                               fontSize: 15
                                                                             }}
                                                                           >
                                                                             <span
                                                                               style={{
                                                                                 fontSize: 15,
-                                                                                color:
-                                                                                  "rgb(89, 89, 89)"
+                                                                               
+                                                                                  
                                                                               }}
                                                                             >
                                                                               <span
                                                                                 style={{
                                                                                   fontSize: 15,
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)"
+                                                                                 
+                                                                                    
                                                                                 }}
                                                                               >
                                                                                 <span
                                                                                   id="control"
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(0, 0, 0)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <strong>
@@ -3503,15 +3500,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                           
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                             
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -3558,15 +3555,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                           
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                             
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -3604,8 +3601,8 @@ export default function PP(){
                                                                               Notice
                                                                               <span
                                                                                 style={{
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)",
+                                                                                 
+                                                                                    
                                                                                   fontSize: 15
                                                                                 }}
                                                                               >
@@ -3615,8 +3612,8 @@ export default function PP(){
                                                                                 </span>
                                                                                 <span
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)",
+                                                                                   
+                                                                                      
                                                                                     fontSize: 15
                                                                                   }}
                                                                                 >
@@ -3627,8 +3624,8 @@ export default function PP(){
                                                                                   >
                                                                                     <span
                                                                                       style={{
-                                                                                        color:
-                                                                                          "rgb(89, 89, 89)"
+                                                                                       
+                                                                                          
                                                                                       }}
                                                                                     >
                                                                                       <span
@@ -3638,8 +3635,8 @@ export default function PP(){
                                                                                       >
                                                                                         <span
                                                                                           style={{
-                                                                                            color:
-                                                                                              "rgb(89, 89, 89)"
+                                                                                           
+                                                                                              
                                                                                           }}
                                                                                         >
                                                                                           <span data-custom-class="body_text">
@@ -3655,22 +3652,22 @@ export default function PP(){
                                                                             <span data-custom-class="body_text">
                                                                               <span
                                                                                 style={{
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)",
+                                                                                 
+                                                                                    
                                                                                   fontSize: 15
                                                                                 }}
                                                                               >
                                                                                 <span
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)",
+                                                                                   
+                                                                                      
                                                                                     fontSize: 15
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)",
+                                                                                     
+                                                                                        
                                                                                       fontSize: 15
                                                                                     }}
                                                                                   >
@@ -3681,8 +3678,8 @@ export default function PP(){
                                                                                     >
                                                                                       <span
                                                                                         style={{
-                                                                                          color:
-                                                                                            "rgb(89, 89, 89)"
+                                                                                         
+                                                                                            
                                                                                         }}
                                                                                       >
                                                                                         <span
@@ -3692,8 +3689,8 @@ export default function PP(){
                                                                                         >
                                                                                           <span
                                                                                             style={{
-                                                                                              color:
-                                                                                                "rgb(89, 89, 89)"
+                                                                                             
+                                                                                                
                                                                                             }}
                                                                                           >
                                                                                             <span data-custom-class="body_text">
@@ -3727,36 +3724,36 @@ export default function PP(){
                                                                       >
                                                                         <span
                                                                           style={{
-                                                                            color:
-                                                                              "rgb(127, 127, 127)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
-                                                                              color:
-                                                                                "rgb(89, 89, 89)",
+                                                                              
+                                                                                
                                                                               fontSize: 15
                                                                             }}
                                                                           >
                                                                             <span
                                                                               style={{
                                                                                 fontSize: 15,
-                                                                                color:
-                                                                                  "rgb(89, 89, 89)"
+                                                                                
+                                                                                  
                                                                               }}
                                                                             >
                                                                               <span
                                                                                 style={{
                                                                                   fontSize: 15,
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)"
+                                                                                  
+                                                                                    
                                                                                 }}
                                                                               >
                                                                                 <span
                                                                                   id="control"
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(0, 0, 0)"
+                                                                                    
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <strong>
@@ -3794,15 +3791,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -3856,15 +3853,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -3947,8 +3944,8 @@ export default function PP(){
                                                                               >
                                                                                 <span
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                    
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span data-custom-class="body_text">
@@ -3977,15 +3974,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -4057,29 +4054,29 @@ export default function PP(){
                                                                               apps.
                                                                               <span
                                                                                 style={{
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)",
+                                                                                  
+                                                                                    
                                                                                   fontSize: 15
                                                                                 }}
                                                                               >
                                                                                 <span
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)",
+                                                                                    
+                                                                                      
                                                                                     fontSize: 15
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)",
+                                                                                      
+                                                                                        
                                                                                       fontSize: 15
                                                                                     }}
                                                                                   >
                                                                                     <span
                                                                                       style={{
-                                                                                        color:
-                                                                                          "rgb(89, 89, 89)",
+                                                                                        
+                                                                                          
                                                                                         fontSize: 15
                                                                                       }}
                                                                                     >
@@ -4090,8 +4087,8 @@ export default function PP(){
                                                                                       >
                                                                                         <span
                                                                                           style={{
-                                                                                            color:
-                                                                                              "rgb(89, 89, 89)"
+                                                                                            
+                                                                                              
                                                                                           }}
                                                                                         >
                                                                                           <span
@@ -4101,8 +4098,8 @@ export default function PP(){
                                                                                           >
                                                                                             <span
                                                                                               style={{
-                                                                                                color:
-                                                                                                  "rgb(89, 89, 89)"
+                                                                                                
+                                                                                                  
                                                                                               }}
                                                                                             >
                                                                                               <span data-custom-class="body_text">
@@ -4142,36 +4139,36 @@ export default function PP(){
                                                                       >
                                                                         <span
                                                                           style={{
-                                                                            color:
-                                                                              "rgb(127, 127, 127)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
-                                                                              color:
-                                                                                "rgb(89, 89, 89)",
+                                                                              
+                                                                                
                                                                               fontSize: 15
                                                                             }}
                                                                           >
                                                                             <span
                                                                               style={{
                                                                                 fontSize: 15,
-                                                                                color:
-                                                                                  "rgb(89, 89, 89)"
+                                                                                
+                                                                                  
                                                                               }}
                                                                             >
                                                                               <span
                                                                                 style={{
                                                                                   fontSize: 15,
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)"
+                                                                                  
+                                                                                    
                                                                                 }}
                                                                               >
                                                                                 <span
                                                                                   id="control"
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(0, 0, 0)"
+                                                                                    
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <strong>
@@ -4209,15 +4206,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -4274,15 +4271,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -4339,8 +4336,8 @@ export default function PP(){
                                                                               >
                                                                                 <span
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                    
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span data-custom-class="body_text">
@@ -4365,8 +4362,8 @@ export default function PP(){
                                                                               >
                                                                                 <span
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                    
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span data-custom-class="body_text">
@@ -4396,15 +4393,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -4461,8 +4458,8 @@ export default function PP(){
                                                                               possible.
                                                                               <span
                                                                                 style={{
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)"
+                                                                                  
+                                                                                    
                                                                                 }}
                                                                               >
                                                                                 <bdt className="block-component" />
@@ -4488,36 +4485,36 @@ export default function PP(){
                                                                       >
                                                                         <span
                                                                           style={{
-                                                                            color:
-                                                                              "rgb(127, 127, 127)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
-                                                                              color:
-                                                                                "rgb(89, 89, 89)",
+                                                                              
+                                                                                
                                                                               fontSize: 15
                                                                             }}
                                                                           >
                                                                             <span
                                                                               style={{
                                                                                 fontSize: 15,
-                                                                                color:
-                                                                                  "rgb(89, 89, 89)"
+                                                                                
+                                                                                  
                                                                               }}
                                                                             >
                                                                               <span
                                                                                 style={{
                                                                                   fontSize: 15,
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)"
+                                                                                  
+                                                                                    
                                                                                 }}
                                                                               >
                                                                                 <span
                                                                                   id="control"
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(0, 0, 0)"
+                                                                                    
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <strong>
@@ -4555,15 +4552,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -4613,15 +4610,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -4729,16 +4726,16 @@ export default function PP(){
                                                                               environment.
                                                                               <span
                                                                                 style={{
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)"
+                                                                                  
+                                                                                    
                                                                                 }}
                                                                               >
                                                                                 <bdt className="statement-end-if-in-editor" />
                                                                               </span>
                                                                               <span
                                                                                 style={{
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)",
+                                                                                  
+                                                                                    
                                                                                   fontSize: 15
                                                                                 }}
                                                                               >
@@ -4767,36 +4764,36 @@ export default function PP(){
                                                                       >
                                                                         <span
                                                                           style={{
-                                                                            color:
-                                                                              "rgb(127, 127, 127)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
-                                                                              color:
-                                                                                "rgb(89, 89, 89)",
+                                                                              
+                                                                                
                                                                               fontSize: 15
                                                                             }}
                                                                           >
                                                                             <span
                                                                               style={{
                                                                                 fontSize: 15,
-                                                                                color:
-                                                                                  "rgb(89, 89, 89)"
+                                                                                
+                                                                                  
                                                                               }}
                                                                             >
                                                                               <span
                                                                                 style={{
                                                                                   fontSize: 15,
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)"
+                                                                                  
+                                                                                    
                                                                                 }}
                                                                               >
                                                                                 <span
                                                                                   id="control"
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(0, 0, 0)"
+                                                                                    
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <strong>
@@ -4832,15 +4829,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -4854,8 +4851,8 @@ export default function PP(){
                                                                                 &nbsp;
                                                                                 <span
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                    
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
@@ -4904,8 +4901,8 @@ export default function PP(){
                                                                                 information.
                                                                                 <span
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                    
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
@@ -4934,8 +4931,8 @@ export default function PP(){
                                                                               </em>
                                                                               <span
                                                                                 style={{
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)"
+                                                                                  
+                                                                                    
                                                                                 }}
                                                                               >
                                                                                 <span
@@ -4967,15 +4964,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -5075,15 +5072,15 @@ export default function PP(){
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(0, 58, 250)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span
                                                                               style={{
                                                                                 fontSize: 15,
-                                                                                color:
-                                                                                  "rgb(0, 58, 250)"
+                                                                                
+                                                                                  
                                                                               }}
                                                                             >
                                                                               <span data-custom-class="body_text">
@@ -5102,15 +5099,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -5139,15 +5136,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -5177,8 +5174,8 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           &nbsp;
@@ -5193,15 +5190,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -5231,15 +5228,15 @@ export default function PP(){
                                                                               >
                                                                                 <span
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(0, 58, 250)"
+                                                                                    
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span data-custom-class="body_text">
                                                                                     <span
                                                                                       style={{
-                                                                                        color:
-                                                                                          "rgb(0, 58, 250)"
+                                                                                        
+                                                                                          
                                                                                       }}
                                                                                     >
                                                                                       <span data-custom-class="body_text">
@@ -5279,15 +5276,15 @@ export default function PP(){
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(0, 58, 250)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span
                                                                               style={{
                                                                                 fontSize: 15,
-                                                                                color:
-                                                                                  "rgb(0, 58, 250)"
+                                                                                
+                                                                                  
                                                                               }}
                                                                             >
                                                                               <span data-custom-class="body_text">
@@ -5302,15 +5299,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -5336,15 +5333,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                            
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                              
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -5363,22 +5360,22 @@ export default function PP(){
                                                                               >
                                                                                 <span
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(0, 58, 250)"
+                                                                                    
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span data-custom-class="body_text">
                                                                                     <span
                                                                                       style={{
-                                                                                        color:
-                                                                                          "rgb(0, 58, 250)"
+                                                                                        
+                                                                                          
                                                                                       }}
                                                                                     >
                                                                                       <span data-custom-class="body_text">
                                                                                         <span
                                                                                           style={{
-                                                                                            color:
-                                                                                              "rgb(0, 58, 250)",
+                                                                                           
+                                                                                              
                                                                                             fontSize: 15
                                                                                           }}
                                                                                         >
@@ -5424,15 +5421,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                           
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                             
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -5501,15 +5498,15 @@ export default function PP(){
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(0, 58, 250)"
+                                                                             
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span
                                                                               style={{
                                                                                 fontSize: 15,
-                                                                                color:
-                                                                                  "rgb(0, 58, 250)"
+                                                                               
+                                                                                  
                                                                               }}
                                                                             >
                                                                               <span data-custom-class="body_text">
@@ -5528,15 +5525,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                           
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                             
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -5830,15 +5827,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                           
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                             
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -5849,8 +5846,8 @@ export default function PP(){
                                                                               >
                                                                                 <span
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
@@ -5860,8 +5857,8 @@ export default function PP(){
                                                                                   >
                                                                                     <span
                                                                                       style={{
-                                                                                        color:
-                                                                                          "rgb(89, 89, 89)"
+                                                                                       
+                                                                                          
                                                                                       }}
                                                                                     >
                                                                                       <span data-custom-class="body_text">
@@ -5872,8 +5869,8 @@ export default function PP(){
                                                                                         >
                                                                                           <span
                                                                                             style={{
-                                                                                              color:
-                                                                                                "rgb(89, 89, 89)"
+                                                                                             
+                                                                                                
                                                                                             }}
                                                                                           >
                                                                                             <bdt className="block-component" />
@@ -5905,15 +5902,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                           
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                             
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -5972,8 +5969,8 @@ export default function PP(){
                                                                                 >
                                                                                   <span
                                                                                     style={{
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -5985,8 +5982,8 @@ export default function PP(){
                                                                                       >
                                                                                         <span
                                                                                           style={{
-                                                                                            color:
-                                                                                              "rgb(89, 89, 89)"
+                                                                                           
+                                                                                              
                                                                                           }}
                                                                                         >
                                                                                           <span
@@ -5996,8 +5993,8 @@ export default function PP(){
                                                                                           >
                                                                                             <span
                                                                                               style={{
-                                                                                                color:
-                                                                                                  "rgb(89, 89, 89)"
+                                                                                               
+                                                                                                  
                                                                                               }}
                                                                                             >
                                                                                               <span
@@ -6007,8 +6004,8 @@ export default function PP(){
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <bdt className="statement-end-if-in-editor" />
@@ -6099,36 +6096,36 @@ export default function PP(){
                                                                       >
                                                                         <span
                                                                           style={{
-                                                                            color:
-                                                                              "rgb(127, 127, 127)"
+                                                                           
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
-                                                                              color:
-                                                                                "rgb(89, 89, 89)",
+                                                                             
+                                                                                
                                                                               fontSize: 15
                                                                             }}
                                                                           >
                                                                             <span
                                                                               style={{
                                                                                 fontSize: 15,
-                                                                                color:
-                                                                                  "rgb(89, 89, 89)"
+                                                                               
+                                                                                  
                                                                               }}
                                                                             >
                                                                               <span
                                                                                 style={{
                                                                                   fontSize: 15,
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)"
+                                                                                 
+                                                                                    
                                                                                 }}
                                                                               >
                                                                                 <span
                                                                                   id="control"
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(0, 0, 0)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <strong>
@@ -6163,15 +6160,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                           
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                             
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -6296,36 +6293,36 @@ export default function PP(){
                                                                       >
                                                                         <span
                                                                           style={{
-                                                                            color:
-                                                                              "rgb(127, 127, 127)"
+                                                                           
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
-                                                                              color:
-                                                                                "rgb(89, 89, 89)",
+                                                                             
+                                                                                
                                                                               fontSize: 15
                                                                             }}
                                                                           >
                                                                             <span
                                                                               style={{
                                                                                 fontSize: 15,
-                                                                                color:
-                                                                                  "rgb(89, 89, 89)"
+                                                                               
+                                                                                  
                                                                               }}
                                                                             >
                                                                               <span
                                                                                 style={{
                                                                                   fontSize: 15,
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)"
+                                                                                 
+                                                                                    
                                                                                 }}
                                                                               >
                                                                                 <span
                                                                                   id="control"
                                                                                   style={{
-                                                                                    color:
-                                                                                      "rgb(0, 0, 0)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <strong>
@@ -6364,15 +6361,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                           
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                             
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -6421,15 +6418,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                           
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                             
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -6463,15 +6460,15 @@ export default function PP(){
                                                                         <span
                                                                           style={{
                                                                             fontSize: 15,
-                                                                            color:
-                                                                              "rgb(89, 89, 89)"
+                                                                           
+                                                                              
                                                                           }}
                                                                         >
                                                                           <span
                                                                             style={{
                                                                               fontSize: 15,
-                                                                              color:
-                                                                                "rgb(89, 89, 89)"
+                                                                             
+                                                                                
                                                                             }}
                                                                           >
                                                                             <span data-custom-class="body_text">
@@ -6523,15 +6520,15 @@ export default function PP(){
                                                                               <span
                                                                                 style={{
                                                                                   fontSize: 15,
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)"
+                                                                                 
+                                                                                    
                                                                                 }}
                                                                               >
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span data-custom-class="body_text">
@@ -6555,15 +6552,15 @@ export default function PP(){
                                                                               <span
                                                                                 style={{
                                                                                   fontSize: 15,
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)"
+                                                                                 
+                                                                                    
                                                                                 }}
                                                                               >
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span data-custom-class="body_text">
@@ -6589,15 +6586,15 @@ export default function PP(){
                                                                               <span
                                                                                 style={{
                                                                                   fontSize: 15,
-                                                                                  color:
-                                                                                    "rgb(89, 89, 89)"
+                                                                                 
+                                                                                    
                                                                                 }}
                                                                               >
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span data-custom-class="body_text">
@@ -6631,15 +6628,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -6669,15 +6666,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -6744,15 +6741,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -6816,15 +6813,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -6864,15 +6861,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -6955,15 +6952,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -6997,15 +6994,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7093,15 +7090,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7135,15 +7132,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7226,15 +7223,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7272,15 +7269,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7380,15 +7377,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7422,15 +7419,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7510,15 +7507,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7558,15 +7555,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7658,15 +7655,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7702,15 +7699,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7818,15 +7815,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7860,15 +7857,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7950,15 +7947,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -7998,15 +7995,15 @@ export default function PP(){
                                                                                 <span
                                                                                   style={{
                                                                                     fontSize: 15,
-                                                                                    color:
-                                                                                      "rgb(89, 89, 89)"
+                                                                                   
+                                                                                      
                                                                                   }}
                                                                                 >
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span data-custom-class="body_text">
@@ -8075,22 +8072,22 @@ export default function PP(){
                                                                                   <span
                                                                                     style={{
                                                                                       fontSize: 15,
-                                                                                      color:
-                                                                                        "rgb(89, 89, 89)"
+                                                                                     
+                                                                                        
                                                                                     }}
                                                                                   >
                                                                                     <span
                                                                                       style={{
                                                                                         fontSize: 15,
-                                                                                        color:
-                                                                                          "rgb(89, 89, 89)"
+                                                                                       
+                                                                                          
                                                                                       }}
                                                                                     >
                                                                                       <span data-custom-class="body_text">
                                                                                         <span
                                                                                           style={{
-                                                                                            color:
-                                                                                              "rgb(89, 89, 89)"
+                                                                                           
+                                                                                              
                                                                                           }}
                                                                                         >
                                                                                           <span data-custom-class="body_text">
@@ -8361,15 +8358,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -8387,15 +8384,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -8432,22 +8429,22 @@ export default function PP(){
                                                                                                     <span
                                                                                                       style={{
                                                                                                         fontSize: 15,
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)"
+                                                                                                       
+                                                                                                          
                                                                                                       }}
                                                                                                     >
                                                                                                       <span
                                                                                                         style={{
                                                                                                           fontSize: 15,
-                                                                                                          color:
-                                                                                                            "rgb(89, 89, 89)"
+                                                                                                         
+                                                                                                            
                                                                                                         }}
                                                                                                       >
                                                                                                         <span data-custom-class="body_text">
                                                                                                           <span
                                                                                                             style={{
-                                                                                                              color:
-                                                                                                                "rgb(89, 89, 89)",
+                                                                                                             
+                                                                                                                
                                                                                                               fontSize: 15
                                                                                                             }}
                                                                                                           >
@@ -8472,15 +8469,15 @@ export default function PP(){
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span
                                                                                                     style={{
                                                                                                       fontSize: 15,
-                                                                                                      color:
-                                                                                                        "rgb(89, 89, 89)"
+                                                                                                     
+                                                                                                        
                                                                                                     }}
                                                                                                   >
                                                                                                     <span data-custom-class="body_text">
@@ -8496,30 +8493,30 @@ export default function PP(){
                                                                                                       <span
                                                                                                         style={{
                                                                                                           fontSize: 15,
-                                                                                                          color:
-                                                                                                            "rgb(89, 89, 89)"
+                                                                                                         
+                                                                                                            
                                                                                                         }}
                                                                                                       >
                                                                                                         <span
                                                                                                           style={{
                                                                                                             fontSize: 15,
-                                                                                                            color:
-                                                                                                              "rgb(89, 89, 89)"
+                                                                                                           
+                                                                                                              
                                                                                                           }}
                                                                                                         >
                                                                                                           <span data-custom-class="body_text">
                                                                                                             <span
                                                                                                               style={{
-                                                                                                                color:
-                                                                                                                  "rgb(89, 89, 89)",
+                                                                                                               
+                                                                                                                  
                                                                                                                 fontSize: 15
                                                                                                               }}
                                                                                                             >
                                                                                                               <span data-custom-class="body_text">
                                                                                                                 <span
                                                                                                                   style={{
-                                                                                                                    color:
-                                                                                                                      "rgb(89, 89, 89)",
+                                                                                                                   
+                                                                                                                      
                                                                                                                     fontSize: 15
                                                                                                                   }}
                                                                                                                 >
@@ -8531,8 +8528,8 @@ export default function PP(){
                                                                                                                     >
                                                                                                                       <span
                                                                                                                         style={{
-                                                                                                                          color:
-                                                                                                                            "rgb(89, 89, 89)"
+                                                                                                                         
+                                                                                                                            
                                                                                                                         }}
                                                                                                                       >
                                                                                                                         <span data-custom-class="body_text">
@@ -8556,37 +8553,37 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
                                                                                                     <span
                                                                                                       style={{
                                                                                                         fontSize: 15,
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)"
+                                                                                                       
+                                                                                                          
                                                                                                       }}
                                                                                                     >
                                                                                                       <span
                                                                                                         style={{
                                                                                                           fontSize: 15,
-                                                                                                          color:
-                                                                                                            "rgb(89, 89, 89)"
+                                                                                                         
+                                                                                                            
                                                                                                         }}
                                                                                                       >
                                                                                                         <span data-custom-class="body_text">
                                                                                                           <span
                                                                                                             style={{
-                                                                                                              color:
-                                                                                                                "rgb(89, 89, 89)",
+                                                                                                             
+                                                                                                                
                                                                                                               fontSize: 15
                                                                                                             }}
                                                                                                           >
@@ -8611,15 +8608,15 @@ export default function PP(){
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span
                                                                                                     style={{
                                                                                                       fontSize: 15,
-                                                                                                      color:
-                                                                                                        "rgb(89, 89, 89)"
+                                                                                                     
+                                                                                                        
                                                                                                     }}
                                                                                                   >
                                                                                                     <span data-custom-class="body_text">
@@ -8635,30 +8632,30 @@ export default function PP(){
                                                                                                       <span
                                                                                                         style={{
                                                                                                           fontSize: 15,
-                                                                                                          color:
-                                                                                                            "rgb(89, 89, 89)"
+                                                                                                         
+                                                                                                            
                                                                                                         }}
                                                                                                       >
                                                                                                         <span
                                                                                                           style={{
                                                                                                             fontSize: 15,
-                                                                                                            color:
-                                                                                                              "rgb(89, 89, 89)"
+                                                                                                           
+                                                                                                              
                                                                                                           }}
                                                                                                         >
                                                                                                           <span data-custom-class="body_text">
                                                                                                             <span
                                                                                                               style={{
-                                                                                                                color:
-                                                                                                                  "rgb(89, 89, 89)",
+                                                                                                               
+                                                                                                                  
                                                                                                                 fontSize: 15
                                                                                                               }}
                                                                                                             >
                                                                                                               <span data-custom-class="body_text">
                                                                                                                 <span
                                                                                                                   style={{
-                                                                                                                    color:
-                                                                                                                      "rgb(89, 89, 89)",
+                                                                                                                   
+                                                                                                                      
                                                                                                                     fontSize: 15
                                                                                                                   }}
                                                                                                                 >
@@ -8670,8 +8667,8 @@ export default function PP(){
                                                                                                                     >
                                                                                                                       <span
                                                                                                                         style={{
-                                                                                                                          color:
-                                                                                                                            "rgb(89, 89, 89)"
+                                                                                                                         
+                                                                                                                            
                                                                                                                         }}
                                                                                                                       >
                                                                                                                         <span data-custom-class="body_text">
@@ -8695,37 +8692,37 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
                                                                                                     <span
                                                                                                       style={{
                                                                                                         fontSize: 15,
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)"
+                                                                                                       
+                                                                                                          
                                                                                                       }}
                                                                                                     >
                                                                                                       <span
                                                                                                         style={{
                                                                                                           fontSize: 15,
-                                                                                                          color:
-                                                                                                            "rgb(89, 89, 89)"
+                                                                                                         
+                                                                                                            
                                                                                                         }}
                                                                                                       >
                                                                                                         <span data-custom-class="body_text">
                                                                                                           <span
                                                                                                             style={{
-                                                                                                              color:
-                                                                                                                "rgb(89, 89, 89)",
+                                                                                                             
+                                                                                                                
                                                                                                               fontSize: 15
                                                                                                             }}
                                                                                                           >
@@ -8750,15 +8747,15 @@ export default function PP(){
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span
                                                                                                     style={{
                                                                                                       fontSize: 15,
-                                                                                                      color:
-                                                                                                        "rgb(89, 89, 89)"
+                                                                                                     
+                                                                                                        
                                                                                                     }}
                                                                                                   >
                                                                                                     <span data-custom-class="body_text">
@@ -8780,30 +8777,30 @@ export default function PP(){
                                                                                                       <span
                                                                                                         style={{
                                                                                                           fontSize: 15,
-                                                                                                          color:
-                                                                                                            "rgb(89, 89, 89)"
+                                                                                                         
+                                                                                                            
                                                                                                         }}
                                                                                                       >
                                                                                                         <span
                                                                                                           style={{
                                                                                                             fontSize: 15,
-                                                                                                            color:
-                                                                                                              "rgb(89, 89, 89)"
+                                                                                                           
+                                                                                                              
                                                                                                           }}
                                                                                                         >
                                                                                                           <span data-custom-class="body_text">
                                                                                                             <span
                                                                                                               style={{
-                                                                                                                color:
-                                                                                                                  "rgb(89, 89, 89)",
+                                                                                                               
+                                                                                                                  
                                                                                                                 fontSize: 15
                                                                                                               }}
                                                                                                             >
                                                                                                               <span data-custom-class="body_text">
                                                                                                                 <span
                                                                                                                   style={{
-                                                                                                                    color:
-                                                                                                                      "rgb(89, 89, 89)",
+                                                                                                                   
+                                                                                                                      
                                                                                                                     fontSize: 15
                                                                                                                   }}
                                                                                                                 >
@@ -8815,8 +8812,8 @@ export default function PP(){
                                                                                                                     >
                                                                                                                       <span
                                                                                                                         style={{
-                                                                                                                          color:
-                                                                                                                            "rgb(89, 89, 89)"
+                                                                                                                         
+                                                                                                                            
                                                                                                                         }}
                                                                                                                       >
                                                                                                                         <span data-custom-class="body_text">
@@ -8845,15 +8842,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -8913,8 +8910,8 @@ export default function PP(){
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
-                                                                                                    color:
-                                                                                                      "rgb(0, 58, 250)",
+                                                                                                   
+                                                                                                      
                                                                                                     fontSize: 15
                                                                                                   }}
                                                                                                 >
@@ -8954,22 +8951,22 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
                                                                                                     <span
                                                                                                       style={{
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)",
+                                                                                                       
+                                                                                                          
                                                                                                         fontSize: 15
                                                                                                       }}
                                                                                                     >
@@ -8990,15 +8987,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -9033,15 +9030,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -9091,15 +9088,15 @@ export default function PP(){
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(0, 58, 250)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span
                                                                                                     style={{
                                                                                                       fontSize: 15,
-                                                                                                      color:
-                                                                                                        "rgb(0, 58, 250)"
+                                                                                                     
+                                                                                                        
                                                                                                     }}
                                                                                                   >
                                                                                                     WHEN
@@ -9118,15 +9115,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -9154,15 +9151,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -9203,8 +9200,8 @@ export default function PP(){
                                                                                                     information.
                                                                                                     <span
                                                                                                       style={{
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)",
+                                                                                                       
+                                                                                                          
                                                                                                         fontSize: 15
                                                                                                       }}
                                                                                                     >
@@ -9233,15 +9230,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -9273,8 +9270,8 @@ export default function PP(){
                                                                                                     We
                                                                                                     <span
                                                                                                       style={{
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)"
+                                                                                                       
+                                                                                                          
                                                                                                       }}
                                                                                                     >
                                                                                                       &nbsp;
@@ -9299,22 +9296,22 @@ export default function PP(){
                                                                                                     consumers.
                                                                                                     <span
                                                                                                       style={{
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)"
+                                                                                                       
+                                                                                                          
                                                                                                       }}
                                                                                                     >
                                                                                                       <span data-custom-class="body_text">
                                                                                                         <span
                                                                                                           style={{
-                                                                                                            color:
-                                                                                                              "rgb(89, 89, 89)"
+                                                                                                           
+                                                                                                              
                                                                                                           }}
                                                                                                         >
                                                                                                           <span data-custom-class="body_text">
                                                                                                             <span
                                                                                                               style={{
-                                                                                                                color:
-                                                                                                                  "rgb(89, 89, 89)"
+                                                                                                               
+                                                                                                                  
                                                                                                               }}
                                                                                                             >
                                                                                                               <span data-custom-class="body_text">
@@ -9332,8 +9329,8 @@ export default function PP(){
                                                                                               <span data-custom-class="body_text">
                                                                                                 <span
                                                                                                   style={{
-                                                                                                    color:
-                                                                                                      "rgb(0, 0, 0)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -9381,45 +9378,45 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span
                                                                                                     style={{
-                                                                                                      color:
-                                                                                                        "rgb(89, 89, 89)",
+                                                                                                     
+                                                                                                        
                                                                                                       fontSize: 15
                                                                                                     }}
                                                                                                   >
                                                                                                     <span data-custom-class="body_text">
                                                                                                       <span
                                                                                                         style={{
-                                                                                                          color:
-                                                                                                            "rgb(89, 89, 89)",
+                                                                                                         
+                                                                                                            
                                                                                                           fontSize: 15
                                                                                                         }}
                                                                                                       >
                                                                                                         <span data-custom-class="body_text">
                                                                                                           <span
                                                                                                             style={{
-                                                                                                              color:
-                                                                                                                "rgb(89, 89, 89)",
+                                                                                                             
+                                                                                                                
                                                                                                               fontSize: 15
                                                                                                             }}
                                                                                                           >
                                                                                                             <span data-custom-class="body_text">
                                                                                                               <span
                                                                                                                 style={{
-                                                                                                                  color:
-                                                                                                                    "rgb(89, 89, 89)",
+                                                                                                                 
+                                                                                                                    
                                                                                                                   fontSize: 15
                                                                                                                 }}
                                                                                                               >
@@ -9429,45 +9426,45 @@ export default function PP(){
                                                                                                                       <span
                                                                                                                         style={{
                                                                                                                           fontSize: 15,
-                                                                                                                          color:
-                                                                                                                            "rgb(89, 89, 89)"
+                                                                                                                         
+                                                                                                                            
                                                                                                                         }}
                                                                                                                       >
                                                                                                                         <span
                                                                                                                           style={{
                                                                                                                             fontSize: 15,
-                                                                                                                            color:
-                                                                                                                              "rgb(89, 89, 89)"
+                                                                                                                           
+                                                                                                                              
                                                                                                                           }}
                                                                                                                         >
                                                                                                                           <span
                                                                                                                             style={{
-                                                                                                                              color:
-                                                                                                                                "rgb(89, 89, 89)",
+                                                                                                                             
+                                                                                                                                
                                                                                                                               fontSize: 15
                                                                                                                             }}
                                                                                                                           >
                                                                                                                             <span data-custom-class="body_text">
                                                                                                                               <span
                                                                                                                                 style={{
-                                                                                                                                  color:
-                                                                                                                                    "rgb(89, 89, 89)",
+                                                                                                                                 
+                                                                                                                                    
                                                                                                                                   fontSize: 15
                                                                                                                                 }}
                                                                                                                               >
                                                                                                                                 <span data-custom-class="body_text">
                                                                                                                                   <span
                                                                                                                                     style={{
-                                                                                                                                      color:
-                                                                                                                                        "rgb(89, 89, 89)",
+                                                                                                                                     
+                                                                                                                                        
                                                                                                                                       fontSize: 15
                                                                                                                                     }}
                                                                                                                                   >
                                                                                                                                     <span data-custom-class="body_text">
                                                                                                                                       <span
                                                                                                                                         style={{
-                                                                                                                                          color:
-                                                                                                                                            "rgb(89, 89, 89)",
+                                                                                                                                         
+                                                                                                                                            
                                                                                                                                           fontSize: 15
                                                                                                                                         }}
                                                                                                                                       >
@@ -9529,36 +9526,36 @@ export default function PP(){
                                                                                             >
                                                                                               <span
                                                                                                 style={{
-                                                                                                  color:
-                                                                                                    "rgb(127, 127, 127)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)",
+                                                                                                   
+                                                                                                      
                                                                                                     fontSize: 15
                                                                                                   }}
                                                                                                 >
                                                                                                   <span
                                                                                                     style={{
                                                                                                       fontSize: 15,
-                                                                                                      color:
-                                                                                                        "rgb(89, 89, 89)"
+                                                                                                     
+                                                                                                        
                                                                                                     }}
                                                                                                   >
                                                                                                     <span
                                                                                                       style={{
                                                                                                         fontSize: 15,
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)"
+                                                                                                       
+                                                                                                          
                                                                                                       }}
                                                                                                     >
                                                                                                       <span
                                                                                                         id="control"
                                                                                                         style={{
-                                                                                                          color:
-                                                                                                            "rgb(0, 0, 0)"
+                                                                                                         
+                                                                                                            
                                                                                                         }}
                                                                                                       >
                                                                                                         <strong>
@@ -9596,15 +9593,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -9649,15 +9646,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -9766,36 +9763,36 @@ export default function PP(){
                                                                                             >
                                                                                               <span
                                                                                                 style={{
-                                                                                                  color:
-                                                                                                    "rgb(127, 127, 127)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)",
+                                                                                                   
+                                                                                                      
                                                                                                     fontSize: 15
                                                                                                   }}
                                                                                                 >
                                                                                                   <span
                                                                                                     style={{
                                                                                                       fontSize: 15,
-                                                                                                      color:
-                                                                                                        "rgb(89, 89, 89)"
+                                                                                                     
+                                                                                                        
                                                                                                     }}
                                                                                                   >
                                                                                                     <span
                                                                                                       style={{
                                                                                                         fontSize: 15,
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)"
+                                                                                                       
+                                                                                                          
                                                                                                       }}
                                                                                                     >
                                                                                                       <span
                                                                                                         id="control"
                                                                                                         style={{
-                                                                                                          color:
-                                                                                                            "rgb(0, 0, 0)"
+                                                                                                         
+                                                                                                            
                                                                                                         }}
                                                                                                       >
                                                                                                         <strong>
@@ -9834,15 +9831,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -9859,8 +9856,8 @@ export default function PP(){
                                                                                                     may{" "}
                                                                                                     <span
                                                                                                       style={{
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)",
+                                                                                                       
+                                                                                                          
                                                                                                         fontSize: 15
                                                                                                       }}
                                                                                                     >
@@ -9878,8 +9875,8 @@ export default function PP(){
                                                                                                     ,{" "}
                                                                                                     <span
                                                                                                       style={{
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)",
+                                                                                                       
+                                                                                                          
                                                                                                         fontSize: 15
                                                                                                       }}
                                                                                                     >
@@ -9895,15 +9892,15 @@ export default function PP(){
                                                                                                     <span
                                                                                                       style={{
                                                                                                         fontSize: 15,
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)"
+                                                                                                       
+                                                                                                          
                                                                                                       }}
                                                                                                     >
                                                                                                       <span
                                                                                                         style={{
                                                                                                           fontSize: 15,
-                                                                                                          color:
-                                                                                                            "rgb(89, 89, 89)"
+                                                                                                         
+                                                                                                            
                                                                                                         }}
                                                                                                       >
                                                                                                         <span data-custom-class="body_text">
@@ -9918,8 +9915,8 @@ export default function PP(){
                                                                                                     </span>
                                                                                                     <span
                                                                                                       style={{
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)",
+                                                                                                       
+                                                                                                          
                                                                                                         fontSize: 15
                                                                                                       }}
                                                                                                     >
@@ -9934,8 +9931,8 @@ export default function PP(){
                                                                                                   </span>
                                                                                                   <span
                                                                                                     style={{
-                                                                                                      color:
-                                                                                                        "rgb(89, 89, 89)",
+                                                                                                     
+                                                                                                        
                                                                                                       fontSize: 15
                                                                                                     }}
                                                                                                   >
@@ -9947,15 +9944,15 @@ export default function PP(){
                                                                                                   <span
                                                                                                     style={{
                                                                                                       fontSize: 15,
-                                                                                                      color:
-                                                                                                        "rgb(89, 89, 89)"
+                                                                                                     
+                                                                                                        
                                                                                                     }}
                                                                                                   >
                                                                                                     <span
                                                                                                       style={{
                                                                                                         fontSize: 15,
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)"
+                                                                                                       
+                                                                                                          
                                                                                                       }}
                                                                                                     >
 
@@ -9981,15 +9978,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -10000,14 +9997,14 @@ export default function PP(){
                                                                                                     >
                                                                                                       <span
                                                                                                         style={{
-                                                                                                          color:
-                                                                                                            "rgb(89, 89, 89)"
+                                                                                                         
+                                                                                                            
                                                                                                         }}
                                                                                                       >
                                                                                                         <span
                                                                                                           style={{
-                                                                                                            color:
-                                                                                                              "rgb(89, 89, 89)"
+                                                                                                           
+                                                                                                              
                                                                                                           }}
                                                                                                         >
                                                                                                         </span>
@@ -10017,8 +10014,8 @@ export default function PP(){
                                                                                                   <span data-custom-class="body_text">
                                                                                                     <span
                                                                                                       style={{
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)"
+                                                                                                       
+                                                                                                          
                                                                                                       }}
                                                                                                     >
                                                                                                       <span data-custom-class="body_text">
@@ -10044,14 +10041,14 @@ export default function PP(){
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span
                                                                                                     style={{
-                                                                                                      color:
-                                                                                                        "rgb(89, 89, 89)"
+                                                                                                     
+                                                                                                        
                                                                                                     }}
                                                                                                   >
                                                                                                     <span data-custom-class="body_text">
@@ -10074,14 +10071,14 @@ export default function PP(){
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span
                                                                                                     style={{
-                                                                                                      color:
-                                                                                                        "rgb(89, 89, 89)"
+                                                                                                     
+                                                                                                        
                                                                                                     }}
                                                                                                   >
                                                                                                     <span data-custom-class="body_text">
@@ -10089,8 +10086,8 @@ export default function PP(){
                                                                                                         <span data-custom-class="body_text">
                                                                                                           <span
                                                                                                             style={{
-                                                                                                              color:
-                                                                                                                "rgb(89, 89, 89)"
+                                                                                                             
+                                                                                                                
                                                                                                             }}
                                                                                                           >
                                                                                                             <bdt className="block-component" />
@@ -10111,15 +10108,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -10131,8 +10128,8 @@ export default function PP(){
                                                                                                       <span data-custom-class="body_text">
                                                                                                         <span
                                                                                                           style={{
-                                                                                                            color:
-                                                                                                              "rgb(89, 89, 89)"
+                                                                                                           
+                                                                                                              
                                                                                                           }}
                                                                                                         >
                                                                                                           <bdt className="block-component" />
@@ -10147,8 +10144,8 @@ export default function PP(){
                                                                                                       <span data-custom-class="body_text">
                                                                                                         <span
                                                                                                           style={{
-                                                                                                            color:
-                                                                                                              "rgb(89, 89, 89)"
+                                                                                                           
+                                                                                                              
                                                                                                           }}
                                                                                                         >
                                                                                                           <bdt className="statement-end-if-in-editor" />
@@ -10158,8 +10155,8 @@ export default function PP(){
                                                                                                       </span>
                                                                                                       <span
                                                                                                         style={{
-                                                                                                          color:
-                                                                                                            "rgb(89, 89, 89)"
+                                                                                                         
+                                                                                                            
                                                                                                         }}
                                                                                                       >
                                                                                                         <bdt className="else-block">
@@ -10187,8 +10184,8 @@ export default function PP(){
                                                                                                   <span data-custom-class="body_text">
                                                                                                     <span
                                                                                                       style={{
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)",
+                                                                                                       
+                                                                                                          
                                                                                                         fontSize: 15
                                                                                                       }}
                                                                                                     >
@@ -10225,36 +10222,36 @@ export default function PP(){
                                                                                             >
                                                                                               <span
                                                                                                 style={{
-                                                                                                  color:
-                                                                                                    "rgb(127, 127, 127)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)",
+                                                                                                   
+                                                                                                      
                                                                                                     fontSize: 15
                                                                                                   }}
                                                                                                 >
                                                                                                   <span
                                                                                                     style={{
                                                                                                       fontSize: 15,
-                                                                                                      color:
-                                                                                                        "rgb(89, 89, 89)"
+                                                                                                     
+                                                                                                        
                                                                                                     }}
                                                                                                   >
                                                                                                     <span
                                                                                                       style={{
                                                                                                         fontSize: 15,
-                                                                                                        color:
-                                                                                                          "rgb(89, 89, 89)"
+                                                                                                       
+                                                                                                          
                                                                                                       }}
                                                                                                     >
                                                                                                       <span
                                                                                                         id="control"
                                                                                                         style={{
-                                                                                                          color:
-                                                                                                            "rgb(0, 0, 0)"
+                                                                                                         
+                                                                                                            
                                                                                                         }}
                                                                                                       >
                                                                                                         <strong>
@@ -10298,15 +10295,15 @@ export default function PP(){
                                                                                               <span
                                                                                                 style={{
                                                                                                   fontSize: 15,
-                                                                                                  color:
-                                                                                                    "rgb(89, 89, 89)"
+                                                                                                 
+                                                                                                    
                                                                                                 }}
                                                                                               >
                                                                                                 <span
                                                                                                   style={{
                                                                                                     fontSize: 15,
-                                                                                                    color:
-                                                                                                      "rgb(89, 89, 89)"
+                                                                                                   
+                                                                                                      
                                                                                                   }}
                                                                                                 >
                                                                                                   <span data-custom-class="body_text">
@@ -10350,12 +10347,12 @@ export default function PP(){
                                                                                                     visit:{" "}
                                                                                                     <span
                                                                                                       style={{
-                                                                                                        color:
-                                                                                                          "rgb(0, 58, 250)"
+                                                                                                       
+                                                                                                          
                                                                                                       }}
                                                                                                     >
                                                                                                       <bdt className="question">
-                                                                                                        mailto:dpo@ramzihijjawi.me?subject=Delete%2FEdit%2FView%20my%20Personal%20Information
+                                                                                                      <Link href={"mailto:dpo@ramzihijjawi.me?subject=Delete%2FEdit%2FView%20my%20Personal%20Information"}>dpo@ramzihijjawi.me</Link>
                                                                                                       </bdt>
                                                                                                     </span>
                                                                                                     <bdt className="else-block" />
@@ -10375,7 +10372,7 @@ export default function PP(){
                                                                                           </div>
                                                                                           <div
                                                                                             style={{
-                                                                                              color:
+                                                                                            backgroundColor:
                                                                                                 "#595959",
                                                                                               fontSize: 14,
                                                                                               fontFamily:
@@ -10392,8 +10389,8 @@ export default function PP(){
                                                                                             Termly's{" "}
                                                                                             <a
                                                                                               style={{
-                                                                                                color:
-                                                                                                  "rgb(48, 48, 241) !important"
+                                                                                               
+                                                                                                  
                                                                                               }}
                                                                                               href="https://termly.io/products/privacy-policy-generator/"
                                                                                             >

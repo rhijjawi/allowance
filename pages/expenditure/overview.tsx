@@ -391,7 +391,7 @@ export default function Expenditure() {
         {chartData.length == 0 ? (
           <motion.p className="mt-6">
             It looks like you haven't recorded any expense data. Click{" "}
-            <Link href="/expenditure/list" className="font-semibold text-black">
+            <Link href="/expenditure/list" className="font-semibold dark:text-black">
               here
             </Link>{" "}
             to get started
