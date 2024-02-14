@@ -1,6 +1,6 @@
 // utils/supabase.js
-
 import { createClient } from "@supabase/supabase-js";
+
 const getSupabase = async (accessToken) => {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -16,4 +16,12 @@ const getSupabase = async (accessToken) => {
   return supabase;
 };
 
-export { getSupabase };
+const noAuthSupaBase = () => {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  );
+  return supabase;
+}
+
+export { getSupabase, noAuthSupaBase };
