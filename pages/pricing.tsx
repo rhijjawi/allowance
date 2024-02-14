@@ -69,10 +69,10 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
                         router.push(`/sign-in?afterlogin=${router.asPath}`);
                       }
                       if (user && user.publicMetadata.role != "parent") {
-                        return addAlert("error", "You're not sign in with a parent account", 3000);
+                        return addAlert("error", "You're not signed-in with a parent account", 3000);
                       }
                       setLoading({ ...loading, [i.id]: true });
-                      axios.post("/api/stripe/createCheckoutSession", {item: [i.id, Boolean(i.type == "recurring")], backUrl : router.asPath}).then(async (res) => {
+                      axios.post("/api/stripe/createCheckoutSession", {item: [[i.id, Boolean(i.type == "recurring")]], backUrl : router.asPath}).then(async (res) => {
                         if (res.status == 200) {
                           setLoading({ ...loading, [i.id]: false });
                           window.open(res.data.goto, "_self");
