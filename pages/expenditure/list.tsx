@@ -225,7 +225,7 @@ export default function ListPage() {
       // await (await getSupabase(user!.accessToken)).from('expenses').update({label: label}).eq(id, id)
     };
     if (CurrentlyEditing == null && typeof previousEditing == "number") {
-      alert(label);
+      //
     }
   }, [previousEditing]);
   useEffect(() => {
