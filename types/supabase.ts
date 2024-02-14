@@ -34,7 +34,7 @@ export interface IncomeSchema {
 } 
 export interface CategorySchema{
   category: string
-  id?: number
+  id: number
   subcategories: Json[]
 }
 export interface Database {

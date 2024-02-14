@@ -125,6 +125,7 @@ export default function Report(props : { expenses : ExpenseType[], _currency :  
                                 <p className="mt-2 font-semibold">Total: $950</p>
                             </Card>)
                             }
+                            
                             )}
                 </div>
             </Card>
