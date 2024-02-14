@@ -11,7 +11,6 @@ import { GuardianOnboardingProvider } from "@/components/contexts/GuardianOnboar
 import Script from "next/script";
 import Head from "next/head";
 import { StrictMode, useEffect, useState } from "react";
-import { Subtitle } from "@tremor/react";
 import { useRouter } from "next/router";
 import React from "react";
 const raleway = Raleway({ subsets: ["latin"] });

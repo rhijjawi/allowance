@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Card } from "@tremor/react";
 
 export default function PP(){
