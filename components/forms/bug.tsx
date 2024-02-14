@@ -18,11 +18,11 @@ export default function ReportABug({isOpen, setIsOpen} : {isOpen : boolean, setI
                     delay: 0.1,
                 }
             }
-        }} className={`fixed inset-0 z-[1000] ${isOpen ? 'block' : 'hidden'}`}
+        }} className={`fixed inset-0 z-[100] ${isOpen ? 'block' : 'hidden'}`}
         >
-        <div className=" z-10 min-h-screen flex items-center justify-center">
-            <div className="bg-gray-100/50 w-screen h-screen fixed top-0 z-30" onClick={()=>{setIsOpen(false)}}/>
-          <div className="bg-dark-tremor-background-muted p-8 rounded-lg shadow-md w-full md:w-2/3 lg:w-1/2 z-40">
+        <div className="min-h-screen flex items-center justify-center">
+            <div className="w-screen backdrop-blur-sm blur h-screen fixed top-0" onClick={()=>{setIsOpen(false)}}/>
+          <div className="bg-dark-tremor-background-muted blur-0 p-8 rounded-lg shadow-md w-full md:w-2/3 lg:w-1/2">
               <h1 className="text-2xl font-semibold mb-6 text-white">Report a Bug</h1>
               <form onSubmit={(e)=>{
                 const formData = new FormData();

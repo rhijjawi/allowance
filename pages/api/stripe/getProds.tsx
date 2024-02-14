@@ -2,7 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 import { getAuth } from '@clerk/nextjs/server';
 import { createClient } from '@supabase/supabase-js';
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_SUPABASE_SECRET_KEY!);
+import { clerkClient } from '@clerk/nextjs';
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2023-10-16' });
 const prices : {[index : string] : {monthly?: string, yearly?: string, one_time? : string}} = {
     "standard" : {

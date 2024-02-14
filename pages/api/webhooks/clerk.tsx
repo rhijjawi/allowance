@@ -29,13 +29,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
 
       const customer = await stripe.customers.create({
         email: email_addresses[0].emailAddress,
-        name: `${first_name} ${last_name}`,
-        metadata: {
-          publicMetadata: {
-            role: data.unsafe_metadata.role,
-            currency: data.unsafe_metadata.currency,
-          } as any,
-        },
+        name: `${first_name} ${last_name}`
       });
 
       res.status(200).json({

@@ -1,4 +1,3 @@
-import { clerkClient } from "@clerk/nextjs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { createClient } from "@supabase/supabase-js";
