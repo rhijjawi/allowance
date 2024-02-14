@@ -1,0 +1,21 @@
+import { getAuth } from "@clerk/nextjs/server";
+import { NextApiRequest, NextApiResponse } from "next";
+import { createClient } from "@supabase/supabase-js";
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_SUPABASE_SECRET_KEY!);
+const handler = async (req: NextApiRequest, res: NextApiResponse ) => {
+    switch (req.method) {
+      case "POST":
+        return await POST(req, res);
+      default:
+        return res.status(405).end(`Method ${req.method} Not Allowed`);
+    }
+  };
+
+async function POST(req: NextApiRequest, res: NextApiResponse ){
+    const {userId} = !getAuth(req).userId ? req.body : getAuth(req)
+    console.log(userId)
+    if (!userId) {return res.status(401).json({error : "Unauthenticated"})}
+    const {data, error} = await supabase.from('reports').select('forchild, uuid, date_range').order("created_at", {ascending : false}).eq("parent_id", userId)
+    return res.json({data : data});
+}
+export default handler;
