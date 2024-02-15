@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { SignedOutAuthObject } from "@clerk/nextjs/server";
 
 export const getServerSideProps : GetServerSideProps = async (context: GetServerSidePropsContext) => {
-    let data;
+    let data, error;
     const user = getAuth(context.req);
     if (!((user as SignedOutAuthObject).userId)) {
         return {
@@ -43,12 +43,14 @@ export const getServerSideProps : GetServerSideProps = async (context: GetServer
       }
     } catch (e) {
         data = [];
+        error = e;
     }
     return { props: { reports: data } };
   };
 
-export default function Manage({ reports } : {reports : {childFor : string, uuid : string, date_range? : [number, number]}[]}) {
+export default function Manage({ reports, error } : {reports : {childFor : string, uuid : string, date_range? : [number, number]}[], error? : string}) {
     const router = useRouter()
+    console.log(error)
     const dateFormatter = new Intl.DateTimeFormat(navigator.languages[0], {dateStyle : 'long'})
     return (
         <div className="h-fit w-full overflow-hidden border-t-2 bg-white dark:bg-black">

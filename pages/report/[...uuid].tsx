@@ -52,7 +52,6 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
             !(_currency[curr]) ? _currency[curr] = await standardizeCurrencyGeneral(1, curr, res.data.parent.publicMetadata.reports.currency) : null;   
         }
     }
-    console.log(res.data.parent)
     return {
       props: { expenses, _currency, homeCurr : res.data.parent.publicMetadata.reports.currency, child : res.data.child, parent : res.data.parent, shareLink : res.data.share },
     }
