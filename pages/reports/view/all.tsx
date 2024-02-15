@@ -31,7 +31,16 @@ export const getServerSideProps : GetServerSideProps = async (context: GetServer
       const res = await axios.post(
         process.env.NODE_ENV == "development" ? "http://expenses.ramzihijjawi.me:3000/api/reports" : "https://logmoney.app/api/reports"
       , {userId : user.userId});
-      data = res.data.data
+      if (res.status == 200){data = res.data.data}
+      else {
+        return {
+            redirect : {
+                permanent : true,
+                destination: `/`
+            },
+            props : {}
+        }
+      }
     } catch (e) {
         data = [];
     }

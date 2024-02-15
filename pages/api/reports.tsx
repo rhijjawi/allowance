@@ -13,9 +13,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse ) => {
 
 async function POST(req: NextApiRequest, res: NextApiResponse ){
     const {userId} = getAuth(req)
-    console.log(userId)
     if (!userId) {return res.status(401).json({error : "Unauthenticated"})}
     const {data, error} = await supabase.from('reports').select('forchild, uuid, date_range').order("created_at", {ascending : false}).eq("parent_id", userId)
-    return res.json({data : data});
+    if (error){
+      return res.status(500).json({error});
+    }
+    if (data){
+      return res.status(200).json({data : data});
+    }
 }
 export default handler;
