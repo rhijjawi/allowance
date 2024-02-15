@@ -5,6 +5,7 @@ import axios from "axios";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { SignedOutAuthObject } from "@clerk/nextjs/server";
+
 export const getServerSideProps : GetServerSideProps = async (context: GetServerSidePropsContext) => {
     let data;
     const user = getAuth(context.req);
@@ -22,7 +23,8 @@ export const getServerSideProps : GetServerSideProps = async (context: GetServer
             redirect : {
                 permanent : true,
                 destination: `/`
-            }
+            },
+            props : {}
         }
     }
     try {
@@ -34,7 +36,6 @@ export const getServerSideProps : GetServerSideProps = async (context: GetServer
         data = [];
     }
     return { props: { reports: data } };
-    //[Number(new Date()), Number(new Date((new Date()).setMonth((new Date()).getMonth() - 1)))].reverse()
   };
 
 export default function Manage({ reports } : {reports : {childFor : string, uuid : string, date_range? : [number, number]}[]}) {
