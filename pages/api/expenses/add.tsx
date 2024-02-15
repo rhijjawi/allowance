@@ -71,6 +71,7 @@ function convertCsvToJson(csvString: string, userId : string, bank : string) : a
             recurring : bankData.recurring,
             files : bankData.files,
             refunded: bankData.recurring,
+            is_displayed : bankData.is_displayed
         };
         console.log(jsonObject)
         return jsonObject;

@@ -5,6 +5,7 @@ import axios from "axios";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { SignedOutAuthObject } from "@clerk/nextjs/server";
+import reportFail from "@/utils/functions/discord";
 
 export const getServerSideProps : GetServerSideProps = async (context: GetServerSidePropsContext) => {
     let data, error;
@@ -41,16 +42,15 @@ export const getServerSideProps : GetServerSideProps = async (context: GetServer
             props : {}
         }
       }
-    } catch (e) {
+    } catch (e : unknown) {
+        reportFail('getServerSideProps', String(e));
         data = [];
-        error = e;
     }
-    return { props: { reports: data } };
+    return { props: { reports: data, } };
   };
 
 export default function Manage({ reports, error } : {reports : {childFor : string, uuid : string, date_range? : [number, number]}[], error? : string}) {
     const router = useRouter()
-    console.log(error)
     const dateFormatter = new Intl.DateTimeFormat(navigator.languages[0], {dateStyle : 'long'})
     return (
         <div className="h-fit w-full overflow-hidden border-t-2 bg-white dark:bg-black">
