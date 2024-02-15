@@ -19,7 +19,8 @@ class Transaction {
     transaction_date: Date
     recurring: boolean
     files: string[]
-    constructor(line : string[], label: number, amount: number, currency: number, category : [number, number]|null,  refunded: boolean, transaction_date: number, recurring: boolean, dateFormat : string, files: string[])  {
+    is_displayed? : boolean
+    constructor(line : string[], label: number, amount: number, currency: number, category : [number, number]|null,  refunded: boolean, transaction_date: number, recurring: boolean, dateFormat : string, files: string[], is_displayed?: boolean)  {
         this.line = line;
         this.label = line[label]
         this.amount = Math.abs(Number(line[amount]))
@@ -29,6 +30,7 @@ class Transaction {
         this.refunded = Boolean(false)
         this.recurring = Boolean(false)
         this.files = files
+        this.is_displayed = is_displayed
     }
     toJSONData(){
         return {
@@ -39,7 +41,8 @@ class Transaction {
             transaction_date : this.transaction_date,
             refunded : this.refunded,
             recurring : this.recurring,
-            files : this.files
+            files : this.files,
+            is_displayed : this.is_displayed
         }
     }
 }

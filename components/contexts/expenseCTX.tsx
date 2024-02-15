@@ -89,6 +89,7 @@ export type InsertExp = {
     transaction_date: string|Date,
     recurring : boolean,
     files : string[]
+    is_displayed? : boolean
 }
 export type ExpenseType = ExpenseSchema
 export type IncomeType = IncomeSchema

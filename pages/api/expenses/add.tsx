@@ -35,7 +35,7 @@ export default async function handler(req : NextApiRequest, res : NextApiRespons
             if (result.length == 0){
                 res.status(400).json({error: "Something Happened"})
             }
-            const { data, error } = await supabase.from('expenses').insert(result).eq("user_id", userId).select("amount,currency,category,label,transaction_date,recurring,files,refunded");
+            const { data, error } = await supabase.from('expenses').insert(result).eq("user_id", userId).select("amount,currency,category,label,transaction_date,recurring,files,refunded,is_displayed");
             if (!error){
                 return res.status(200).json({results: data, count: result.length}) 
             }
