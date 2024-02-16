@@ -42,6 +42,7 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
         if (error || !data){
             return
         }
+        console.log(data[0])
         let _user = await clerkClient.users.getUser(data[0].parent_id) as User
         let child = await clerkClient.users.getUser(data[0].forchild) as User
         const {data: _expenses, error : expensesError} = await supabase.from('expenses').select("*").eq("user_id", data![0].forchild).gte("transaction_date", new Date(data[0].date_range[0]).toISOString()).lte("transaction_date", new Date(data[0].date_range[1]).toISOString())
