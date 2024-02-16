@@ -28,7 +28,7 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
         console.log(e)
         return {
             redirect: {
-                permanent: false,
+                permanent: true,
                 destination: "/",
             },
         }
@@ -36,7 +36,7 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
     if (!(res.status == 200)){
         return {
             redirect: {
-                permanent: false,
+                permanent: true,
                 destination: "/",
             },
         }
@@ -54,7 +54,7 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
             !(_currency[curr]) ? _currency[curr] = await standardizeCurrencyGeneral(1, curr, res.data.parent.publicMetadata.reports.currency) : null;   
         }
     }
-    console.log((new Date()).toTimeString())
+    console.log(expenses[0], _currency, res.data.dates, res.data.parent.id, res.data.child.id, res.data.share)
     return {
       props: { expenses, _currency, dates : res.data.dates, homeCurr : res.data.parent.publicMetadata.reports.currency, child : res.data.child, parent : res.data.parent, shareLink : res.data.share },
     }
@@ -73,7 +73,6 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
     const ref = useRef(0);
 
     const [from, to] = props.dates.map((date)=>(new Date(Number(date))).toDateString());
-    console.log(props.homeCurr)
     const customTooltip = (_ : any) => {
         const { payload, active } = _;
         if (!active || !payload) return null;

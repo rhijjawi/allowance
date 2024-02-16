@@ -34,7 +34,9 @@ export const getServerSideProps : GetServerSideProps = async (context: GetServer
         const res = await axios.post(
             process.env.NODE_ENV == "development" ? "http://expenses.ramzihijjawi.me:3000/api/reports" : "https://logmoney.app/api/reports"
         , {userId : user.userId});
-      if (res.status == 200){data = res.data.data}
+      if (res.status == 200){
+        data = res.data.data
+        }
       else {
         return {
             redirect : {
@@ -62,7 +64,6 @@ export default function Manage({ reports, error } : {reports : {childFor : strin
         }
     }, [typeof navigator])
     return (
-        <ErrorBoundary>
         <div className="h-fit w-full overflow-hidden border-t-2 bg-white dark:bg-black">
             <div className="mx-auto mb-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
             <Card className={`mx-auto  my-auto mt-5 w-full max-w-[80%] divide-gray-200 rounded-lg border-2 shadow-2xl `}>
@@ -84,6 +85,5 @@ export default function Manage({ reports, error } : {reports : {childFor : strin
             </Card>
             </div>
         </div>
-        </ErrorBoundary>
-    )
+        )
 }
