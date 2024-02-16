@@ -38,6 +38,8 @@ public/sitemap-0.xml
 
 # Sentry Config File
 .sentryclirc
-.env.development
-.env.development
+.env*
 bun.lockb
+
+# Sentry Config File
+.sentryclirc
