@@ -45,6 +45,7 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
     const expenseData : {} = {}
     const _currency : {[index : string] : number} = {}
     let uniqueCurrencies : string[] = [];
+    console.log((new Date()).toTimeString())
     if (expenses.length > 0){
         filteredExpenses = expenses.filter((exp)=>{return true})
         const currencies : string[] = filteredExpenses.flatMap((element : ExpenseType) => {return element.currency});
@@ -53,6 +54,7 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
             !(_currency[curr]) ? _currency[curr] = await standardizeCurrencyGeneral(1, curr, res.data.parent.publicMetadata.reports.currency) : null;   
         }
     }
+    console.log((new Date()).toTimeString())
     return {
       props: { expenses, _currency, dates : res.data.dates, homeCurr : res.data.parent.publicMetadata.reports.currency, child : res.data.child, parent : res.data.parent, shareLink : res.data.share },
     }
@@ -71,7 +73,7 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
     const ref = useRef(0);
 
     const [from, to] = props.dates.map((date)=>(new Date(Number(date))).toDateString());
-
+    console.log(props.homeCurr)
     const customTooltip = (_ : any) => {
         const { payload, active } = _;
         if (!active || !payload) return null;
@@ -170,7 +172,7 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
             <div className="mx-auto py-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
             <Card>
                 {props.parent.id == user.userId && <div className="h-12 absolute right-0 pr-6">
-                    <Button iconPosition="left" onClick={()=> {navigator.clipboard ? navigator.clipboard.writeText(`/report/${props.shareLink}`) : alert(`https://logmoney.app/report/${props.shareLink}`)}} icon={ShareIcon} className=" float-right inline-flex justify-center rounded-md border-none bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none  focus-visible:ring-red-500 focus-visible:ring-offset-2">Share</Button>
+                    <Button iconPosition="left" onClick={()=> {navigator.clipboard ? navigator.clipboard.writeText(`https://logmoney.app/report/${props.shareLink}`) : alert(`https://logmoney.app/report/${props.shareLink}`)}} icon={ShareIcon} className=" float-right inline-flex justify-center rounded-md border-none bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none  focus-visible:ring-red-500 focus-visible:ring-offset-2">Share</Button>
                 </div>}
                 <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">Expenditure Report</h3>      
                 <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">{from} ⇔ {to}</h3>      

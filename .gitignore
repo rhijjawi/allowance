@@ -35,3 +35,9 @@ yarn-error.log*
 next-env.d.ts
 .env.production
 public/sitemap-0.xml
+
+# Sentry Config File
+.sentryclirc
+.env.development
+.env.development
+bun.lockb

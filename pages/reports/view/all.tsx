@@ -31,9 +31,9 @@ export const getServerSideProps : GetServerSideProps = async (context: GetServer
         }
     }
     try {
-      const res = await axios.post(
-        process.env.NODE_ENV == "development" ? "http://expenses.ramzihijjawi.me:3000/api/reports" : "https://logmoney.app/api/reports"
-      , {userId : user.userId});
+        const res = await axios.post(
+            process.env.NODE_ENV == "development" ? "http://expenses.ramzihijjawi.me:3000/api/reports" : "https://logmoney.app/api/reports"
+        , {userId : user.userId});
       if (res.status == 200){data = res.data.data}
       else {
         return {
@@ -45,6 +45,7 @@ export const getServerSideProps : GetServerSideProps = async (context: GetServer
         }
       }
     } catch (e : unknown) {
+        console.log(e)
         data = [];
     }
     return { props: { reports: data } };
