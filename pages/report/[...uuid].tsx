@@ -7,8 +7,9 @@ import { CategorySchema } from "@/types/supabase"
 import { MonthToNum, NumToMonth, currFormatter, standardizeCurrency, standardizeCurrencyGeneral } from "@/utils/functions/valueFormatters"
 import { getSupabase, noAuthSupaBase } from "@/utils/supabase"
 import { useAuth } from "@clerk/nextjs"
-import { User, getAuth } from "@clerk/nextjs/server"
+import { User, clerkClient, getAuth } from "@clerk/nextjs/server"
 import { ShareIcon } from "@heroicons/react/24/outline"
+import { createClient } from "@supabase/supabase-js"
 import { AreaChart, BarChart, Button, Card, Col, LineChart, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from "@tremor/react"
 import axios from "axios"
 import { GetServerSidePropsContext, } from "next"
@@ -18,57 +19,69 @@ import { useEffect, useRef, useState } from "react"
 
 
 export async function getServerSideProps(context : GetServerSidePropsContext & {params : {uuid : string[]}}) {
+    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_SUPABASE_SECRET_KEY!);
     let filteredExpenses;
     let res;
-    try{
-        console.log("start request",(new Date()).toTimeString())
-        res = await axios.get(
-            process.env.NODE_ENV == "development" ? `http://expenses.ramzihijjawi.me:3000/api/report/generate/${context.params?.uuid[0]}/${context.params.uuid[1] ? `?noauth=${context.params.uuid[1]}` : ""}` : `https://logmoney.app/api/report/generate/${context.params?.uuid[0]}/${context.params.uuid[1] ? `?noauth=${context.params.uuid[1]}` : ""}` 
-            )
-        console.log("end request",(new Date()).toTimeString())
-        if (!(res.status == 200)){
+        const user = getAuth(context.req);
+        let req;
+        if (user.userId){
+            req = supabase.from('reports').select('parent_id, forchild, date_range, no_login, uuid').eq("uuid", context.params?.uuid[0]).eq("parent_id", user.userId)
+        }
+        else if (!(user.userId) && context.params.uuid.length > 1){
+            req = supabase.from('reports').select('parent_id, forchild, date_range, no_login, uuid').eq("uuid", context.params?.uuid[0]).eq("no_login", context.params?.uuid[1])
+        }
+        else {
             return {
                 redirect: {
                     permanent: true,
-                    destination: "/",
+                    destination: "/404",
                 },
             }
         }
-    }
-    catch (e) {
-        console.log(e)
-        return {
-            redirect: {
-                permanent: true,
-                destination: "/",
-            },
+        const {data, error} = await req!
+        if (error || !data){
+            return
         }
-    }
-    try{
-    const expenses : ExpenseType[] = res.data.expenses
-    const expenseData : {} = {}
-    const _currency : {[index : string] : number} = {}
-    let uniqueCurrencies : string[] = [];
-    if (expenses.length > 0){
-        filteredExpenses = expenses.filter((exp)=>{return true})
-        const currencies : string[] = filteredExpenses.flatMap((element : ExpenseType) => {return element.currency});
-        currencies.forEach((currency) => {if(uniqueCurrencies.indexOf(currency) == -1){uniqueCurrencies.push(currency)}})
-        console.log("startConversion",(new Date()).toTimeString())
-        for (let curr of currencies) {
-            !(_currency[curr]) ? _currency[curr] = await standardizeCurrencyGeneral(1, curr, res.data.parent.publicMetadata.reports.currency) : null;   
+        let _user = await clerkClient.users.getUser(data[0].parent_id) as User
+        let child = await clerkClient.users.getUser(data[0].forchild) as User
+        const {data: _expenses, error : expensesError} = await supabase.from('expenses').select("*").eq("user_id", data![0].forchild).gte("transaction_date", new Date(data[0].date_range[0]).toISOString()).lte("transaction_date", new Date(data[0].date_range[1]).toISOString())
+        if (_expenses && !expensesError){
+            const expenses : ExpenseType[] = _expenses
+            const expenseData : {} = {}
+            const _currency : {[index : string] : number} = {}
+            let uniqueCurrencies : string[] = [];
+            console.log((new Date()).toTimeString())
+            if (expenses.length > 0){
+                filteredExpenses = expenses.filter((exp)=>{return true})
+                const currencies : string[] = filteredExpenses.flatMap((element : ExpenseType) => {return element.currency});
+                currencies.forEach((currency) => {if(uniqueCurrencies.indexOf(currency) == -1){uniqueCurrencies.push(currency)}})
+                console.log("startConversion", new Date)
+                for (let curr of currencies) {
+                    !(_currency[curr]) ? _currency[curr] = await standardizeCurrencyGeneral(1, curr, (_user.publicMetadata.reports as {currency : string}).currency) : null;   
+                }
+            }
+            let shareLink;
+            if (_user.id == data[0].parent_id){
+                shareLink = `${data[0].uuid}/${data[0].no_login}`
+            }
+            else {
+                shareLink = null;
+            }
+            console.log(child)
+            return {
+                props: { expenses, _currency, dates : data[0].date_range, homeCurr : (_user.publicMetadata.reports as {currency : string}).currency, child : {firstName : child.firstName, lastName : child.lastName, metadata : child.publicMetadata}, parent : {id : _user.id}, shareLink : shareLink },
+              }
         }
-        console.log("end", (new Date()).toTimeString())
-    }
-    console.log(expenses[0], _currency, res.data.dates, res.data.parent.id, res.data.child.id, res.data.share)
-    return {
-      props: { expenses, _currency, dates : res.data.dates, homeCurr : res.data.parent.publicMetadata.reports.currency, child : res.data.child, parent : res.data.parent, shareLink : res.data.share },
-    }
-    }
-    catch (e){
-        return {
-            props: {error : e},
+        else {
+            return {
+                redirect: {
+                    permanent: true,
+                    destination: "/500",
+                },
+            }
         }
-    }
+
+
   }
 
 export default function Report(props : { expenses : ExpenseType[], dates: [number, number], _currency :  {[index : string] : number}, homeCurr : string, shareLink : string, parent : User, child : User}){
