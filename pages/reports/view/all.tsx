@@ -6,6 +6,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { SignedOutAuthObject } from "@clerk/nextjs/server";
 import reportFail from "@/utils/functions/discord";
+import { useEffect } from "react";
 
 export const getServerSideProps : GetServerSideProps = async (context: GetServerSidePropsContext) => {
     let data, error;
@@ -50,8 +51,14 @@ export const getServerSideProps : GetServerSideProps = async (context: GetServer
 
 export default function Manage({ reports, error } : {reports : {childFor : string, uuid : string, date_range? : [number, number]}[], error? : string}) {
     const router = useRouter()
-
-    const dateFormatter = navigator ? new Intl.DateTimeFormat(navigator.languages[0], {dateStyle : 'long'}) : new Intl.DateTimeFormat("en", {dateStyle : 'long'})
+    let dateFormatter = new Intl.DateTimeFormat("en", {dateStyle : 'long'})
+    useEffect(()=>{
+        if (typeof navigator === "undefined"){
+        }
+        else {
+            dateFormatter = new Intl.DateTimeFormat(navigator.languages[0], {dateStyle : 'long'})
+        }
+    }, [typeof navigator])
     return (
         <div className="h-fit w-full overflow-hidden border-t-2 bg-white dark:bg-black">
             <div className="mx-auto mb-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
