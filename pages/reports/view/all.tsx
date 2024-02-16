@@ -10,7 +10,7 @@ import reportFail from "@/utils/functions/discord";
 export const getServerSideProps : GetServerSideProps = async (context: GetServerSidePropsContext) => {
     let data, error;
     const user = getAuth(context.req);
-    if (!((user as SignedOutAuthObject).userId)) {
+    if (!((user as SignedOutAuthObject)?.userId)) {
         return {
             redirect: {
               permanent: true,
@@ -43,15 +43,15 @@ export const getServerSideProps : GetServerSideProps = async (context: GetServer
         }
       }
     } catch (e : unknown) {
-        reportFail('getServerSideProps', String(e));
         data = [];
     }
-    return { props: { reports: data, } };
+    return { props: { reports: data } };
   };
 
 export default function Manage({ reports, error } : {reports : {childFor : string, uuid : string, date_range? : [number, number]}[], error? : string}) {
     const router = useRouter()
-    const dateFormatter = new Intl.DateTimeFormat(navigator.languages[0], {dateStyle : 'long'})
+
+    const dateFormatter = navigator ? new Intl.DateTimeFormat(navigator.languages[0], {dateStyle : 'long'}) : new Intl.DateTimeFormat("en", {dateStyle : 'long'})
     return (
         <div className="h-fit w-full overflow-hidden border-t-2 bg-white dark:bg-black">
             <div className="mx-auto mb-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
@@ -61,7 +61,7 @@ export default function Manage({ reports, error } : {reports : {childFor : strin
                 {reports.length > 0 ? reports.map((report : {childFor : string, uuid : string, date_range? : [number, number]}, index : number)=>{
                     return (
                         <>
-                            <div className="px-1 py-2 relative bg-slate-100 rounded-md">
+                            <div key={index} className="px-1 py-2 relative bg-slate-100 rounded-md">
                                 <p className="text-lg align-middle">Report {report.uuid}</p>
                                 {report.date_range && <p className="h-fit">Data from {dateFormatter.format(new Date(report.date_range[0]))} to {dateFormatter.format(new Date(report.date_range[1]))}</p>}
                                 <button className="absolute mr-3 top-0 right-0 bottom-0 my-auto h-fit justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2" onClick={()=>router.push(`/report/${report.uuid}`)}>View Report</button>

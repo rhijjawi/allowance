@@ -7,7 +7,7 @@ export default function Success() {
   const router = useRouter();
   useEffect(() => {
     setTimeout(() => {
-      router.push("/reports/manage");
+      router.push("/reports");
     }, 5000);
   }, []);
   return (

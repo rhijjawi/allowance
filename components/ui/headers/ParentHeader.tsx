@@ -26,7 +26,7 @@ const products = [
 ]
 const reports = [
     { name: 'Overview', description: 'View all generated reports', href: '/reports/view/all', icon: BookOpenIcon },
-    { name: 'Manage Reports', description: 'Manage your reports', href: '/reports/manage', icon: Cog8ToothIcon},
+    { name: 'Manage Reports', description: 'Manage your reports', href: '/reports', icon: Cog8ToothIcon},
 ]
 const billing = [
     { name: 'Pricing', description: 'Our Pricing Plans', href: '/pricing', icon : ReceiptPercentIcon },
