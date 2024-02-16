@@ -12,6 +12,7 @@ import { ErrorBoundary } from "@sentry/nextjs";
 export const getServerSideProps : GetServerSideProps = async (context: GetServerSidePropsContext) => {
     let data, error;
     const user = getAuth(context.req);
+    console.log(user)
     if (!((user as SignedOutAuthObject)?.userId)) {
         return {
             redirect: {
@@ -32,8 +33,7 @@ export const getServerSideProps : GetServerSideProps = async (context: GetServer
     }
     try {
         const res = await axios.post(
-            process.env.NODE_ENV == "development" ? "http://expenses.ramzihijjawi.me:3000/api/reports" : "https://logmoney.app/api/reports"
-        , {userId : user.userId});
+            process.env.NODE_ENV == "development" ? "http://expenses.ramzihijjawi.me:3000/api/reports" : "https://logmoney.app/api/reports", {userId : user.userId});
       if (res.status == 200){
         data = res.data.data
         }

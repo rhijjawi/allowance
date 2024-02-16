@@ -61,6 +61,7 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
   }
 
 export default function Report(props : { expenses : ExpenseType[], dates: [number, number], _currency :  {[index : string] : number}, homeCurr : string, shareLink : string, parent : User, child : User}){
+    console.log(props)
     const router = useRouter()
     //const uuid = router.query.uuid;
     const user = useAuth()
@@ -115,10 +116,10 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
     }, [])
     useEffect(() => {
         let active = true;
-        if (!categories || router.isFallback) return;
+        if (!categories || router.isFallback || !props.expenses) return;
         let expenseList: { [index: number]: (CategorySchema & { sum: number }) } = {};
         let _dayByDay: { [index: string]: {sum : number} } = {};
-    
+        
         const sortedExpenses = props.expenses.sort((a, b) => {
             return new Date(a.transaction_date).getTime() - new Date(b.transaction_date).getTime();
         });
@@ -153,7 +154,7 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
         return () => {
             active = false;
         };
-    }, [categories]);
+    }, [props.expenses, categories]);
         
     if (router.isFallback || !categoryData || !dayByDay || !categories) {
         return (<div className="w-full relative h-96 overflow-hidden border-t-2 bg-white dark:bg-dark-tremor-background-muted/75">
