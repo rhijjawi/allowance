@@ -70,9 +70,7 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
     const [dayByDay, setdayByDay] = useState<any[]|null>(null);
     const supabase = noAuthSupaBase()
     const {addAlert} = useAlerts()
-    const ref = useRef(0);
 
-    const [from, to] = props.dates.map((date)=>(new Date(Number(date))).toDateString());
     const customTooltip = (_ : any) => {
         const { payload, active } = _;
         if (!active || !payload) return null;
@@ -157,7 +155,7 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
         };
     }, [categories]);
         
-    if (router.isFallback || categoryData == null || !dayByDay) {
+    if (router.isFallback || !categoryData || !dayByDay || !categories) {
         return (<div className="w-full relative h-96 overflow-hidden border-t-2 bg-white dark:bg-dark-tremor-background-muted/75">
             <svg aria-hidden="true" className="w-12 h-12 absolute right-0 left-0 top-0 bottom-0 my-auto mx-auto text-gray-200 animate-spin dark:text-gray-600 fill-purple-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -174,7 +172,7 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
                     <Button iconPosition="left" onClick={()=> {navigator.clipboard ? navigator.clipboard.writeText(`https://logmoney.app/report/${props.shareLink}`) : alert(`https://logmoney.app/report/${props.shareLink}`)}} icon={ShareIcon} className=" float-right inline-flex justify-center rounded-md border-none bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none  focus-visible:ring-red-500 focus-visible:ring-offset-2">Share</Button>
                 </div>}
                 <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">Expenditure Report</h3>      
-                <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">{from} ⇔ {to}</h3>      
+                <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">{(new Date(Number(props.dates[0]))).toDateString()} ⇔ {(new Date(Number(props.dates[1]))).toDateString()}</h3>      
                 <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">{sum && currFormatter(Object.values(sum!).reduce((previous, current)=>{return (current.sum + previous)}, 0), props.homeCurr)} </p>
                 <AreaChart
                     curveType="step"

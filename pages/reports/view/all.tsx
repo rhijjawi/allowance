@@ -68,7 +68,7 @@ export default function Manage({ reports, error } : {reports : {childFor : strin
             <div className="mx-auto mb-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
             <Card className={`mx-auto  my-auto mt-5 w-full max-w-[80%] divide-gray-200 rounded-lg border-2 shadow-2xl `}>
                 <Title>All Reports</Title>
-                <div className={`grid grid-cols-1 grid-rows-[${reports.length}] h-fit divide-y-5 divide-white/100 dark:divide-white/80`}>
+                {reports ? <div className={`grid grid-cols-1 grid-rows-[${reports.length}] h-fit divide-y-5 divide-white/100 dark:divide-white/80`}>
                 {reports.length > 0 ? reports.map((report : {childFor : string, uuid : string, date_range? : [number, number]}, index : number)=>{
                     return (
                         <>
@@ -81,7 +81,7 @@ export default function Manage({ reports, error } : {reports : {childFor : strin
                         </>
                     )
                 }) : <p className="text-center mt-5 text-red-400">No Reports to display</p>}
-                </div>
+                </div> : <></>}
             </Card>
             </div>
         </div>
