@@ -2,6 +2,7 @@ import ExpTable from "@/components/charts/ExpenseTable"
 import { useAlerts } from "@/components/contexts/alertHandler"
 import { ExpenseType, useExpenses } from "@/components/contexts/expenseCTX"
 import CategoryBadge, { getBadgeByCategoryName, getBadgeById, getColor } from "@/components/static/categories"
+import HoverSwitchCurr, {HoverCurrGeneral} from "@/components/ui/buttons/hoverSwitchCurr"
 import { CategorySchema } from "@/types/supabase"
 import { MonthToNum, NumToMonth, currFormatter, standardizeCurrency, standardizeCurrencyGeneral } from "@/utils/functions/valueFormatters"
 import { getSupabase, noAuthSupaBase } from "@/utils/supabase"
@@ -116,7 +117,7 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
     }, [])
     useEffect(() => {
         let active = true;
-        if (!categories || router.isFallback || !props.expenses) return;
+        if (!categories || !props.expenses) return;
         let expenseList: { [index: number]: (CategorySchema & { sum: number }) } = {};
         let _dayByDay: { [index: string]: {sum : number} } = {};
         
@@ -156,7 +157,7 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
         };
     }, [props.expenses, categories]);
         
-    if (router.isFallback || !categoryData || !dayByDay || !categories) {
+    if (!categoryData || !dayByDay || !categories) {
         return (<div className="w-full relative h-96 overflow-hidden border-t-2 bg-white dark:bg-dark-tremor-background-muted/75">
             <svg aria-hidden="true" className="w-12 h-12 absolute right-0 left-0 top-0 bottom-0 my-auto mx-auto text-gray-200 animate-spin dark:text-gray-600 fill-purple-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -223,7 +224,7 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
                                             {exp.label}
                                         </TableCell>
                                         <TableCell>
-                                            {currFormatter(exp.amount, exp.currency)}
+                                            <HoverCurrGeneral size="md" expense={exp} currency={[ props.homeCurr, props._currency[exp.currency]]}/>
                                         </TableCell>
                                         <TableCell>
                                             {categories && getBadgeById(exp.category[0], categories!)}

@@ -63,6 +63,7 @@ export default function Manage({ reports, error } : {reports : {childFor : strin
             dateFormatter = new Intl.DateTimeFormat(navigator.languages[0], {dateStyle : 'long'})
         }
     }, [typeof navigator])
+    useEffect(()=>{console.log(reports)},[reports])
     return (
         <div className="h-fit w-full overflow-hidden border-t-2 bg-white dark:bg-black">
             <div className="mx-auto mb-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
