@@ -21,9 +21,19 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
     let filteredExpenses;
     let res;
     try{
+        console.log("start request",(new Date()).toTimeString())
         res = await axios.get(
             process.env.NODE_ENV == "development" ? `http://expenses.ramzihijjawi.me:3000/api/report/generate/${context.params?.uuid[0]}/${context.params.uuid[1] ? `?noauth=${context.params.uuid[1]}` : ""}` : `https://logmoney.app/api/report/generate/${context.params?.uuid[0]}/${context.params.uuid[1] ? `?noauth=${context.params.uuid[1]}` : ""}` 
-        )
+            )
+        console.log("end request",(new Date()).toTimeString())
+        if (!(res.status == 200)){
+            return {
+                redirect: {
+                    permanent: true,
+                    destination: "/",
+                },
+            }
+        }
     }
     catch (e) {
         console.log(e)
@@ -34,30 +44,30 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
             },
         }
     }
-    if (!(res.status == 200)){
-        return {
-            redirect: {
-                permanent: true,
-                destination: "/",
-            },
-        }
-    }
+    try{
     const expenses : ExpenseType[] = res.data.expenses
     const expenseData : {} = {}
     const _currency : {[index : string] : number} = {}
     let uniqueCurrencies : string[] = [];
-    console.log((new Date()).toTimeString())
     if (expenses.length > 0){
         filteredExpenses = expenses.filter((exp)=>{return true})
         const currencies : string[] = filteredExpenses.flatMap((element : ExpenseType) => {return element.currency});
         currencies.forEach((currency) => {if(uniqueCurrencies.indexOf(currency) == -1){uniqueCurrencies.push(currency)}})
+        console.log("startConversion",(new Date()).toTimeString())
         for (let curr of currencies) {
             !(_currency[curr]) ? _currency[curr] = await standardizeCurrencyGeneral(1, curr, res.data.parent.publicMetadata.reports.currency) : null;   
         }
+        console.log("end", (new Date()).toTimeString())
     }
     console.log(expenses[0], _currency, res.data.dates, res.data.parent.id, res.data.child.id, res.data.share)
     return {
       props: { expenses, _currency, dates : res.data.dates, homeCurr : res.data.parent.publicMetadata.reports.currency, child : res.data.child, parent : res.data.parent, shareLink : res.data.share },
+    }
+    }
+    catch (e){
+        return {
+            props: {error : e},
+        }
     }
   }
 
