@@ -30,6 +30,10 @@ export function getBadge(id : number) {
 export function getIDByCategoryName(name : string, categoryData : CategorySchema[]) : number {
     return (categoryData.find((element : CategorySchema) => {return element.category === name}))!.id!
 }
+export function getBadgeById(id : number, categoryData : CategorySchema[], size : string = "md", styling : string = "") {
+    let badges = CategoryBadge()
+    return (<Badge size={size} color={getColor((categoryData.find((element : CategorySchema) => {return element.id === id})!.id!))} className={`select-none dark:bg-black/0 border border-${getColor((categoryData.find((element : CategorySchema) => {return element.id === id}))!.id!)}-500 ${styling}`} icon={getBadge((categoryData.find((element : CategorySchema) => {return element.id === id}))!.id!)}>{(categoryData.find((element : CategorySchema) => {return element.id === id}))!.category}</Badge>)
+}
 export function getBadgeByCategoryName(name : string, categoryData : CategorySchema[], size : string = "md", styling : string = "") {
     let badges = CategoryBadge()
     return (<Badge size={size} color={getColor((categoryData.find((element : CategorySchema) => {return element.category === name})!.id!))} className={`select-none dark:bg-black/0 border border-${getColor((categoryData.find((element : CategorySchema) => {return element.category === name}))!.id!)}-500 ${styling}`} icon={getBadge((categoryData.find((element : CategorySchema) => {return element.category === name}))!.id!)}>{(categoryData.find((element : CategorySchema) => {return element.category === name}))!.category}</Badge>)

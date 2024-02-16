@@ -1,7 +1,7 @@
 import ExpTable from "@/components/charts/ExpenseTable"
 import { useAlerts } from "@/components/contexts/alertHandler"
 import { ExpenseType, useExpenses } from "@/components/contexts/expenseCTX"
-import { getColor } from "@/components/static/categories"
+import CategoryBadge, { getBadgeByCategoryName, getBadgeById, getColor } from "@/components/static/categories"
 import { CategorySchema } from "@/types/supabase"
 import { MonthToNum, NumToMonth, currFormatter, standardizeCurrency, standardizeCurrencyGeneral } from "@/utils/functions/valueFormatters"
 import { getSupabase, noAuthSupaBase } from "@/utils/supabase"
@@ -54,11 +54,11 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
         }
     }
     return {
-      props: { expenses, _currency, homeCurr : res.data.parent.publicMetadata.reports.currency, child : res.data.child, parent : res.data.parent, shareLink : res.data.share },
+      props: { expenses, _currency, dates : res.data.dates, homeCurr : res.data.parent.publicMetadata.reports.currency, child : res.data.child, parent : res.data.parent, shareLink : res.data.share },
     }
   }
 
-export default function Report(props : { expenses : ExpenseType[], _currency :  {[index : string] : number}, homeCurr : string, shareLink : string, parent : User}){
+export default function Report(props : { expenses : ExpenseType[], dates: [number, number], _currency :  {[index : string] : number}, homeCurr : string, shareLink : string, parent : User, child : User}){
     const router = useRouter()
     //const uuid = router.query.uuid;
     const user = useAuth()
@@ -69,6 +69,8 @@ export default function Report(props : { expenses : ExpenseType[], _currency :  
     const supabase = noAuthSupaBase()
     const {addAlert} = useAlerts()
     const ref = useRef(0);
+
+    const [from, to] = props.dates.map((date)=>(new Date(Number(date))).toDateString());
 
     const customTooltip = (_ : any) => {
         const { payload, active } = _;
@@ -168,9 +170,10 @@ export default function Report(props : { expenses : ExpenseType[], _currency :  
             <div className="mx-auto py-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
             <Card>
                 {props.parent.id == user.userId && <div className="h-12 absolute right-0 pr-6">
-                    <Button iconPosition="left" onClick={()=> navigator.clipboard.writeText(`/report/${props.shareLink}`)} icon={ShareIcon} className=" float-right inline-flex justify-center rounded-md border-none bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none  focus-visible:ring-red-500 focus-visible:ring-offset-2">Share</Button>
+                    <Button iconPosition="left" onClick={()=> {navigator.clipboard ? navigator.clipboard.writeText(`/report/${props.shareLink}`) : alert(`https://logmoney.app/report/${props.shareLink}`)}} icon={ShareIcon} className=" float-right inline-flex justify-center rounded-md border-none bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none  focus-visible:ring-red-500 focus-visible:ring-offset-2">Share</Button>
                 </div>}
-                <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">Expenditure Over Time</h3>      
+                <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">Expenditure Report</h3>      
+                <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">{from} ⇔ {to}</h3>      
                 <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">{sum && currFormatter(Object.values(sum!).reduce((previous, current)=>{return (current.sum + previous)}, 0), props.homeCurr)} </p>
                 <AreaChart
                     curveType="step"
@@ -194,7 +197,7 @@ export default function Report(props : { expenses : ExpenseType[], _currency :  
                             }
                             )}
                         <Card className="col-span-3 w-fit min-h-12 mx-auto">
-                            <Table className="w-fit mx-auto">
+                            {props.expenses.length > 0 ? <Table className="w-fit mx-auto">
                                 <TableHead className="w-full">
                                     <TableHeaderCell>
                                         Date
@@ -223,12 +226,12 @@ export default function Report(props : { expenses : ExpenseType[], _currency :  
                                             {currFormatter(exp.amount, exp.currency)}
                                         </TableCell>
                                         <TableCell>
-                                            {exp.category}
+                                            {categories && getBadgeById(exp.category[0], categories!)}
                                         </TableCell>
                                     </TableRow>)
                                     })}
                                 </TableBody>
-                            </Table>
+                            </Table> : <><p className="text-center">It seems like {props.child.firstName} hasn't recorded any transcations for this month 😔.</p><p className="text-center">Send them a reminder!</p></>}
                         </Card>
                         
                 </div>

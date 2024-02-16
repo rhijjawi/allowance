@@ -31,7 +31,7 @@ async function GET(req: NextApiRequest, res: NextApiResponse ){
       const expenses = await supabase.from('expenses').select("*").eq("user_id", data![0].forchild).gte("transaction_date", new Date(data[0].date_range[0]).toISOString()).lte("transaction_date", new Date(data[0].date_range[1]).toISOString())
 
       if (expenses.data && !expenses.error){
-        return res.json({expenses : expenses.data, parent : user as User, child : child as User, share : `${uuid}/${noauth}`})
+        return res.json({expenses : expenses.data, dates: data[0].date_range, parent : user as User, child : child as User, share : `${uuid}/${data[0].no_login}`})
       }
       else {
         return res.json({error : expenses.error.message})
