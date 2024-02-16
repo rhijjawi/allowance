@@ -6,56 +6,79 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { SignedOutAuthObject } from "@clerk/nextjs/server";
 import reportFail from "@/utils/functions/discord";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ErrorBoundary } from "@sentry/nextjs";
+import { useUser } from "@clerk/nextjs";
+import { useAlerts } from "@/components/contexts/alertHandler";
 
-export const getServerSideProps : GetServerSideProps = async (context: GetServerSidePropsContext) => {
-    let data, error;
-    const user = getAuth(context.req);
-    console.log(user)
-    if (!((user as SignedOutAuthObject)?.userId)) {
-        return {
-            redirect: {
-              permanent: true,
-              destination: `/sign-in?afterlogin=${context.resolvedUrl}`,
-            },
-            props:{},
-        };
-    }
-    if ((user?.sessionClaims?.metadata as {role : string}).role !== "parent"){
-        return {
-            redirect : {
-                permanent : true,
-                destination: `/`
-            },
-            props : {}
-        }
-    }
-    try {
-        const res = await axios.post(
-            process.env.NODE_ENV == "development" ? "http://expenses.ramzihijjawi.me:3000/api/reports" : "https://logmoney.app/api/reports", {userId : user.userId});
-      if (res.status == 200){
-        data = res.data.data
-        }
-      else {
-        return {
-            redirect : {
-                permanent : true,
-                destination: `/`
-            },
-            props : {}
-        }
-      }
-    } catch (e : unknown) {
-        console.log(e)
-        data = [];
-    }
-    return { props: { reports: data } };
-  };
+// export const getServerSideProps : GetServerSideProps = async (context: GetServerSidePropsContext) => {
+//     let data, error;
+//     const user = getAuth(context.req);
+//     console.log(user)
+//     if (!((user as SignedOutAuthObject)?.userId)) {
+//         return {
+//             redirect: {
+//               permanent: true,
+//               destination: `/sign-in?afterlogin=${context.resolvedUrl}`,
+//             },
+//             props:{},
+//         };
+//     }
+//     if ((user?.sessionClaims?.metadata as {role : string}).role !== "parent"){
+//         return {
+//             redirect : {
+//                 permanent : true,
+//                 destination: `/`
+//             },
+//             props : {}
+//         }
+//     }
+//     try {
+//         const res = await axios.post(
+//             process.env.NODE_ENV == "development" ? "http://expenses.ramzihijjawi.me:3000/api/reports" : "https://logmoney.app/api/reports", {userId : user.userId});
+//       if (res.status == 200){
+//         data = res.data.data
+//         }
+//       else {
+//         return {
+//             redirect : {
+//                 permanent : true,
+//                 destination: `/`
+//             },
+//             props : {}
+//         }
+//       }
+//     } catch (e : unknown) {
+//         console.log(e)
+//         data = [];
+//     }
+//     return { props: { reports: data } };
+//   };
 
-export default function Manage({ reports, error } : {reports : {childFor : string, uuid : string, date_range? : [number, number]}[], error? : string}) {
+export default function Manage() {
     const router = useRouter()
     let dateFormatter = new Intl.DateTimeFormat("en", {dateStyle : 'long'})
+    const {user, isLoaded, isSignedIn} = useUser()
+    const [reports, setReports] = useState<{childFor : string, uuid : string, date_range? : [number, number]}[]|null>(null)
+    const {addAlert} = useAlerts()
+    useEffect(()=>{
+        async function _(){
+            let res;
+            try{
+                res = await axios.post(process.env.NODE_ENV == "development" ? "http://expenses.ramzihijjawi.me:3000/api/reports" : "https://logmoney.app/api/reports")
+            }
+            catch (e) {
+                return null;
+            }
+            if (res.status == 200){
+                setReports(res.data.data)
+            }
+            else{
+                addAlert("error", "Something terrible happened! Please try again");
+            }
+        }
+        _()
+    }, [])
     useEffect(()=>{
         if (typeof navigator === "undefined"){
         }
