@@ -22,7 +22,7 @@ async function GET(req: NextApiRequest, res: NextApiResponse ){
     if (error){
       return res.status(500).json({error : error.message})
     }
-    if (data[0].no_login !== noauth){
+    if (noauth && data[0].no_login !== noauth){
       return res.status(401).json({error : "Not allowed"})
     }
     try{

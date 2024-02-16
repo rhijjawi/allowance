@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { SignedOutAuthObject } from "@clerk/nextjs/server";
 import reportFail from "@/utils/functions/discord";
 import { useEffect } from "react";
+import { ErrorBoundary } from "@sentry/nextjs";
 
 export const getServerSideProps : GetServerSideProps = async (context: GetServerSidePropsContext) => {
     let data, error;
@@ -60,6 +61,7 @@ export default function Manage({ reports, error } : {reports : {childFor : strin
         }
     }, [typeof navigator])
     return (
+        <ErrorBoundary>
         <div className="h-fit w-full overflow-hidden border-t-2 bg-white dark:bg-black">
             <div className="mx-auto mb-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
             <Card className={`mx-auto  my-auto mt-5 w-full max-w-[80%] divide-gray-200 rounded-lg border-2 shadow-2xl `}>
@@ -81,5 +83,6 @@ export default function Manage({ reports, error } : {reports : {childFor : strin
             </Card>
             </div>
         </div>
+        </ErrorBoundary>
     )
 }
