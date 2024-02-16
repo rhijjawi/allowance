@@ -24,10 +24,10 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
     let res;
         const user = getAuth(context.req);
         let req;
-        if (user.userId){
+        if (user.userId && context.params.uuid.length == 1){
             req = supabase.from('reports').select('parent_id, forchild, date_range, no_login, uuid').eq("uuid", context.params?.uuid[0]).eq("parent_id", user.userId)
         }
-        else if (!(user.userId) && context.params.uuid.length > 1){
+        else if (context.params.uuid.length > 1){
             req = supabase.from('reports').select('parent_id, forchild, date_range, no_login, uuid').eq("uuid", context.params?.uuid[0]).eq("no_login", context.params?.uuid[1])
         }
         else {
