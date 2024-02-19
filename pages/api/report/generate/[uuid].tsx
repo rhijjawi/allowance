@@ -1,7 +1,7 @@
 import { User, getAuth } from "@clerk/nextjs/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { createClient } from "@supabase/supabase-js";
-import { clerkClient, } from "@clerk/nextjs";
+import { clerkClient, useAuth, } from "@clerk/nextjs";
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_SUPABASE_SECRET_KEY!);
 const handler = async (req: NextApiRequest, res: NextApiResponse ) => {
   switch (req.method) {
@@ -15,6 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse ) => {
 async function GET(req: NextApiRequest, res: NextApiResponse ){
     const {uuid, noauth} = req.query;
     const {data, error} = await supabase.from('reports').select('parent_id, forchild, date_range, no_login').eq("uuid", uuid)
+    const {userId} = useAuth()
     let user, child = null;
     if ((data && data.length == 0)){
       return res.status(404).json({error : "Not Found"})

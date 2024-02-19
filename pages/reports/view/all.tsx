@@ -88,19 +88,20 @@ export default function Manage() {
     }, [typeof navigator])
     useEffect(()=>{console.log(reports)},[reports])
     return (
-        <div className="h-fit w-full overflow-hidden border-t-2 bg-white dark:bg-black">
+        <div className="h-fit w-full overflow-hidden border-t-2 bg-white dark:bg-dark-tremor-background-muted/75">
             <div className="mx-auto mb-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
             <Card className={`mx-auto  my-auto mt-5 w-full max-w-[80%] divide-gray-200 rounded-lg border-2 shadow-2xl `}>
                 <Title>All Reports</Title>
-                {reports ? <div className={`grid grid-cols-1 grid-rows-[${reports.length}] h-fit divide-y-5 divide-white/100 dark:divide-white/80`}>
+                {reports ? <div className={` h-fit my-5`}>
                 {reports.length > 0 ? reports.map((report : {childFor : string, uuid : string, date_range? : [number, number]}, index : number)=>{
                     return (
                         <>
-                            <div key={index} className="px-1 py-2 relative bg-slate-100 rounded-md">
-                                <p className="text-lg align-middle">Report {report.uuid}</p>
-                                {report.date_range && <p className="h-fit">Data from {dateFormatter.format(new Date(report.date_range[0]))} to {dateFormatter.format(new Date(report.date_range[1]))}</p>}
-                                <button className="absolute mr-3 top-0 right-0 bottom-0 my-auto h-fit justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2" onClick={()=>router.push(`/report/${report.uuid}`)}>View Report</button>
+                            <div key={index} className="px-1 py-2 mb-3 relative bg-slate-100/30  dark:bg-gray-700 border-black/70 border-2 rounded-md">
+                                <p className="text-lg ml-2 align-middle">Report {report.uuid}</p>
+                                {report.date_range && <p className="h-fit ml-2">Data from {dateFormatter.format(new Date(report.date_range[0]))} to {dateFormatter.format(new Date(report.date_range[1]))}</p>}
+                                <button className="absolute border-2 dark:border-green-400 mr-3 top-0 right-0 bottom-0 my-auto h-fit justify-center rounded-md border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2" onClick={()=>router.push(`/report/${report.uuid}`)}>View Report</button>
                             </div>
+                            
                             
                         </>
                     )
