@@ -132,7 +132,7 @@ export function UserAddCard(props: {
               try {
                 await navigator.clipboard.writeText(code.join(""));
               } catch {
-                alert("Error copying to clipboard");
+                alert(`Error copying to clipboard: ${code.join("")}`);
               }
             }
           }}

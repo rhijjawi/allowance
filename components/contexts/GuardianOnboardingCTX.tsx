@@ -34,7 +34,7 @@ export function GuardianOnboardingProvider({children} : {children: React.ReactNo
                 setHasFinishedOnboarding(false)
             }
             else if (data![0]['subscription_id'] == null || data![0]['subscription_status'] !== 'active'){
-                alert(data![0]['subscription_status'])
+                // alert(data![0]['subscription_status'])
             }
             else if (data![0]['subscription_id'] != null && data![0]['subscription_status'] === 'active'){
                 fetch('/api/stripe/validateSubscription').then((res) => {
