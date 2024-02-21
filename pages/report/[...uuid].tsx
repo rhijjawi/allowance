@@ -40,7 +40,6 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
             users.filter((user)=>user.id == data[0].parent_id)[0],
             users.filter((user)=>user.id == data[0].forchild)[0]
         ]
-        console.log(_user.publicMetadata, child.publicMetadata)
         const {data: _expenses, error : expensesError} = await supabase.from('expenses').select("*").eq("user_id", data![0].forchild).gte("transaction_date", new Date(data[0].date_range[0]).toISOString()).lte("transaction_date", new Date(data[0].date_range[1]).toISOString())
         if (_expenses && !expensesError){
             const expenses : ExpenseType[] = _expenses

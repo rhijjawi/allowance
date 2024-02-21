@@ -13,13 +13,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse ) => {
 
 async function POST(req: NextApiRequest, res: NextApiResponse ){
   const {userId} = req.body.userId ? req.body : getAuth(req)
+  const page = req.query.page ? Number(req.query.page) : 0
+  const perpage = 5;
   if (!userId) {return res.status(401).json({error : "Unauthenticated"})}
-  const {data, error} = await supabase.from('reports').select('forchild, uuid, date_range').order("created_at", {ascending : false}).eq("parent_id", userId)
+  const {data, error, count} = await supabase.from('reports').select('forchild, uuid, date_range', {count : 'exact'}).order("created_at", {ascending : false}).eq("parent_id", userId).range((page*perpage),((page+1)*perpage))
   if (error){
+    console.log(error)
     return res.status(500).json({data : error});
   }
   else if (data){
-    return res.status(200).json({data : data});
+    return res.status(200).json({data : data, count, perpage});
   }
 }
 export default handler;

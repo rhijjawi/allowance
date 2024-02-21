@@ -26,7 +26,7 @@ const products = [
 //   { name : 'Debt Management', description: 'Manage your debt', href: '/debt/overview', icon: CreditCardIcon},
 ]
 const reports = [
-    { name: 'Overview', description: 'View all generated reports', href: '/reports/view/all', icon: BookOpenIcon },
+    { name: 'Overview', description: 'View all generated reports', href: '/reports/view', icon: BookOpenIcon },
     { name: 'Manage Reports', description: 'Manage your reports', href: '/reports', icon: Cog8ToothIcon},
 ]
 const billing = [
