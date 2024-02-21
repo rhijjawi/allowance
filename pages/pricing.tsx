@@ -10,7 +10,9 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 import { useGuardianOnboarding } from "@/components/contexts/GuardianOnboardingCTX";
 import axios from "axios";
-export const getStaticProps = async (context: any) => {
+import { GetStaticPaths, GetStaticPathsContext, GetStaticProps } from "next";
+
+export const getStaticProps : GetStaticProps = async (context: any) => {
   let data;
   try {
     const res = await fetch(

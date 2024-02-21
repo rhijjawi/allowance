@@ -10,8 +10,8 @@ export default function Calculator(){
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [avData, setav] = useState<calc.Debt[]>([])
     const [snowData, setSnow] = useState<calc.Debt[]>([])
-    const [avalanche, setAvalanche] = useState<{monthlyBalances : {}[], totalInterestPaid: number}>({monthlyBalances : [], totalInterestPaid: 0})
-    const [snowball, setSnowball] = useState<{monthlyBalances : {}[], totalInterestPaid: number}>({monthlyBalances : [], totalInterestPaid: 0})
+    const [avalanche, setAvalanche] = useState<{monthlyBalances : {}[]|null, totalInterestPaid: number}>({monthlyBalances : null, totalInterestPaid: 0})
+    const [snowball, setSnowball] = useState<{monthlyBalances : {}[]|null, totalInterestPaid: number}>({monthlyBalances : null, totalInterestPaid: 0})
     const [name, setName] = useState<string|null>(null)
     const [bal, setBal] = useState<number|null>(null)
     const [int, setInt] = useState<number|null>(null)
@@ -23,7 +23,7 @@ export default function Calculator(){
         const {monthlyBalances, totalInterestPaid} = calc.simulateRepayments(snowData, 3000, 'snowball');
         setSnowball({monthlyBalances, totalInterestPaid})
     }, [snowData])
-    if (snowball.monthlyBalances.length == 0 || avalanche.monthlyBalances.length == 0) return <></>
+    if (!snowball.monthlyBalances || !avalanche.monthlyBalances) return <></>
     return (
         <main className="bg-dark-tremor-background-muted/75 -z-[100] flex min-h-screen flex-col items-center justify-between px-6 py-12 md:px-24">
             <Card className="relative h-fit">
@@ -61,10 +61,16 @@ export default function Calculator(){
                     </Flex>
                     <Metric>{currFormatter(avalanche.totalInterestPaid, (user && isSignedIn) ? user.publicMetadata.currency as string : "EUR" )}</Metric>
                 </Card>
-                <div className="w-full h-1"></div>
+                <Card className="max-w-sm">
+                    <Flex justifyContent="between" alignItems="center">
+                    <p>Interest Paid</p>
+                    </Flex>
+                    <Metric>{currFormatter(snowball.totalInterestPaid, (user && isSignedIn) ? user.publicMetadata.currency as string : "EUR"  )}</Metric>
+                </Card>
+                <div className="grid grid-cols-2 grid-rows-1 gap-x-12">
                 <AreaChart 
                 showAnimation
-                className="my-12"
+                className="my-12 border-2 rounded-md mx-4"
                 title="Avalanche Balances"
                 curveType="step"
                 index={'month'}
@@ -73,15 +79,9 @@ export default function Calculator(){
                 stack={false}
                 valueFormatter={(val : number)=>`Balance: ${currFormatter(val)}`}
                 />
-                <Card className="max-w-sm">
-                    <Flex justifyContent="between" alignItems="center">
-                    <p>Interest Paid</p>
-                    </Flex>
-                    <Metric>{currFormatter(snowball.totalInterestPaid, (user && isSignedIn) ? user.publicMetadata.currency as string : "EUR"  )}</Metric>
-                </Card>
                 <AreaChart 
                 showAnimation
-                className="my-12"
+                className="my-12 border-2 rounded-md mx-4"
                 curveType="step"
                 title="Snowball Balances"
                 index={'month'}
@@ -90,6 +90,7 @@ export default function Calculator(){
                 stack={false}
                 valueFormatter={(val : number)=>`Balance: ${currFormatter(val)}`}
                 />
+                </div>
             </Card>
         </main>
     )
