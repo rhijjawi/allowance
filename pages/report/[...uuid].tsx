@@ -1,20 +1,18 @@
-import ExpTable from "@/components/charts/ExpenseTable"
 import { useAlerts } from "@/components/contexts/alertHandler"
 import { ExpenseType, useExpenses } from "@/components/contexts/expenseCTX"
-import CategoryBadge, { getBadgeByCategoryName, getBadgeById, getColor } from "@/components/static/categories"
-import HoverSwitchCurr, {HoverCurrGeneral} from "@/components/ui/buttons/hoverSwitchCurr"
+import { getBadgeById, getColor } from "@/components/static/categories"
+import {HoverCurrGeneral} from "@/components/ui/buttons/hoverSwitchCurr"
 import { CategorySchema } from "@/types/supabase"
-import { MonthToNum, NumToMonth, currFormatter, standardizeCurrency, standardizeCurrencyGeneral } from "@/utils/functions/valueFormatters"
-import { getSupabase, noAuthSupaBase } from "@/utils/supabase"
+import { currFormatter, standardizeCurrencyGeneral } from "@/utils/functions/valueFormatters"
+import { noAuthSupaBase } from "@/utils/supabase"
 import { useAuth } from "@clerk/nextjs"
 import { User, clerkClient, getAuth } from "@clerk/nextjs/server"
 import { ExclamationCircleIcon, ShareIcon } from "@heroicons/react/24/outline"
 import { createClient } from "@supabase/supabase-js"
-import { AreaChart, BarChart, Button, Card, Col, LineChart, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from "@tremor/react"
-import axios from "axios"
+import { AreaChart, Button, Card, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from "@tremor/react"
 import { GetServerSidePropsContext, } from "next"
 import { useRouter } from "next/router"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 
 
 
@@ -30,9 +28,6 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
         else if (context.params.uuid.length > 1){
             req = supabase.from('reports').select('parent_id, forchild, date_range, no_login, uuid').eq("uuid", context.params?.uuid[0]).eq("no_login", context.params?.uuid[1])
         }
-        else {
-            return {props : {error : {title: "Something happened", message : "We're sorry, but we weren't able to find the report you requested."}}}
-        }
         const {data, error} = await req!
         if (error || !data){
             return {props : {error : {title: "Something happened", message : "We're sorry, but we weren't able to find the report you requested."}}}
@@ -40,9 +35,7 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
         if (data.length == 0){
             return {props : {error : {title: "Report not found", message : "If you clicked a link to get here, send us a message using the button below"}}}
         }
-        console.log(data[0])
-        let _user = await clerkClient.users.getUser(data[0].parent_id) as User
-        let child = await clerkClient.users.getUser(data[0].forchild) as User
+        let [_user, child] = await clerkClient.users.getUserList({userId : [data[0].parent_id, data[0].forchild]}) as User[]
         const {data: _expenses, error : expensesError} = await supabase.from('expenses').select("*").eq("user_id", data![0].forchild).gte("transaction_date", new Date(data[0].date_range[0]).toISOString()).lte("transaction_date", new Date(data[0].date_range[1]).toISOString())
         if (_expenses && !expensesError){
             const expenses : ExpenseType[] = _expenses
@@ -82,9 +75,8 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
 
   }
 
-export default function Report(props : { expenses : ExpenseType[], dates: [number, number], _currency :  {[index : string] : number}, homeCurr : string, shareLink : string, parent : User, child : User, error? : string}){
+export default function Report(props : { expenses : ExpenseType[], dates: [number, number], _currency :  {[index : string] : number}, homeCurr : string, shareLink : string, parent : User, child : User, error? : {title : string, message : string}}){
     const router = useRouter()
-    //const uuid = router.query.uuid;
     const user = useAuth()
     const [sum, setSum] = useState<{[index : number] : (CategorySchema & {sum : number})}|null>(null)
     const [categories, setCategories] = useState<CategorySchema[]|null>(null)
@@ -207,7 +199,7 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
             <div className="mx-auto py-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
             <Card>
                 {props.parent.id == user.userId && <div className="h-12 absolute right-0 pr-6">
-                    <Button iconPosition="left" onClick={()=> {navigator.clipboard ? navigator.clipboard.writeText(`https://logmoney.app/report/${props.shareLink}`) : alert(`https://logmoney.app/report/${props.shareLink}`)}} icon={ShareIcon} className=" float-right inline-flex justify-center rounded-md border-none bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none  focus-visible:ring-red-500 focus-visible:ring-offset-2">Share</Button>
+                    <Button iconPosition="left" onClick={() => {navigator.clipboard ? navigator.clipboard.writeText(`https://logmoney.app/report/${props.shareLink}`) : alert(`https://logmoney.app/report/${props.shareLink}`)}} icon={ShareIcon} className=" float-right inline-flex justify-center rounded-md border-none bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none  focus-visible:ring-red-500 focus-visible:ring-offset-2">Share</Button>
                 </div>}
                 <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">Expenditure Report</h3>      
                 <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">{(new Date(Number(props.dates[0]))).toDateString()} ⇔ {(new Date(Number(props.dates[1]))).toDateString()}</h3>      

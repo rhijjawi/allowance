@@ -1,4 +1,4 @@
-import { useAuth, useUser } from '@clerk/nextjs'
+import {  useAuth, useUser } from '@clerk/nextjs'
 import { ArrowRightIcon, BellIcon, CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { AnimatePresence, motion } from 'framer-motion'
 import { createContext, useState, useEffect, useContext } from 'react'
@@ -6,8 +6,12 @@ import { getSupabase } from '@/utils/supabase'
 import { Button } from '@tremor/react'
 import { useRouter } from 'next/router'
 import { useAlerts } from './alertHandler'
-const GuardianOnboardingContext = createContext<{hasValidStripeSubscription : boolean|undefined, subscriptionId : null|string[]}>({hasValidStripeSubscription : undefined, subscriptionId : null})
+import { auth } from '@clerk/nextjs/server'
+import { redirectToSignIn } from '@clerk/nextjs/server'
+
+const GuardianOnboardingContext = createContext<{hasValidStripeSubscription : boolean|undefined, subscriptionId : null|string[], hasFinishedOnboarding : boolean|null}>({hasValidStripeSubscription : undefined, subscriptionId : null, hasFinishedOnboarding : null})
 const exemptedRoutes = ['/subscription/manage', '/404', '/sign-in/[[...index]]', '/sign-in', '/sign-up', '/sign-up/[[...index]]', '/forgot-password', '/reset-password', '/verify-email', '/verify-phone', '/', '/privacy-policy', '/_error', '/terms-of-service', '/contact-us', '/about-us', '/faq', '/debt/literature']
+
 
 export function GuardianOnboardingProvider({children} : {children: React.ReactNode}){
     const [hasValidStripeSubscription, setHasValidStripeSubscription] = useState<boolean|undefined>(undefined)
@@ -29,6 +33,9 @@ export function GuardianOnboardingProvider({children} : {children: React.ReactNo
             if (error == null && data!.length == 0){
                 setHasFinishedOnboarding(false)
             }
+            else if (data![0]['subscription_id'] == null || data![0]['subscription_status'] !== 'active'){
+                alert(data![0]['subscription_status'])
+            }
             else if (data![0]['subscription_id'] != null && data![0]['subscription_status'] === 'active'){
                 fetch('/api/stripe/validateSubscription').then((res) => {
                     if (res.status === 200){
@@ -39,10 +46,11 @@ export function GuardianOnboardingProvider({children} : {children: React.ReactNo
                         setHasValidStripeSubscription(false)
                     }
                 }).then((json : {isActive : boolean, items: string[]})=>{
+                    console.log(json)
                     addAlert("success", 'subscription is valid :)', 5000)
                     setSubscriptionId(json.items)
                     setHasValidStripeSubscription(true)
-                });
+                }).catch((e)=>alert(e));
             }
         }
         if (!isSignedIn) return
@@ -90,7 +98,7 @@ export function GuardianOnboardingProvider({children} : {children: React.ReactNo
                     </motion.div>
                 </motion.div>
             </motion.div>
-            <GuardianOnboardingContext.Provider value={{hasValidStripeSubscription, subscriptionId}}>
+            <GuardianOnboardingContext.Provider value={{hasValidStripeSubscription, subscriptionId, hasFinishedOnboarding}}>
                 {children}
             </GuardianOnboardingContext.Provider> 
         </AnimatePresence>

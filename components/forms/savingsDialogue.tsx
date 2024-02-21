@@ -1,10 +1,11 @@
 import { fetcher } from "@/utils/fetcher";
-import { Dialog } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 import { Button, NumberInput, Subtitle, Title } from "@tremor/react";
-import { SetStateAction, useState } from "react";
+import { Fragment, SetStateAction, useState } from "react";
 import symbols from '@/components/static/symbols.json'
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { useAlerts } from "@/components/contexts/alertHandler";
+import axios from "axios";
 export function SavingsModal({ isOpen, setIsOpen, misc, setMisc} : {isOpen : boolean, setIsOpen : React.Dispatch<SetStateAction<boolean>>, misc : any, setMisc : React.Dispatch<SetStateAction<any>>}){
     const {addAlert} = useAlerts();
     const [GoalAmount, setGoalAmount] = useState<number>(misc.savings[1]);
@@ -12,65 +13,136 @@ export function SavingsModal({ isOpen, setIsOpen, misc, setMisc} : {isOpen : boo
     const [currency, setCurrency] = useState<string>(misc.savings[2]);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const handleSave = () => {
-
+    const handleSave = async() => {
       setLoading(true); 
+      console.log(misc.savings, saved, GoalAmount, currency)
+      if (misc.savings[0] == saved && misc.savings[1] == GoalAmount && misc.savings[2] == currency){
+        setIsOpen(false)
+        addAlert("warning", "Nothing changed.", 2000);
+        return
+      }
       setMisc({...misc, savings: [saved, GoalAmount, currency]});
-      setTimeout(() => {
-        addAlert("success", "Savings goal updated!", 2000);
-        setIsOpen(false);
-      }, 2000);
+      axios.put("/api/user/misc", misc).then((res)=>{
+        if (res.status == 200){
+          addAlert("success", "Savings goal updated!", 2000);
+        }
+        else {
+          addAlert("error", "Something went wrong.", 2000);
+        }
+      })
+      setIsOpen(false);
     };
   
     return (
-      <Dialog open={isOpen} onClose={() => setIsOpen(false)} className={'relative z-[500] '}>
-        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-        <div className='fixed inset-0 flex w-screen items-center justify-center p-4 '>
-          <Dialog.Panel className={`rounded-md  bg-white dark:bg-black relative w-full max-w-2xl max-h-full border-2 border-orange-500 dark:border-white`}>
-              <Dialog.Title className={'flex items-start bg-orange-400 justify-between p-4 border-b rounded-t dark:text-black text-black'}>Your Savings Goals</Dialog.Title>
-              <div className='p-6 space-y-6 dark:bg-slate-600/80 h-48'>
-              <div className={'text-base leading-relaxed text-gray-500 '}>   
-                  <div className="mx-auto w-[70%] h-full py-3`">
-                  <div className="block relative text-sm font-medium leading-6 text-gray-900 dark:text-white">
-                        <NumberInput
-                            icon={CurrencyDollarIcon}
-                            placeholder="Amount..."
-                            enableStepper={false}
-                            value={GoalAmount}
-                            error={GoalAmount < 0 ? true : false}
-                            onValueChange={(e)=>{
-                                setGoalAmount(e);
-                            }}
-                        />
-                        <label htmlFor="currency" className="sr-only">
-                            Currency
-                        </label>
-                        <select
-                            id="currency"
-                            name="currency"
-                            onChange={(e)=>{
-                                setCurrency(e.target.value)
-                            }
-                                }
-                            className="h-full absolute right-0 top-0 float-right rounded-md border-0 bg-transparent text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                            value={currency}
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={()=>setIsOpen(false)}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/25" />
+          </Transition.Child>
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+          <Dialog.Panel className="max-w-[45%] w-fit min-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-dark-tremor-background-subtle p-6 text-left align-middle shadow-xl transition-all">
+            <Dialog.Title
+              as="h3"
+              className="text-lg font-medium leading-6 text-gray-900 dark:text-white"
+            >
+              Your Savings Goals
+              </Dialog.Title>
+              <div className="mt-2 grid grid-cols-3 gap-x-2 w-[95%]">
+              <div className="block relative text-sm font-medium leading-6 text-gray-900 dark:text-white">
+              <NumberInput
+                icon={CurrencyDollarIcon}
+                placeholder="Amount Saved"
+                enableStepper={false}
+                value={saved}
+                className="h-12"
+                error={saved < 0 || Number.isNaN(saved)}
+                onValueChange={(e)=>{
+                    setSaved(e);
+              }}/>
+              {/* <select
+                  id="currency"
+                  name="currency"
+                  onChange={(e)=>{
+                      setCurrency(e.target.value)
+                  }
+                      }
+                  className="h-full absolute -right-7 top-0 float-right rounded-md border-0 bg-transparent text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                  value={currency}
+              >
+                  {Object.keys(symbols).map((currency:string, index:number) => (
+                      <option key={index} value={currency}>{currency}</option>
+                  ))}
+              </select> */}
+                </div>
+                
+                <div className="block relative text-sm font-medium leading-6 text-gray-900 dark:text-white">
+              <NumberInput
+                size={20}
+                icon={CurrencyDollarIcon}
+                placeholder={`Goal in ${currency}`}
+                enableStepper={false}
+                value={GoalAmount}
+                className="max-w-full w-full h-12"
+                error={GoalAmount < 0 || Number.isNaN(GoalAmount)}
+                onValueChange={(e)=>setGoalAmount(e)}/>
+                </div>
+              <div className="relative w-full">
+              <select
+                  id="currency"
+                  name="currency"
+                  onChange={(e)=>{
+                      setCurrency(e.target.value)
+                  }
+                      }
+                  className="w-full dark:bg-dark-tremor-background h-12 rounded-md focus:ring-2 border-gray-400/20 border-2"
+                  value={currency}
+              >
+                  {Object.keys(symbols).map((currency:string, index:number) => (
+                      <option key={index} value={currency}>{currency}</option>
+                  ))}
+              </select>
+              </div>
+              
+              </div>
+                <div className="h-12 mt-5 align-bottom ">
+                        <button
+                          type="button"
+                          className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                          onClick={()=>setIsOpen(false)}
                         >
-                            {Object.keys(symbols).map((currency:string, index:number) => (
-                                <option key={index} value={currency}>{currency}</option>
-                            ))}
-                        </select>
-
-                    </div>
-                    <Subtitle className={`dark:text-white text-black`}>Goal</Subtitle>
-                  </div>
-                    <div className="relative w-full h-fit">
-                      <Button className={`bg-orange-500 hover:bg-orange-600 text-white px-4 mt-3 rounded-md mx-auto w-16 py-2 float-left mb-5`} disabled={loading} onClick={() => setIsOpen(false)}> Cancel </Button>
-                      <Button className={`bg-orange-500 hover:bg-orange-600 text-white px-3 mt-3 rounded-md mx-auto w-16 py-2 float-right mb-5`} disabled={loading} onClick={() => handleSave()}> Save </Button>
-                    </div>
+                          Cancel
+                        </button>
+                      <button
+                        type="button"
+                        className="float-right bottom-0 disabled:bg-green-100/60 disabled:cursor-not-allowed justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                        disabled={loading || GoalAmount < 0 || Number.isNaN(GoalAmount) || saved < 0 || Number.isNaN(saved)} onClick={() => handleSave()}
+                      >
+                        Save
+                      </button>
+                </div>
+              </Dialog.Panel>
+              </Transition.Child>
               </div>
-              </div>
-          </Dialog.Panel>
         </div>
       </Dialog>
+      </Transition>
     );
   };

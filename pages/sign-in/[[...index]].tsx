@@ -20,7 +20,6 @@ export function SignInPage() {
                     transition={{ duration: 1, ease: "linear", delay: 0.2 }}
                     className="mx-auto my-auto bottom-0 right-0 top-0 left-0 absolute max-w-fit max-h-fit h-fit w-fit">
                     <SignIn
-                        afterSignInUrl={params.get("afterlogin") ? params.get("afterlogin") : undefined}
                         appearance={{
                             elements: {
                                 formButtonPrimary: "bg-indigo-600",

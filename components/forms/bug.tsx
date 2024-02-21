@@ -1,9 +1,11 @@
 import { useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
+import { useRouter } from "next/router";
 import React, { Dispatch } from "react";
 
 export default function ReportABug({isOpen, setIsOpen} : {isOpen : boolean, setIsOpen : Dispatch<boolean>}) {
     const {user, isSignedIn} = useUser();
+    const router = useRouter()
     const postURL = isSignedIn ? "https://eoq198g7ikfeqsy.m.pipedream.net/submit-bug?user=" + user?.id : "https://eoq198g7ikfeqsy.m.pipedream.net/submit-bug"
     return (
         <motion.div initial={"hidden"} animate={"visible"} variants={{
@@ -29,6 +31,7 @@ export default function ReportABug({isOpen, setIsOpen} : {isOpen : boolean, setI
                 formData.append("bugTitle", (e.target as any).bugTitle.value);
                 formData.append("bugDescription", (e.target as any).bugDescription.value);
                 formData.append("screenshot", (e.target as any).screenshot.files[0]);
+                formData.append("currentUrl", router.route+router.asPath);
                 fetch(postURL, {
                     method: "POST",
                     headers : {contentType: "multipart/form-data"},

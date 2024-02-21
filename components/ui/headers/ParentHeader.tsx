@@ -6,6 +6,7 @@ import {
     Bars3Icon,
     BookOpenIcon,
     ChartPieIcon,
+    Cog6ToothIcon,
     Cog8ToothIcon,
     ExclamationCircleIcon,
     HomeIcon,
@@ -30,6 +31,7 @@ const reports = [
 ]
 const billing = [
     { name: 'Pricing', description: 'Our Pricing Plans', href: '/pricing', icon : ReceiptPercentIcon },
+    { name : 'Manage Subscription', description: "", href: '', icon : Cog6ToothIcon}
 ]
 
 function classNames(...classes : any[]) {
@@ -63,7 +65,7 @@ export default function ParentHeader() {
         <Popover.Group className="hidden lg:flex lg:gap-x-12">
                 <Popover className="relative">
                     <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
-                    Reports
+                        Reports
                     <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
                     </Popover.Button>
 

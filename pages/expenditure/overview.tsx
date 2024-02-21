@@ -68,6 +68,8 @@ export default function Expenditure() {
   const [emergencySum, setEmergencySum] = useState<number>(0);
   const router = useRouter();
   const { addAlert } = useAlerts();
+  useEffect(()=>{
+  }, [misc])
   useEffect(() => {
     if (expenseData.length > 0) {
       setSum(0);
@@ -185,8 +187,8 @@ export default function Expenditure() {
   }, [sum]);
   if (!isLoaded || loading || misc == null) return <></>;
   return (
-    <main className="bg-dark-tremor-background-muted/75 -z-[100] flex min-h-screen flex-col items-center justify-between px-6 py-12 md:px-24">
-      <Card className="relative h-16">
+    <main className="bg-dark-tremor-background-muted/75 -z-[100] flex min-h-screen flex-col items-center px-6 py-12 md:px-24">
+      {/* <Card className="relative h-16">
         <div className="absolute left-0 right-0 top-[50%] z-0 m-auto ml-5 w-fit -translate-y-[50%] text-left">
           <Button size="md" className="h-full">
             <PlusCircleIcon className="inline h-6 w-6" />
@@ -199,12 +201,12 @@ export default function Expenditure() {
             <span> Read more</span>
           </Button>
         </div>
-      </Card>
+      </Card> */}
       <Grid
         numItemsMd={3}
         numItemsLg={3}
         numItemsSm={1}
-        className="my-5 w-full gap-x-5 max-md:gap-y-5"
+        className="sm:my-5 md:my-5 lg:my-3 w-full gap-x-5 gap-y-0"
       >
         <CustomCard
           variants={cardVariants}
@@ -275,16 +277,9 @@ export default function Expenditure() {
             )}
           </div>
           <Button
-            className="absolute bottom-0 left-0 float-left mb-3 ml-3 md:mb-5 md:ml-5"
-            iconPosition="right"
-            onClick={() => setIsSavingsOpen(true)}
-            icon={PencilIcon}
-          >
-            Edit Goal
-          </Button>
-          <Button
             className="absolute bottom-0 right-0 float-right mb-3 mr-3 md:mb-5 md:mr-5"
             iconPosition="right"
+            onClick={() => setIsSavingsOpen(true)}
             icon={PencilIcon}
           >
             Edit
@@ -336,7 +331,7 @@ export default function Expenditure() {
           </Button>
         </CustomCard>
       </Grid>
-      <Card className="relative h-fit max-md:h-fit">
+      <Card className="relative h-full max-md:h-fit">
         {
           <>
             <Title>Overall Expenditure</Title>

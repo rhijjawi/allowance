@@ -59,17 +59,27 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
                       ? `per ${i.recurring?.interval}`
                       : `one time`}
                   </p>
-                  <MotionButton
+                  {user?.publicMetadata.role == 'parent' && <MotionButton
                     loading={loading[i.id]}
-                    disabled={loading[i.id] || (hasValidStripeSubscription && subscriptionId && subscriptionId?.filter((sub) => sub !== (i.product as {id : string}).id).length > 0)}
+                    disabled={loading[i.id] || (subscriptionId && subscriptionId[0] == "prod_OxBnpefLqK5Nn8") || (hasValidStripeSubscription && subscriptionId && subscriptionId?.filter((sub) => sub !== (i.product as {id : string}).id).length > 0)}
                     //@ts-ignore
-                    tooltip={ (hasValidStripeSubscription && subscriptionId && subscriptionId?.filter((sub) => sub !== i.product.id).length > 0) ? <div>You already have this subscription</div> : undefined}
+                    tooltip={
+                      subscriptionId && subscriptionId[0] === "prod_OxBnpefLqK5Nn8" 
+                      ? <p>You're already an early adopter!</p> 
+                      : hasValidStripeSubscription && subscriptionId && subscriptionId.some(sub => sub !== (i.product as Stripe.Product).id) 
+                        ? <p>You already have this subscription</p> 
+                        : undefined
+                    }                    
                     onClick={async () => {
+                      if (loading){return;}
                       if (!isSignedIn) {
-                        router.push(`/sign-in?afterlogin=${router.asPath}`);
+                        router.push(`/sign-in?redirect_url=${router.asPath}`);
                       }
                       if (user && user.publicMetadata.role != "parent") {
                         return addAlert("error", "You're not signed-in with a parent account", 3000);
+                      }
+                      if (user && subscriptionId && subscriptionId[0] == "prod_OxBnpefLqK5Nn8"){
+                        return addAlert("error", "You already have a lifetime subscription!", 3000)
                       }
                       setLoading({ ...loading, [i.id]: true });
                       axios.post("/api/stripe/createCheckoutSession", {item: [[i.id, Boolean(i.type == "recurring")]], backUrl : router.asPath}).then(async (res) => {
@@ -90,13 +100,13 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
                     iconPosition="right"
                   >
                       {i.type == "recurring" ? `Subscribe` : "Pay"}
-                  </MotionButton>
+                  </MotionButton>}
                 </Card>
               );
             })}
             </div>
             
-            <p className="mt-2 text-stone-500 text-center">Your payment information is handled by Stripe. We never see any of your sensitive payment information.</p>
+            <p className="mt-4 text-stone-500 text-center">Your payment information is handled by Stripe. We never see any of your sensitive payment information.</p>
           </Card>
         </div>
       </div>

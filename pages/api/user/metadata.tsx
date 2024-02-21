@@ -41,6 +41,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
     let metadata = Object.assign({}, user.publicMetadata);
     for (const path in req.body) {
       const value = req.body[path];
+      if (path == 'role'){return}
       overwriteNestedKey(metadata, path, value);
     }
     await clerkClient.users.updateUserMetadata(userId, {
