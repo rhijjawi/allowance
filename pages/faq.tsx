@@ -1,5 +1,5 @@
 import { Disclosure } from "@headlessui/react";
-import { MinusSmallIcon, PlusSmallIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import { MinusIcon, PlusIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 export default function FAQ() {
@@ -19,11 +19,15 @@ export default function FAQ() {
     const faqs = [
         {
             "question": "What is LogMoney?",
-            "answer": "LogMoney is a financial management platform designed to help you oversee and track your expenses, income, and debt while studying abroad."
+            "answer": "LogMoney is a financial management platform designed to help you oversee and track your expenses, income, and debt whether at home or abroad."
         },
         {
             "question": "How can I sign up for an account?",
             "answer": "To create an account, click on the 'Sign Up' button on the homepage, and follow the registration process."
+        },
+        {
+            "question": "How much does LogMoney.app cost?",
+            "answer": "Great news! Logmoney.app is free for everyone. The only products we charge for are for the monthly reports that are sent to parents."
         },
         {
             "question": "Is my financial data secure?",
@@ -34,8 +38,8 @@ export default function FAQ() {
             "answer": "Using the expenses tab above, you can add your expenses and categorize them. You can also add your income and track your savings."
         },
         {
-            "question": "Can I import my expenses?",
-            "answer": "For now, you can only manually add your expenses. We will be adding the ability to import expenses from your bank account in the near future."
+            "question": "Can I import my expenses from my bank?",
+            "answer": "We have added the ability to import expenses from your bank account! More banks soon to come."
         },
         {
             "question": "How can I track my debt and set up a debt reduction plan?",
@@ -53,14 +57,12 @@ export default function FAQ() {
     const [isOpen, setIsOpen] = useState(isOpenObj)
     return (
         <>
-            <div className="border-t"></div>
-            <div className="bg-white dark:bg-black">
-                <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
+            <div className="h-fit w-full overflow-hidden border-t-2 bg-white dark:bg-dark-tremor-background-muted/75">
+                <div className="mx-auto max-w-7xl px-6 py-12 sm:py-32 lg:px-8 lg:py-40">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-
                         transition={{ duration: 1, ease: "linear", height: { duration: 1 }, opacity: { duration: 1, delay: 0.15 } }}
                         className="mx-auto relative max-w-4xl border-4 border-indigo-600 py-5 px-5 rounded-md">
                         <QuestionMarkCircleIcon className="h-12 w-12 absolute right-5 top-5 rounded-lg dark:text-cyan-300/80" />
@@ -76,9 +78,9 @@ export default function FAQ() {
                                             <span className="text-base font-semibold leading-7 my-2">{faq.question}</span>
                                             <span className="ml-6 flex h-7 items-center my-auto">
                                                 {isOpen[index] ? (
-                                                    <MinusSmallIcon className="h-6 w-6" aria-hidden="true" />
+                                                    <MinusIcon className="h-6 w-6" aria-hidden="true" />
                                                 ) : (
-                                                    <PlusSmallIcon className="h-6 w-6" aria-hidden="true" />
+                                                    <PlusIcon className="h-6 w-6" aria-hidden="true" />
                                                 )}
                                             </span>
                                         </div>

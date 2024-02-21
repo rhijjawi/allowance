@@ -139,7 +139,11 @@ export default function ParentHeader() {
                     </Popover.Panel>
                     </Transition>
                 </Popover>
+                <Link href="/faq" className="text-sm font-semibold leading-6 text-gray-900">
+                    FAQ
+                </Link>
             </Popover.Group>
+            
         <motion.div className="hidden lg:flex lg:flex-1 lg:justify-end">
         {user ? <UserButton afterSignOutUrl="/" userProfileUrl='/profile/manage' showName userProfileMode='navigation' />
                     : <motion.button onClick={()=>{router.push('/sign-in')}} className='w-fit py-2 px-4 text-sm bg-indigo-600 rounded-md cursor-pointer text-white'>Log In / Sign Up</motion.button>}
