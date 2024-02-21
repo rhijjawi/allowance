@@ -35,8 +35,8 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
         if (data.length == 0){
             return {props : {error : {title: "Report not found", message : "If you clicked a link to get here, send us a message using the button below"}}}
         }
+        console.log(data[0])
         let [_user, child] = await clerkClient.users.getUserList({userId : [data[0].parent_id, data[0].forchild]}) as User[]
-        console.log(_user.publicMetadata, child.publicMetadata.role)
         const {data: _expenses, error : expensesError} = await supabase.from('expenses').select("*").eq("user_id", data![0].forchild).gte("transaction_date", new Date(data[0].date_range[0]).toISOString()).lte("transaction_date", new Date(data[0].date_range[1]).toISOString())
         if (_expenses && !expensesError){
             const expenses : ExpenseType[] = _expenses
