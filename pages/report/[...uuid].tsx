@@ -35,8 +35,9 @@ export async function getServerSideProps(context : GetServerSidePropsContext & {
         if (data.length == 0){
             return {props : {error : {title: "Report not found", message : "If you clicked a link to get here, send us a message using the button below"}}}
         }
-        console.log(data[0])
-        let [_user, child] = await clerkClient.users.getUserList({userId : [data[0].parent_id, data[0].forchild]}) as User[]
+        let users = await clerkClient.users.getUserList({userId : [data[0].parent_id, data[0].forchild]}) as User[]
+        const [_user, child] = users
+        console.log(_user.publicMetadata, child.publicMetadata)
         const {data: _expenses, error : expensesError} = await supabase.from('expenses').select("*").eq("user_id", data![0].forchild).gte("transaction_date", new Date(data[0].date_range[0]).toISOString()).lte("transaction_date", new Date(data[0].date_range[1]).toISOString())
         if (_expenses && !expensesError){
             const expenses : ExpenseType[] = _expenses
@@ -202,7 +203,7 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
                 {props.parent.id == user.userId && <div className="h-12 absolute right-0 pr-6">
                     <Button iconPosition="left" onClick={() => {navigator.clipboard ? navigator.clipboard.writeText(`https://logmoney.app/report/${props.shareLink}`) : alert(`https://logmoney.app/report/${props.shareLink}`)}} icon={ShareIcon} className=" float-right inline-flex justify-center rounded-md border-none bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none  focus-visible:ring-red-500 focus-visible:ring-offset-2">Share</Button>
                 </div>}
-                <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">Expenditure Report</h3>      
+                <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">{props.child.firstName}'s Expenditure Report</h3>      
                 <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">{(new Date(Number(props.dates[0]))).toDateString()} ⇔ {(new Date(Number(props.dates[1]))).toDateString()}</h3>      
                 <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">{sum && currFormatter(Object.values(sum!).reduce((previous, current)=>{return (current.sum + previous)}, 0), props.homeCurr)} </p>
                 <AreaChart
