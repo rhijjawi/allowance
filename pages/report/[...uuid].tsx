@@ -17,67 +17,72 @@ import { useEffect, useState } from "react"
 
 
 export async function getServerSideProps(context : GetServerSidePropsContext & {params : {uuid : string[]}}) {
+    console.time("end")
+    console.time("supabase")
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_SUPABASE_SECRET_KEY!);
+    console.timeEnd("supabase")
     let filteredExpenses;
-    let res;
-        const user = getAuth(context.req);
-        let req;
-        if (user.userId && context.params.uuid.length == 1){
-            req = supabase.from('reports').select('parent_id, forchild, date_range, no_login, uuid').eq("uuid", context.params?.uuid[0]).eq("parent_id", user.userId)
-        }
-        else if (context.params.uuid.length > 1){
-            req = supabase.from('reports').select('parent_id, forchild, date_range, no_login, uuid').eq("uuid", context.params?.uuid[0]).eq("no_login", context.params?.uuid[1])
-        }
-        const {data, error} = await req!
-        if (error || !data){
-            return {props : {error : {title: "Something happened", message : "We're sorry, but we weren't able to find the report you requested."}}}
-        }
-        if (data.length == 0){
-            return {props : {error : {title: "Report not found", message : "If you clicked a link to get here, send us a message using the button below"}}}
-        }
-        let users = await clerkClient.users.getUserList({userId : [data[0].parent_id, data[0].forchild]}) as User[]
-        const [_user, child] = [
-            users.filter((user)=>user.id == data[0].parent_id)[0],
-            users.filter((user)=>user.id == data[0].forchild)[0]
-        ]
-        const {data: _expenses, error : expensesError} = await supabase.from('expenses').select("*").eq("user_id", data![0].forchild).gte("transaction_date", new Date(data[0].date_range[0]).toISOString()).lte("transaction_date", new Date(data[0].date_range[1]).toISOString())
-        if (_expenses && !expensesError){
-            const expenses : ExpenseType[] = _expenses
-            const expenseData : {} = {}
-            const _currency : {[index : string] : number} = {}
-            let uniqueCurrencies : string[] = [];
-            console.log((new Date()).toTimeString())
-            if (expenses.length > 0){
-                filteredExpenses = expenses.filter((exp)=>{return true})
-                const currencies : string[] = filteredExpenses.flatMap((element : ExpenseType) => {return element.currency});
-                currencies.forEach((currency) => {if(uniqueCurrencies.indexOf(currency) == -1){uniqueCurrencies.push(currency)}})
-                console.log("startConversion", new Date)
-                for (let curr of currencies) {
-                    !(_currency[curr]) ? _currency[curr] = await standardizeCurrencyGeneral(1, curr, (_user.publicMetadata.reports as {currency : string}).currency) : null;   
-                }
+    const user = getAuth(context.req);
+    let req;
+    if (user.userId && context.params.uuid.length == 1){
+        req = supabase.from('reports').select('parent_id, forchild, date_range, no_login, uuid').eq("uuid", context.params?.uuid[0]).eq("parent_id", user.userId)
+    }
+    else if (context.params.uuid.length > 1){
+        req = supabase.from('reports').select('parent_id, forchild, date_range, no_login, uuid').eq("uuid", context.params?.uuid[0]).eq("no_login", context.params?.uuid[1])
+    }
+    console.time("getdata")
+    const {data, error} = await req!
+    console.timeEnd("getdata")
+    if (error || !data){
+        return {props : {error : {title: "Something happened", message : "We're sorry, but we weren't able to find the report you requested."}}}
+    }
+    if (data.length == 0){
+        return {props : {error : {title: "Report not found", message : "If you clicked a link to get here, send us a message using the button below"}}}
+    }
+    console.time("clerk")
+    let users = await clerkClient.users.getUserList({userId : [data[0].parent_id, data[0].forchild]}) as User[]
+    const [_user, child] = [
+        users.filter((user)=>user.id == data[0].parent_id)[0],
+        users.filter((user)=>user.id == data[0].forchild)[0]
+    ]
+    console.timeEnd("clerk")
+    console.time("expenses")
+    const {data: _expenses, error : expensesError} = await supabase.from('expenses').select("*").eq("user_id", data![0].forchild).gte("transaction_date", new Date(data[0].date_range[0]).toISOString()).lte("transaction_date", new Date(data[0].date_range[1]).toISOString())
+    if (_expenses && !expensesError){
+        const expenses : ExpenseType[] = _expenses
+        const expenseData : {} = {}
+        const _currency : {[index : string] : number} = {}
+        let uniqueCurrencies : string[] = [];
+        console.log((new Date()).toTimeString())
+        if (expenses.length > 0){
+            filteredExpenses = expenses.filter((exp)=>{return true})
+            const currencies : string[] = filteredExpenses.flatMap((element : ExpenseType) => {return element.currency});
+            currencies.forEach((currency) => {if(uniqueCurrencies.indexOf(currency) == -1){uniqueCurrencies.push(currency)}})
+            console.log("startConversion", new Date)
+            for (let curr of currencies) {
+                !(_currency[curr]) ? _currency[curr] = await standardizeCurrencyGeneral(1, curr, (_user.publicMetadata.reports as {currency : string}).currency) : null;   
             }
-            let shareLink;
-            if (_user.id == data[0].parent_id){
-                shareLink = `${data[0].uuid}/${data[0].no_login}`
-            }
-            else {
-                shareLink = null;
-            }
-            return {
-                props: { expenses, _currency, dates : data[0].date_range, homeCurr : (_user.publicMetadata.reports as {currency : string}).currency, child : {firstName : child.firstName, lastName : child.lastName, metadata : child.publicMetadata}, parent : {id : _user.id}, shareLink : shareLink },
-              }
+        }
+        console.timeEnd("expenses")
+        let shareLink;
+        if (_user.id == data[0].parent_id){
+            shareLink = `${data[0].uuid}/${data[0].no_login}`
         }
         else {
-            return {
-                redirect: {
-                    permanent: true,
-                    destination: "/500",
-                },
-            }
+            shareLink = null;
         }
+        console.timeEnd("end")
+        return {
+            props: { expenses, _currency, dates : data[0].date_range, homeCurr : (_user.publicMetadata.reports as {currency : string}).currency, child : {firstName : child.firstName, lastName : child.lastName, metadata : child.publicMetadata}, parent : {id : _user.id}, shareLink : shareLink },
+        }
+    }
+    else {
+        return {
+            props : {error : {title : "An Unexpected Error Occured", message : expensesError.message}}
+        }
+    }
 
-
-  }
+}
 
 export default function Report(props : { expenses : ExpenseType[], dates: [number, number], _currency :  {[index : string] : number}, homeCurr : string, shareLink : string, parent : User, child : User, error? : {title : string, message : string}}){
     const router = useRouter()

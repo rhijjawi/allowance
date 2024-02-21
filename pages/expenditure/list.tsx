@@ -269,12 +269,13 @@ export default function ListPage() {
             >
               Month-to-date
             </Tab>
-            <Tab
+            {/* <Tab
+            
               icon={CurrencyYenIcon}
               className="text-white  hover:text-slate-400"
             >
               Savings
-            </Tab>
+            </Tab> */}
             <Tab
               icon={ArrowDownOnSquareIcon}
               className="text-white hover:text-slate-400"
@@ -530,7 +531,7 @@ export default function ListPage() {
                 </Col>
               </Grid>
             </TabPanel>
-            <TabPanel>
+            {/* <TabPanel>
               <Col numColSpan={1} numColSpanLg={3} className="mt-6 gap-6 ">
                 <Card className=" relative dark:border-2">
                   <div className="float-right aspect-square h-9">
@@ -543,7 +544,7 @@ export default function ListPage() {
                   </Text>
                 </Card>
               </Col>
-            </TabPanel>
+            </TabPanel> */}
             <TabPanel>
               <Grid
                 numItemsSm={1}
