@@ -53,8 +53,8 @@ function SignUpPage() {
             <p className="font-bold leading-7 text-lg text-black dark:text-white py-2">Are you a Parent or Student?</p>
            <div className="py-5">          
           <div className="grid grid-cols-2">
-             <Button className={`col-start-1 w-[80%] mx-auto bg-black hover:bg-gray-900/90 ${roleType == 1  ? "!bg-green-500 !hover:bg-green-500" : ""}`} onClick={()=>{setRoleType(Number(1) as 0|1|2)}}>Guardian/Parent</Button>
-             <Button className={`col-start-2 w-[80%] mx-auto bg-black hover:bg-gray-900/90 ${roleType == 2  ? "!bg-green-500 !hover:bg-green-500" : ""}`} onClick={()=>{setRoleType(Number(2) as 0|1|2)}}>Student/Other</Button>
+             <Button className={`col-start-1 w-[80%] mx-auto bg-black hover:bg-gray-900/90 ${roleType == 2  ? "!bg-green-500 !hover:bg-green-500" : ""}`} onClick={()=>{setRoleType(Number(2) as 0|1|2)}}>Spender</Button>
+             <Button className={`col-start-2 w-[80%] mx-auto bg-black hover:bg-gray-900/90 ${roleType == 1  ? "!bg-green-500 !hover:bg-green-500" : ""}`} onClick={()=>{setRoleType(Number(1) as 0|1|2)}}>Supervisor/Guardian</Button>
           </div>
           </div>
           {/* <Subtitle>If you are not a parent, select no.</Subtitle> */}
@@ -79,9 +79,8 @@ function SignUpPage() {
               {currencies.map((i : any, index: number)=>{return <SelectItem key={index} value={i[1]}>({i[1]}) {i[0]}</SelectItem>})}
             </Select>
           </div>
-          <p className="my-2">This doesn't have to be the currency of the country you're residing in, just one you're comfortable with and understand</p>
+          <p className="my-2">This doesn't have to be the currency of the country you're residing in, just one you're comfortable with and can interpret easily</p>
           <Button disabled={roleType == 0} className="float-right py-2" onClick={()=>{
-
             if (roleType != 0){
               setOnboardingStep(2)
               setBoardingComplete(true)

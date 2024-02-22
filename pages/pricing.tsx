@@ -44,7 +44,7 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
             className={`mx-auto my-auto mt-5 w-full max-w-[80%] divide-gray-200 rounded-lg border-2 shadow-2xl `}
           >
             <p className="mb-12 text-center text-3xl">Our Plans</p>
-            <div className={`h-fit grid grid-rows-1 grid-cols-${user ? (user.publicMetadata.role == "student" ? 4 : 3) : 3}`}>
+            <div className={`h-fit grid grid-rows-1 grid-cols-${user ? (user.publicMetadata.role == "student" ? 4 : 3) : 4}`}>
             <Card className="mx-auto w-[90%] top-0 h-full inline-block text-center">
                   <Title className="mx-auto w-fit">
                     Free Forever
@@ -65,9 +65,12 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
             {prods.map((i: Stripe.Price, index: number) => {
               return (
                 <Card className="mx-auto w-[90%] top-0 h-full inline-block text-center">
-                  <Title className="mx-auto w-fit">
-                    {(i.product as { name: string; }).name.split(" - ")[1]}
+                  <Title className="mx-auto w-fit break-words relative">
+                    <>{(i.product as { name: string; }).name.split(" - ")[1]}</>
                   </Title>
+                  <div className="absolute top-2 right-2">
+                    <span className="font-bold text-indigo-400 align-super">＊</span>
+                  </div>
                   <p className="select-none text-xs  dark:text-stone-200">
                     {(i.product as { description: string; }).description}
                   </p>
@@ -124,8 +127,8 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
               );
             })}
             </div>
-            
-            <p className="mt-4 text-stone-500 text-center">Your payment information is handled by Stripe. We never see any of your sensitive payment information.</p>
+            <p className="mt-4 text-center align-bottom text-sm text-indigo-500"><span className="text-indigo-400 text-lg">＊</span> These subscriptions are <strong>only</strong> for Guardians/Supervisors</p>
+            <p className="mt-1 text-stone-500 text-center">Your payment information is handled by Stripe. We never see any of your sensitive payment information.</p>
           </Card>
         </div>
       </div>
