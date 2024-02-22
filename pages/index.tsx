@@ -11,6 +11,7 @@ import {
   LockClosedIcon,
   EyeSlashIcon,
   ArrowUpOnSquareStackIcon,
+  GiftIcon,
 } from "@heroicons/react/24/outline";
 import { Select, SelectItem, Text, Color } from "@tremor/react";
 import { useEffect, useState } from "react";
@@ -81,7 +82,7 @@ export default function Home(props: any) {
                   <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none dark:text-gray-500">
                     {[
                       {
-                        name: "AI Powered Savings",
+                        name: "AI Powered Savings (Coming soon!)",
                         icon: CpuChipIcon,
                         description:
                           "Computer vision and machine learning to help you save money (better).",
@@ -124,6 +125,11 @@ export default function Home(props: any) {
                         description:
                           "We prioritize your data security and privacy. Your financial information is encrypted and protected. We do not sell your data to third parties, nor do we plan on doing so. Ever.",
                       },
+                      {
+                        name: "GDPR Compliance",
+                        icon: GiftIcon,
+                        description: "Securing your data, safeguarding your privacy - because your trust is our top priority. We don't sell your data, and we never will. "
+                      }
                     ].map((feature) => (
                       <div key={feature.name} className="relative pl-9">
                         <dt className="inline font-semibold text-gray-900 dark:text-gray-300">
@@ -222,6 +228,11 @@ export default function Home(props: any) {
                         description:
                           "Only share what matters. If you don't want to share your financial information with your parents, you don't have to.",
                       },
+                      {
+                        name: "GDPR Compliance",
+                        icon: GiftIcon,
+                        description: "Securing your data, safeguarding your privacy - because your trust is our top priority. We don't sell your data, and we never will. "
+                      }
                     ].map((feature) => (
                       <div key={feature.name} className="relative pl-9">
                         <dt className="inline font-semibold text-gray-900 dark:text-gray-400">
@@ -271,7 +282,7 @@ export default function Home(props: any) {
                   <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none dark:text-gray-400">
                     {[
                       {
-                        name: "AI Powered Savings",
+                        name: "AI Powered Savings (Coming Soon)",
                         icon: CpuChipIcon,
                         description:
                           "Computer vision and machine learning to help your kids save money.",
@@ -308,6 +319,11 @@ export default function Home(props: any) {
                         description:
                           "We'll only send you what matters. If your child doesn't want to share certain information with you, they won't have to.",
                       },
+                      {
+                        name: "GDPR Compliance",
+                        icon: GiftIcon,
+                        description: "Securing your data, safeguarding your privacy - because your trust is our top priority. We don't sell your data, and we never will. "
+                      }
                     ].map((feature) => (
                       <div key={feature.name} className="relative pl-9">
                         <dt className="inline font-semibold text-gray-900 dark:text-gray-400">
