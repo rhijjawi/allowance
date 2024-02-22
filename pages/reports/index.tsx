@@ -129,8 +129,7 @@ export default function Index() {
                 <div className="relative col-span-2 col-start-1 mx-auto mb-5 w-[80%]  rounded-md border-2 border-indigo-500 bg-indigo-200/50 px-4 py-4 shadow-sm dark:border-cyan-500">
                   <Title>Pair a parent account</Title>
                   <Subtitle>
-                    Enter the unique ID of the parent account you want to pair
-                    with
+                    Enter the unique ID of the parent account you want to pair with
                   </Subtitle>
                   {supervisorData && user?.publicMetadata.role == "student" &&
                     supervisorData.supervisorProfiles
@@ -140,7 +139,12 @@ export default function Index() {
                           key={index}
                           user={user}
                           supervisorDelete={async () => {
-                            const res = await axios.delete("/api/user/assignParent",{data: {supervisor: user.id}});
+                            let res;
+                            try {
+                              (res = await axios.delete("/api/user/assignParent",{data: {supervisor: user.id}}));
+                            } catch (error) {
+                              return addAlert("error", "Something happened, we're refreshing the page to clear things up.", 3000, ()=>{router.reload()})
+                            }
                             switch (res.status) {
                               case 200:
                                 addAlert(

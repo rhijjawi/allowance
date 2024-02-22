@@ -44,7 +44,24 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
             className={`mx-auto my-auto mt-5 w-full max-w-[80%] divide-gray-200 rounded-lg border-2 shadow-2xl `}
           >
             <p className="mb-12 text-center text-3xl">Our Plans</p>
-            <div className="h-fit grid grid-rows-1 grid-cols-3">
+            <div className={`h-fit grid grid-rows-1 grid-cols-${user ? (user.publicMetadata.role == "student" ? 4 : 3) : 3}`}>
+            <Card className="mx-auto w-[90%] top-0 h-full inline-block text-center">
+                  <Title className="mx-auto w-fit">
+                    Free Forever
+                  </Title>
+                  <p className="select-none text-xs  dark:text-stone-200">
+                    LogMoney.app is a tool made by spenders, for spenders. Managing your finances shouldn't come at a cost.
+                  </p>
+                  <p className="select-none py-1 text-emerald-500">
+                    Free. Forever
+                  </p>
+                  {(!isSignedIn && isLoaded) && <MotionButton className="mx-auto mt-5 rounded-md bg-indigo-500 px-3 py-1 text-white" onClick={()=>{
+                    router.push('/sign-up?redirect_url=/expenditure/overview')
+                  }}>Sign Up</MotionButton>}
+                  {(isSignedIn && isLoaded && user.publicMetadata.role == 'student') && <MotionButton className="mx-auto mt-5 rounded-md bg-indigo-500 px-3 py-1 text-white" onClick={()=>{
+                    router.push('/expenditure/overview')
+                  }}>Dashboard</MotionButton>}
+                </Card>
             {prods.map((i: Stripe.Price, index: number) => {
               return (
                 <Card className="mx-auto w-[90%] top-0 h-full inline-block text-center">
