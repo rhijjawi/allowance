@@ -585,8 +585,8 @@ export default function ListPage() {
                   </Select>
                   <motion.div
                     variants={{
-                      hidden: { height: 0, opacity: 0 },
-                      visible: { style: { height: "h-fit", opacity: 1 } },
+                      hidden: { display: "none" ,height: 0, opacity: 0 },
+                      visible: { display : "block" ,style: { height: "h-fit", opacity: 1 } },
                     }}
                     animate={
                       supportedBanks.indexOf(bank as string) == -1

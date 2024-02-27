@@ -208,12 +208,12 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
         <>
             {selectedExpenses.length > 0 && <Card className="fixed min-h-[4rem] max-h-fit max-w-fit z-50 border-neutral-900 border rounded-md bottom-5 left-5">
                 <p>Average: <strong>{currFormatter(props.expenses.filter((exp)=>{
-                    return selectedExpenses.includes(exp.id)
+                    return selectedExpenses.includes(exp.id!)
                 }).map((exp)=>{
                     return [exp.amount, exp.currency]
                 }).flatMap((item : any[])=> item[0]*props._currency[item[1]]).reduce((b,a)=>b+a, 0)/selectedExpenses.length, props.homeCurr)}</strong></p>
                 Total: <strong>{currFormatter(props.expenses.filter((exp)=>{
-                    return selectedExpenses.includes(exp.id)
+                    return selectedExpenses.includes(exp.id!)
                 }).map((exp)=>{
                     return [exp.amount, exp.currency]
                 }).flatMap((item : any[])=> item[0]*props._currency[item[1]]).reduce((b,a)=>b+a, 0), props.homeCurr)}</strong> 
