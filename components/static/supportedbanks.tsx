@@ -63,7 +63,7 @@ function Revolut(arr : any){
     else {
     }
     [ , , transactionDate, , label, amount, , currency] = arr
-    const transaction = new Transaction(arr, 4, 5, 7, null, false, 2, false, "yyyy-mm-dd HH:MM:SS", [])
+    const transaction = new Transaction(arr, 4, 5, 7, null, false, 2, false, "yyyy-MM-dd HH:mm:ss", [])
     return transaction.toJSONData()
 }
 
