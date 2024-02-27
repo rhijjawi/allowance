@@ -29,7 +29,6 @@ module.exports = withSentryConfig(
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options
 
-    // Suppresses source map uploading logs during build
     silent: true,
     org: "ramziprojects",
     project: "logmoney-app",

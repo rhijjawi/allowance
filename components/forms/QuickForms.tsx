@@ -155,8 +155,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
                     <label htmlFor="expLabel" className="row-span-1 col-span-1 text-sm font-medium leading-6 text-gray-900 pt-3 ">
                         Date
                     </label>
-                    <DatePicker 
-                    
+                    <DatePicker
                         weekStartsOn={1}
                         id="datePicker"
                         value={transactionDate}
@@ -186,7 +185,6 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
                             return (<optgroup label={a.category} key={indexa}>{a.subcategories.map((b : string, indexb : number)=>{return (<option key={indexb} value={JSON.stringify([indexa, indexb])}>{b}</option>)})}
                             </optgroup>)
                         }
-
                         )}
                     </select>
                     </div>
@@ -266,16 +264,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
                     id={'cancel'}
                     data-modal-hide="defaultModal" type="button" 
                     className={`inline-flex float-left justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2`}
-                    onClick={async()=>{
-                            setLoading(true)
-                            await submitForm({
-                                label: transactionLabel,
-                                amount: AmountValue,
-                                date : transactionDate,
-                                currency : currency,
-                                category: category!,
-                            })
-                        }}>
+                    onClick={async()=>{props.setIsOpen(false)}}>
                         Cancel
                 </button>
             </div>
@@ -307,11 +296,10 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
         if (!user) {return;};
         let inv = false
         Object.keys(fields).forEach((key : string)=>{
-
-                if (fields[key] == '' || fields[key] == null || fields[key] == undefined){
-                    inv = true;
-                    return setisFormValid(false)
-                }
+            if (fields[key] == '' || fields[key] == null || fields[key] == undefined){
+                inv = true;
+                return setisFormValid(false)
+            }
         });
         if (!inv){
             getToken({template: "supabase"}).then((token)=>getSupabase(token).then((supabase)=>{
@@ -357,15 +345,42 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
         }
     }, [isFormValid])
     return (
-    <Dialog open={props.isOpen} onClose={() => props.setIsOpen(false)} className={'relative z-[500] '}>
-        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-        <div className='fixed inset-0 flex w-screen items-center justify-center p-4 '>
-        <Dialog.Panel className={`rounded-md  dark:bg-black relative w-full max-w-2xl max-h-full border-2 border-emerald-600 dark:border-emerald-600`}>
-            <Dialog.Title className={'flex bg-emerald-400 items-start justify-between p-4 border-b rounded-t dark:border-white dark:text-black text-black'}>Record Income</Dialog.Title>
-            <div className='p-6 space-y-6 dark:bg-slate-600/80 bg-emerald-500'>
-            <div className={'text-base leading-relaxed text-gray-500 '}>    
+        <Transition appear show={props.isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={()=>{props.setIsOpen(false)}}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                    <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                    >
+                        Record Income
+                    </Dialog.Title>
+                    <div className='p-6 space-y-6'>
+            <div className='text-base leading-relaxed text-gray-500 '>    
                 <div>
-                    <label htmlFor="expLabel" className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
+                    <label htmlFor="expLabel" className="block text-sm font-medium leading-6 text-gray-900">
                         Income Label
                     </label>
                     <div className="mt-2">
@@ -373,7 +388,7 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                         type="text"
                         name="expLabel"
                         id="expLabel"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:text-white"
+                        className=""
                         placeholder="Paycheck"
                         value={transactionLabel}
                         onChange={(e)=>{
@@ -397,7 +412,6 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                         weekStartsOn={1}
                         id="datePicker"
                         value={transactionDate}
-                        defaultValue={new Date()}
                         onValueChange={(e)=>{
                             if (e == null || e == undefined){
                                 document.getElementById('datePicker')!.classList.add('border-red-500')
@@ -421,12 +435,11 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                             return (<optgroup label={a.category} key={indexa}>{a.subcategories.map((b : string, indexb : number)=>{return <option key={indexb} value={JSON.stringify([indexa+1, indexb])}>{b}</option>})}
                             </optgroup>)
                         }
-
                         )}
                     </select>
                     </div>
                     <label htmlFor="expLabel" className="inline-block text-sm font-medium relative leading-6 text-gray-900 mt-4 dark:text-white">
-                        Is this part of your recurring income? (Monthly)
+                        Is this part of your recurring Income? (Monthly)
                     </label>
                         <input
                         type="checkbox"
@@ -437,20 +450,10 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                             setisSub(e.target.checked)
                         }}
                         />
-                        {/* <div className="relative max-w-md" hidden={!isSub}>
-                            <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-                                    <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                                    </svg>
-                                </div>
-                            <input type="text" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter recurrence date (DD-MM-YYYY)"/>
-                        </div> */}
-                    
-                    
                     <div className='h-12 grid grid-cols-2 grid-rows-1 mb-5 gap-3'>
                     <div className='col-start-1 col-span-1 '>
                     <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900 pt-3 dark:text-white">
-                        Cost
+                        Amount
                     </label>
                     <div className="block relative text-sm font-medium leading-6 text-gray-900 dark:text-white">
                         <NumberInput
@@ -487,12 +490,12 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                 </div>
             </div>
             </div>
-            <div className='grid grid-cols-3 grid-rows-1 bg-emerald-400 items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-white'>
+            <div className="relative h-12 w-full px-6">
                 <button 
                     disabled={loading ? true : false} 
                     id={'submit'}
                     data-modal-hide="defaultModal" type="button" 
-                    className={`text-white bg-blue-700 hover:bg-blue-800 col-start-3 row-start-1 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-blue-600/30 disabled:dark:hover:bg-blue-600/30`}
+                    className={`inline-flex float-right justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2`}
                     onClick={async()=>{
                             setLoading(!loading)
                             await submitForm({
@@ -506,11 +509,22 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                         {loading ? <svg aria-hidden="true" role="status" className="inline w-4  h-4 mr-3 text-white animate-spin dark:text-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="#1C64F2"/></svg>: null}
                         Record Income
                 </button>
-                <button data-modal-hide="defaultModal" type="button" className="text-gray-500 row-start-1 col-start-1 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600" onClick={()=>{props.setIsOpen(false)}}>Nevermind</button>
+                <button  
+                    id={'cancel'}
+                    data-modal-hide="defaultModal" type="button" 
+                    className={`inline-flex float-left justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2`}
+                    onClick={async()=>{
+                            props.setIsOpen(false)
+                        }}>
+                        Cancel
+                </button>
             </div>
-        </Dialog.Panel>
+            </Dialog.Panel>
+        </Transition.Child>
+        </div>
         </div>
     </Dialog>
+    </Transition>
     )
 }
 export function Subscriptions() {

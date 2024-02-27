@@ -91,6 +91,7 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
     const [categories, setCategories] = useState<CategorySchema[]|null>(null)
     const [categoryData, setCategoryData] = useState<{[index : number] : CategorySchema}|null>(null)
     const [dayByDay, setdayByDay] = useState<any[]|null>(null);
+    const [selectedExpenses, setSelectedExpenses] = useState<number[]>([])
     const supabase = noAuthSupaBase()
     const {addAlert} = useAlerts()
 
@@ -204,76 +205,94 @@ export default function Report(props : { expenses : ExpenseType[], dates: [numbe
         </div>)
     }
     else return (
-        <div className="w-full overflow-hidden border-t-2 bg-white dark:bg-dark-tremor-background-muted/75">
-            <div className="mx-auto py-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
-            <Card>
-                {props.parent.id == user.userId && <div className="h-12 absolute right-0 pr-6">
-                    <Button iconPosition="left" onClick={() => {navigator.clipboard ? navigator.clipboard.writeText(`https://logmoney.app/report/${props.shareLink}`) : alert(`https://logmoney.app/report/${props.shareLink}`)}} icon={ShareIcon} className=" float-right inline-flex justify-center rounded-md border-none bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none  focus-visible:ring-red-500 focus-visible:ring-offset-2">Share</Button>
-                </div>}
-                <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">{props.child.firstName}'s Expenditure Report</h3>      
-                <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">{(new Date(Number(props.dates[0]))).toDateString()} ⇔ {(new Date(Number(props.dates[1]))).toDateString()}</h3>      
-                <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">{sum && currFormatter(Object.values(sum!).reduce((previous, current)=>{return (current.sum + previous)}, 0), props.homeCurr)} </p>
-                <AreaChart
-                    curveType="step"
-                    showGradient={true}
-                    data={dayByDay}
-                    categories={["Overall Expenditure"]}
-                    index="prettyDate"
-                    className="h-96 mb-5"
-                    yAxisWidth={100}
-                    customTooltip={customTooltip}
-                    valueFormatter={(val)=>currFormatter(val, props.homeCurr)}
-                />
-                <div className="grid grid-cols-3 gap-y-5 w-full">
-                        {Object.values(categoryData!).map((cat)=>{
-                        return (    
-                            sum && sum[cat.id] && <Card className={`border-${getColor(cat.id)}-300 dark:border-${getColor(cat.id)}-300 border-2 mx-auto w-[85%]`}>
-                                <h3 className="text-lg font-semibold mb-4 ">{cat.category}</h3>
-                                <p>Of Total Expenditure: {((sum[cat.id].sum/Object.values(sum!).reduce((previous, current)=>{return (current.sum + previous)}, 0))*100).toFixed(2)}%</p>
-                                <p className="mt-2 font-semibold">Total: {currFormatter(sum[cat.id].sum, props.homeCurr)}</p>
-                            </Card>)
-                            }
-                            )}
-                        <Card className="col-span-3 w-fit min-h-12 mx-auto">
-                            {props.expenses.length > 0 ? <Table className="w-fit mx-auto">
-                                <TableHead className="w-full">
-                                    <TableHeaderCell>
-                                        Date
-                                    </TableHeaderCell>
-                                    <TableHeaderCell>
-                                        Label
-                                    </TableHeaderCell>
-                                    <TableHeaderCell>
-                                        Amount
-                                    </TableHeaderCell>
+        <>
+            {selectedExpenses.length > 0 && <Card className="fixed min-h-[4rem] max-h-fit max-w-fit z-50 border-neutral-900 border rounded-md bottom-5 left-5">
+                <p>Average: <strong>{currFormatter(props.expenses.filter((exp)=>{
+                    return selectedExpenses.includes(exp.id)
+                }).map((exp)=>{
+                    return [exp.amount, exp.currency]
+                }).flatMap((item : any[])=> item[0]*props._currency[item[1]]).reduce((b,a)=>b+a, 0)/selectedExpenses.length, props.homeCurr)}</strong></p>
+                Total: <strong>{currFormatter(props.expenses.filter((exp)=>{
+                    return selectedExpenses.includes(exp.id)
+                }).map((exp)=>{
+                    return [exp.amount, exp.currency]
+                }).flatMap((item : any[])=> item[0]*props._currency[item[1]]).reduce((b,a)=>b+a, 0), props.homeCurr)}</strong> 
+                
+            </Card>}
+            <div className="w-full overflow-hidden border-t-2 bg-white dark:bg-dark-tremor-background-muted/75">
+                <div className="mx-auto py-5 min-h-screen max-w-[88rem] px-6 lg:px-8">
+                <Card>
+                    {props.parent.id == user.userId && <div className="h-12 absolute right-0 pr-6">
+                        <Button iconPosition="left" onClick={() => {navigator.clipboard ? navigator.clipboard.writeText(`https://logmoney.app/report/${props.shareLink}`) : alert(`https://logmoney.app/report/${props.shareLink}`)}} icon={ShareIcon} className=" float-right inline-flex justify-center rounded-md border-none bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none  focus-visible:ring-red-500 focus-visible:ring-offset-2">Share</Button>
+                    </div>}
+                    <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">{props.child.firstName}'s Expenditure Report</h3>      
+                    <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">{(new Date(Number(props.dates[0]))).toDateString()} ⇔ {(new Date(Number(props.dates[1]))).toDateString()}</h3>      
+                    <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">{sum && currFormatter(Object.values(sum!).reduce((previous, current)=>{return (current.sum + previous)}, 0), props.homeCurr)} </p>
+                    <AreaChart
+                        curveType="step"
+                        showGradient={true}
+                        data={dayByDay}
+                        categories={["Overall Expenditure"]}
+                        index="prettyDate"
+                        className="h-96 mb-5"
+                        yAxisWidth={100}
+                        customTooltip={customTooltip}
+                        valueFormatter={(val)=>currFormatter(val, props.homeCurr)}
+                    />
+                    <div className="grid grid-cols-3 gap-y-5 w-full">
+                            {Object.values(categoryData!).map((cat)=>{
+                            return (    
+                                sum && sum[cat.id] && <Card className={`bg-${getColor(cat.id)}-300 dark:border-2 dark:border-${getColor(cat.id)}-300 mx-auto w-[85%]`}>
+                                    <h3 className="text-lg font-semibold mb-4 ">{cat.category}</h3>
+                                    <p>Of Total Expenditure: {((sum[cat.id].sum/Object.values(sum!).reduce((previous, current)=>{return (current.sum + previous)}, 0))*100).toFixed(2)}%</p>
+                                    <p className="mt-2 font-semibold">Total: {currFormatter(sum[cat.id].sum, props.homeCurr)}</p>
+                                </Card>)
+                                }
+                                )}
+                            <Card className="col-span-3 w-fit min-h-12 mx-auto">
+                                {props.expenses.length > 0 ? <Table className="w-fit mx-auto">
+                                    <TableHead className="w-full">
+                                        <TableHeaderCell>
+                                            Date
+                                        </TableHeaderCell>
+                                        <TableHeaderCell>
+                                            Label
+                                        </TableHeaderCell>
+                                        <TableHeaderCell>
+                                            Amount
+                                        </TableHeaderCell>
 
-                                    <TableHeaderCell>
-                                        Category
-                                    </TableHeaderCell>
-                                </TableHead>
-                                <TableBody>
-                                    {props.expenses.map((exp)=>{
-                                    return(<TableRow>
-                                        <TableCell>
-                                            {new Date(exp.transaction_date).toDateString()}
-                                        </TableCell>
-                                        <TableCell className="w-fit">
-                                            {exp.label}
-                                        </TableCell>
-                                        <TableCell>
-                                            <HoverCurrGeneral size="md" expense={exp} currency={[ props.homeCurr, props._currency[exp.currency]]}/>
-                                        </TableCell>
-                                        <TableCell>
-                                            {categories && getBadgeById(exp.category, categories!)}
-                                        </TableCell>
-                                    </TableRow>)
-                                    })}
-                                </TableBody>
-                            </Table> : <><p className="text-center">It seems like {props.child.firstName} hasn't recorded any transcations for this month 😔.</p><p className="text-center">Send them a reminder!</p></>}
-                        </Card>
-                        
+                                        <TableHeaderCell>
+                                            Category
+                                        </TableHeaderCell>
+                                    </TableHead>
+                                    <TableBody>
+                                        {props.expenses.map((exp)=>{
+                                        return(<TableRow className={`cursor-pointer ${!selectedExpenses.includes(exp.id!) && 'hover:bg-slate-300/10'} rounded-md ${selectedExpenses.includes(exp.id!) && 'bg-slate-300/30'}`} onClick={()=> {
+                                            
+                                            if (selectedExpenses.indexOf(exp.id!) == -1){ setSelectedExpenses((prev)=>prev.concat(exp.id!))}
+                                            else setSelectedExpenses((prev)=>prev.filter((id)=>id != exp.id))}}>
+                                            <TableCell>
+                                                {new Date(exp.transaction_date).toDateString()}
+                                            </TableCell>
+                                            <TableCell className="w-fit">
+                                                {exp.label}
+                                            </TableCell>
+                                            <TableCell>
+                                                <HoverCurrGeneral size="md" expense={exp} currency={[ props.homeCurr, props._currency[exp.currency]]}/>
+                                            </TableCell>
+                                            <TableCell>
+                                                {categories && getBadgeById(exp.category, categories!)}
+                                            </TableCell>
+                                        </TableRow>)
+                                        })}
+                                    </TableBody>
+                                </Table> : <><p className="text-center">It seems like {props.child.firstName} hasn't recorded any transcations for this month 😔.</p><p className="text-center">Send them a reminder!</p></>}
+                            </Card>
+                            
+                    </div>
+                </Card>
                 </div>
-            </Card>
             </div>
-        </div>
+        </>
 )}
