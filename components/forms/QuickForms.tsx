@@ -1,5 +1,5 @@
 import  symbols from '../static/symbols.json';
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, Fragment, useRef } from 'react';
 import { DatePicker, DatePickerValue, NumberInput, SearchSelect, SearchSelectItem, Select, SelectItem, TextInput } from '@tremor/react';
 import { CurrencyDollarIcon } from '@heroicons/react/24/solid';
 import { useAuth, useUser } from '@clerk/nextjs';
@@ -19,8 +19,8 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
     const [currency, setCurrency] = useState('EUR');
     const [isAmountInvalid, setisAmountInvalid] = useState(false);
     const [AmountValue, setAmountValue] = useState(0);
-    const [whoPaid, setWhoPaid] = useState<null|string>(null);
-    const [transactionDate, setTransactionDate] = useState<DatePickerValue|Date>(new Date());
+    // const [whoPaid, setWhoPaid] = useState<null|string>(null);
+    const [transactionDate, setTransactionDate] = useState<DatePickerValue|Date|undefined>(undefined);
     const [transactionLabel, setTransactionLabel] = useState('');
     const [category, setCategory] = useState<null|[number, number]>(null)
     const [isFormValid, setisFormValid] = useState<Boolean|null>(null);
@@ -28,6 +28,9 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
     const { user, isSignedIn, isLoaded } = useUser()
     const {addAlert} = useAlerts()
     const { getToken} = useAuth();
+    useEffect(()=>{
+        console.log(transactionDate)
+    }, [transactionDate])
     useEffect(()=>{
         console.log(props.isOpen)
     },[props.isOpen])
@@ -92,17 +95,9 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
     return (
         <Transition appear show={props.isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={()=>{props.setIsOpen(false)}}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
+            <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
             <div className="fixed inset-0 bg-black/25" />
-          </Transition.Child>
+            </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
@@ -113,14 +108,13 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
                 enterTo="opacity-100 scale-100"
                 leave="ease-in duration-200"
                 leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                leaveTo="opacity-0 scale-95">
+                <Dialog.Panel className="w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                     <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                     >
-                        Record an Expense (Money In)
+                        Record an Expense (Money Out)
                     </Dialog.Title>
             <div className='p-6 space-y-6'>
             <div className='text-base leading-relaxed text-gray-500 '>    
@@ -130,6 +124,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
                     </label>
                     <div className="mt-2">
                         <TextInput
+                        
                         type="text"
                         error={!(transactionLabel.length > 0)}
                         name="expLabel"
@@ -156,21 +151,19 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
                         Date
                     </label>
                     <DatePicker
+                        key={'datepicker'}
                         weekStartsOn={1}
-                        id="datePicker"
                         value={transactionDate}
                         onValueChange={(e)=>{
-                            if (e == null || e == undefined){
-                                document.getElementById('datePicker')!.classList.add('border-red-500')
-                                document.getElementById('datePicker')!.classList.add('border-2')
-                            }
-                            else{
-                                document.getElementById('datePicker')!.classList.remove('border-red-500')
-                                document.getElementById('datePicker')!.classList.remove('border-2')
-                            }
-                            return setTransactionDate(e)
+                            // if (e == null || e == undefined){
+                            //     (TransactionDate.current)!.classList.add('highlight_child')
+                            // }
+                            // else{
+                            //     (TransactionDate.current)!.classList.remove('highlight_child')
+                            // }
+                            setTransactionDate(e) 
                         }}
-                        className="max-w-sm px-2 rounded-lg row-span-1 col-span-1 col-start-1" 
+                        className="max-w-sm px-2 rounded-lg row-span-1 col-span-1 col-start-1 w-fit" 
                         />
                     <label htmlFor="expLabel" className="row-span-1 col-span-1 row-start-1 col-start-2 text-sm font-medium leading-6 text-gray-900 pt-3 ">
                         Category
@@ -179,7 +172,6 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
                         setCategory(JSON.parse(e.target.value))}
                         } className='max-w-sm h-fit px-2 outline-none text-left whitespace-nowrap truncate focus:ring-2 transition duration-100 rounded-tremor-default flex flex-nowrap shadow-tremor-input focus:border-tremor-brand-subtle dark:shadow-dark-tremor-input dark:focus:border-dark-tremor-brand-subtle pl-3 pr-8 py-2 border bg-tremor-background dark:bg-dark-tremor-background hover:bg-tremor-background-muted dark:hover:bg-dark-tremor-background-muted text-tremor-content dark:text-dark-tremor-content border-tremor-border dark:border-dark-tremor-border'>
                             <option>Select a category...</option>
-                            
                             {categoryData.map((a : CategorySchema, indexa : number)=>{
                             //@ts-ignore 
                             return (<optgroup label={a.category} key={indexa}>{a.subcategories.map((b : string, indexb : number)=>{return (<option key={indexb} value={JSON.stringify([indexa, indexb])}>{b}</option>)})}
@@ -211,7 +203,7 @@ export function ExpenditureDialog(props : {isOpen : boolean, setIsOpen : React.D
                             placeholder="Amount..."
                             enableStepper={false}
                             value={AmountValue}
-                            error={isAmountInvalid}
+                            error={!AmountValue || AmountValue <= 0}
                             required
                             onValueChange={(e)=>{
                                 setAmountValue(e);
@@ -370,7 +362,7 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                     <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
@@ -409,6 +401,7 @@ export function IncomeDialogue(props : {isOpen : boolean, setIsOpen : React.Disp
                         Date
                     </label>
                     <DatePicker 
+                        key={'datepicker1'}
                         weekStartsOn={1}
                         id="datePicker"
                         value={transactionDate}

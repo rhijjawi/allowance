@@ -19,7 +19,7 @@ export default function Footer(){
         <AnimatePresence>
             <footer className="flex flex-col w-full h-fit border-t bg-white dark:bg-gray-800 dark:border-gray-700">
                 <motion.div
-                initial={{ opacity: 0 }}
+                initial={{ opacity: 0.8 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 1, delay: 1 }}

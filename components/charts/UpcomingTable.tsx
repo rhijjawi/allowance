@@ -69,7 +69,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
                         <TableRow key={index}>
                             <TableCell className="w-full"><div className="min-w-12 break-normal whitespace-pre-wrap">{item.label}</div></TableCell>
                             <TableCell>
-                            <Text>In {Math.ceil(DateDelta/(1000*3600*24))} day{Math.ceil(DateDelta/(1000*3600*24)) > 1 ? "s" : ""}</Text>
+                            <Text>In {Math.floor(DateDelta/(1000*3600*24))} day{Math.floor(DateDelta/(1000*3600*24)) > 1 ? "s" : ""}</Text>
                             </TableCell>
                             <TableCell>
                             <Text className={`dark:text-white`}><HoverSwitchCurr size={'md'} expense={item}/></Text>
@@ -109,7 +109,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                     >
-                        <Dialog.Panel className="w-full max-w-xl transform overflow-hidden ring-tremor bg-white p-6 text-left align-middle shadow-tremor transition-all rounded-xl">
+                        <Dialog.Panel className="w-full max-w-xl transform ring-tremor bg-white p-6 text-left align-middle shadow-tremor transition-all rounded-xl">
                         <div className="relative mt-3">
                             <Table className="min-h-fit h-fit mt-5 w-full rounded-b-md border-2 rounded-md">
                             <TableHead>

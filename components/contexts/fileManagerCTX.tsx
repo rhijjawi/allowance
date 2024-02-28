@@ -1,8 +1,8 @@
-import React, { createContext, use, useContext, useEffect, useState } from "react";
+import React, { Fragment, createContext, use, useContext, useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 
 import { useExpenses, ExpenseType } from "@/components/contexts/expenseCTX";
-import { Dialog } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 import { DragAndDrop } from "@/components/forms/uploadFile";
 import { Bold, Text } from "@tremor/react";
 
@@ -35,16 +35,32 @@ export function FileManagerProvider({children} : {children: React.ReactNode}){
             setResolvedExpense(null)
         }}, [open])
     return (
-        <FileManagerCTX.Provider value={{_error, loading, setExpense}}>
-            <Dialog open={open}onClose={() => {setOpen(false)}
-                } className="">
-                <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-black/70">
-                    <Dialog.Panel className="max-w-sm rounded-md h-fit w-96 aspect-square bg-white border-2 border-black py-3 px-2">
-                    <Dialog.Title className="text-black text-2xl font-semibold">
+    <FileManagerCTX.Provider value={{_error, loading, setExpense}}>
+        <Transition appear show={open} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={()=>{setOpen(false)}}>
+            <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
+            <div className="fixed inset-0 bg-black/25" />
+            </Transition.Child>
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95">
+                <Dialog.Panel className="w-full max-w-lg transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                    <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                    >
                         Upload a file
-                    </Dialog.Title>
-                    <div className="w-full h-0.5 bg-gray-600 my-2"></div>
-                    <div className="text-black divide-y-8">
+                        </Dialog.Title>
+                        <div className='p-6 space-y-6'>
+                        <div className='text-base leading-relaxed text-gray-500 '>    
+                            <div>
                         {resolvedExpense && (
                         <div className="flex flex-col text-lg">
                             <div className=" w-fit min-w-[40%] max-w-full">
@@ -67,9 +83,14 @@ export function FileManagerProvider({children} : {children: React.ReactNode}){
                         </div>
                         )}
                     </div>
+                    </div>
+                    </div>
                     </Dialog.Panel>
+                </Transition.Child>
                 </div>
-                </Dialog>
+                </div>
+            </Dialog>
+            </Transition>
             {children}
         </FileManagerCTX.Provider>
     )

@@ -1,6 +1,6 @@
-import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Badge, TextInput, Card } from '@tremor/react';
+import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Badge, TextInput, Card, Button } from '@tremor/react';
 import { ExpenseSchema, IncomeSchema } from '@/types/supabase';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, ArrowRightIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { TrashIcon } from '@heroicons/react/24/solid';
 import HoverSwitchCurr from '../ui/buttons/hoverSwitchCurr';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
@@ -18,6 +18,9 @@ export default function ExpTable({filter, sortBy, setSortBy, setExpenseFU} : {fi
     const {expenseData, categoryData, incomeData, _error, setExpenseData} = useExpenses()
     const [data, setData] = useState<ExpenseSchema[]>([])
     const [selected, setSelected] = useState<number[]>([])
+    const [paginatedData, setPaginatedData] = useState<ExpenseSchema[]>([])
+    const [page, setPage] = useState(0)
+    const pageSize = 25
     const {user} = useUser()
     useEffect(()=>{
         if (filter){
@@ -35,7 +38,11 @@ export default function ExpTable({filter, sortBy, setSortBy, setExpenseFU} : {fi
         else {
             setData(expenseData)
         }
+        setPage(0)
     }, [expenseData])
+    useEffect(()=>{ 
+        setPaginatedData(data.slice(page*pageSize, (page+1)*pageSize))
+    }, [page, data])
     return (<>
     {selected.length > 0 && <Card className="fixed min-h-[4rem] max-h-fit max-w-fit z-50 border-neutral-900 border rounded-md bottom-5 left-5">
         <p>Average: <strong>{currFormatter(expenseData.filter((exp)=>selected.includes(exp.id!)).map((exp : ExpenseSchema)=>{
@@ -46,13 +53,14 @@ export default function ExpTable({filter, sortBy, setSortBy, setExpenseFU} : {fi
         }).reduce((b,a)=>b!+a!, 0)!, (user!.publicMetadata as {currency : string}).currency)}</strong>
     </Card>}
     <Table className="relative grid mt-5 w-full rounded-b-md border-2 rounded-md overflow-visible">
-            {selected.length > 0 ? <><div className="absolute h-fit w-fit rounded-md -top-16 left-0 right-0 mx-auto z-0">
-            <span className="isolate inline-flex rounded-md shadow-sm">
-                <button type="button" className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10" onClick={()=>setSelected([])}>Clear Selection</button>
-                <button type="button" className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10" onClick={()=>setHandlerMode(["delete", selected])}>Bulk Delete</button>
-                <button type="button" className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">Bulk Rename</button>
-                <button type="button" className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10" onClick={()=>setHandlerMode(["modifyCategory", selected])}>Bulk Edit Categories</button>
-            </span>
+            {selected.length > 0 ? <>
+            <div key={'_0'} className="absolute h-fit w-fit rounded-md -top-16 left-0 right-0 mx-auto z-0">
+                <span key={'_0_0'} className="isolate inline-flex rounded-md shadow-sm">
+                    <button key={'_0_1'} type="button" className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10" onClick={()=>setSelected([])}>Clear Selection</button>
+                    <button key={'_0_2'} type="button" className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10" onClick={()=>setHandlerMode(["delete", selected])}>Bulk Delete</button>
+                    <button key={'_0_3'} type="button" className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">Bulk Rename</button>
+                    <button key={'_0_4'} type="button" className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10" onClick={()=>setHandlerMode(["modifyCategory", selected])}>Bulk Edit Categories</button>
+                </span>
             </div></> : null}
     <TableHead>
         <TableRow className="border-b-2 dark:border-b-white border-b-black">
@@ -108,11 +116,11 @@ export default function ExpTable({filter, sortBy, setSortBy, setExpenseFU} : {fi
     </TableHead>
     
     <TableBody className="h-fit dark:divide-white divide-y  divide-black">
-        {data.map((item : ExpenseSchema, index : number) => {
+        {paginatedData.map((item : ExpenseSchema, index : number) => {
             const daystoMs = [1209600000, 2678400000, 31557600000];
             if (Number.isInteger(filter) && filter != 0){
                 const filterTime = new Date(Number(new Date()) - daystoMs[Number(filter)-1]);
-                if(!(new Date(item.transaction_date) >= filterTime && new Date(item.transaction_date) <= new Date()))return (<></>);
+                if(!(new Date(item.transaction_date) >= filterTime && new Date(item.transaction_date) <= new Date())) return (<></>);
             }
             let date = "unknown"
             let formatter = Intl.NumberFormat('en-US', {})
@@ -136,7 +144,7 @@ export default function ExpTable({filter, sortBy, setSortBy, setExpenseFU} : {fi
             }} className={"dark:divide-white cursor-pointer divide-black divide-x " + ["dark:bg-black/10 bg-white ", "dark:bg-slate-800 bg-gray-800/10"][index%2]}>
                 <TableCell key={`${item.id}.2`} className="relative w-8 mx-0 my-auto ">
                     <div className="absolute right-0 top-0 left-0 bottom-0 w-6 h-6 p-6 ">
-                        <input id="comments" checked={selected.indexOf(item.id!) !== -1} aria-describedby="comments-description" name="comments" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
+                        <input readOnly id="comments" checked={selected.indexOf(item.id!) !== -1} aria-describedby="comments-description" name="comments" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
                     </div>
                 </TableCell>
                 <TableCell key={`${item.id}.3`} className="relative w-8 mx-auto my-auto">
@@ -186,5 +194,10 @@ export default function ExpTable({filter, sortBy, setSortBy, setExpenseFU} : {fi
             </TableRow>)
         })}
     </TableBody>
-</Table></>)
+</Table>
+<div className="relative mx-auto w-fit grid grid-cols-2 gap-x-2 mt-6">
+    <Button iconPosition={'left'} onClick={()=>{setPage((prev)=>prev-1)}} disabled={page < 1} icon={ArrowLeftIcon}>Previous</Button>
+    <Button iconPosition={'right'} onClick={()=>{setPage((prev)=>prev+1)}} disabled={expenseData.length < ((page+1)*pageSize)} icon={ArrowRightIcon}>Next</Button>
+</div>
+</>)
 }

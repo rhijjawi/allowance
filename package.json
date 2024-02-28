@@ -22,7 +22,7 @@
     "@stripe/stripe-js": "^2.1.11",
     "@supabase/supabase-js": "^2.33.2",
     "@tailwindcss/forms": "^0.5.6",
-    "@tremor/react": "3.11.1-beta.3",
+    "@tremor/react": "^3.14.0",
     "@types/formidable": "^3.4.5",
     "@types/node": "20.6.1",
     "@types/react": "18.2.21",
