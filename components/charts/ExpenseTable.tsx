@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Badge, TextInput } from '@tremor/react';
+import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Badge, TextInput, Card } from '@tremor/react';
 import { ExpenseSchema, IncomeSchema } from '@/types/supabase';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { TrashIcon } from '@heroicons/react/24/solid';
@@ -7,6 +7,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { getColor, getBadge, getBadgeByCategoryName, getIDByCategoryName } from '../static/categories';
 import { useExpenses } from '../contexts/expenseCTX';
 import { useTransactionHandler } from '../contexts/transactionHandler';
+import { currFormatter } from '@/utils/functions/valueFormatters';
+import { useUser } from '@clerk/nextjs';
 let TableHeadStyle = ["dark:bg-black bg-white select-none relative","h-6 relative right-0 bottom-0 top-0 left-0 mx-auto my-auto"]
 let ChevronStyle = ["absolute w-8 aspect-square rounded-full right-0 bottom-0 top-0 my-auto mr-4","w-8 h-8 border-2 rounded-full absolute"]
 const chevrons = [null, <ChevronUpIcon className={ChevronStyle[1]}/>, <ChevronDownIcon className={ChevronStyle[1]}/>]
@@ -16,6 +18,7 @@ export default function ExpTable({filter, sortBy, setSortBy, setExpenseFU} : {fi
     const {expenseData, categoryData, incomeData, _error, setExpenseData} = useExpenses()
     const [data, setData] = useState<ExpenseSchema[]>([])
     const [selected, setSelected] = useState<number[]>([])
+    const {user} = useUser()
     useEffect(()=>{
         if (filter){
             switch (filter){
@@ -33,15 +36,24 @@ export default function ExpTable({filter, sortBy, setSortBy, setExpenseFU} : {fi
             setData(expenseData)
         }
     }, [expenseData])
-    return (
-        <Table className="relative grid mt-5 w-full rounded-b-md border-2 rounded-md overflow-visible">
-            {selected.length > 0 ? <div className="absolute h-fit w-fit rounded-md -top-16 left-0 right-0 mx-auto z-0">
+    return (<>
+    {selected.length > 0 && <Card className="fixed min-h-[4rem] max-h-fit max-w-fit z-50 border-neutral-900 border rounded-md bottom-5 left-5">
+        <p>Average: <strong>{currFormatter(expenseData.filter((exp)=>selected.includes(exp.id!)).map((exp : ExpenseSchema)=>{
+            return exp.standardizedCurrency
+        }).reduce((b,a)=>b!+a!, 0)!/selected.length, (user!.publicMetadata as {currency : string}).currency)}</strong></p>
+        Total: <strong>{currFormatter(expenseData.filter((exp)=>selected.includes(exp.id!)).map((exp : ExpenseSchema)=>{
+            return exp.standardizedCurrency
+        }).reduce((b,a)=>b!+a!, 0)!, (user!.publicMetadata as {currency : string}).currency)}</strong>
+    </Card>}
+    <Table className="relative grid mt-5 w-full rounded-b-md border-2 rounded-md overflow-visible">
+            {selected.length > 0 ? <><div className="absolute h-fit w-fit rounded-md -top-16 left-0 right-0 mx-auto z-0">
             <span className="isolate inline-flex rounded-md shadow-sm">
-                <button type="button" className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10" onClick={()=>setHandlerMode(["delete", selected])}>Bulk Delete</button>
+                <button type="button" className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10" onClick={()=>setSelected([])}>Clear Selection</button>
+                <button type="button" className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10" onClick={()=>setHandlerMode(["delete", selected])}>Bulk Delete</button>
                 <button type="button" className="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">Bulk Rename</button>
                 <button type="button" className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10" onClick={()=>setHandlerMode(["modifyCategory", selected])}>Bulk Edit Categories</button>
             </span>
-            </div> : null}
+            </div></> : null}
     <TableHead>
         <TableRow className="border-b-2 dark:border-b-white border-b-black">
             <TableHeaderCell className={`w-16 relative ${TableHeadStyle[0]}`}>
@@ -174,5 +186,5 @@ export default function ExpTable({filter, sortBy, setSortBy, setExpenseFU} : {fi
             </TableRow>)
         })}
     </TableBody>
-</Table>)
+</Table></>)
 }

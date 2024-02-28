@@ -1,7 +1,7 @@
-import { Dialog } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 import { CurrencyDollarIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { Button, Callout, NumberInput, Select, SelectItem, Subtitle, Text } from "@tremor/react";
-import React, { Dispatch, useState } from "react";
+import React, { Dispatch, Fragment, useState } from "react";
 import symbols from '@/components/static/symbols.json'
 import { useAlerts } from "../contexts/alertHandler";
 export default function EmergencyFundModal({isOpen, setIsOpen, misc, setMisc} : {isOpen : boolean, setIsOpen : Dispatch<React.SetStateAction<boolean>>, misc : any, setMisc : Dispatch<React.SetStateAction<any>>}){
@@ -26,22 +26,47 @@ export default function EmergencyFundModal({isOpen, setIsOpen, misc, setMisc} : 
         }, 2000);
     };
     return (
-        <Dialog open={isOpen} onClose={() => setIsOpen(false)} className={'relative z-[500] '}>
-          <div className="fixed inset-0 bg-black/30" aria-hidden="true" onClick={()=>setIsOpen(false)} />
-          <div className='fixed inset-0 flex w-screen items-center justify-center p-4 '>
-            <Dialog.Panel className={`rounded-md  bg-white dark:bg-black relative w-full max-w-3xl max-h-full border-2 border-orange-500 dark:border-white`}>
-                <Dialog.Title className={'flex items-start bg-orange-400 justify-between p-4 border-b rounded-t dark:text-black text-black'}>Your Emergency Fund</Dialog.Title>
-                <div className='p-6 dark:bg-slate-600/80 h-96'>
-                    <Callout className='' icon={ExclamationCircleIcon} title={"Reminder"} color="amber">
-                        <Text className="dark:text-slate-300">If you don't have an emergency fund, you should start one.</Text>
-                        <Text className="dark:text-slate-300">Cash is the only currency with guaranteed access. </Text>
-                        <Text className="dark:text-slate-300">You should have at least 3 months of expenses saved up in case of an emergency. <i>Anything can happen.</i></Text>
-                        <Text className="dark:text-slate-300">An "emergency fund" can also be considered a pot for large expenses such as traveling for when big transactions need to be made.</Text>
-                    </Callout>
-                    <div className="grid grid-cols-3 grid-rows-1 py-5 gap-x-5">
+        <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={()=>setIsOpen(false)}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/25" />
+          </Transition.Child>
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+          <Dialog.Panel className="max-w-[45%] w-fit min-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-dark-tremor-background-subtle p-6 text-left align-middle shadow-xl transition-all">
+            <Dialog.Title
+              as="h3"
+              className="text-lg font-medium leading-6 text-gray-900 dark:text-white"
+            >Your Emergency Fund</Dialog.Title>
+            <div className="mt-2 gap-x-2 w-[95%]">
+            <div className="block relative text-sm font-medium leading-6 text-gray-900 dark:text-white">
+                <Callout className='' icon={ExclamationCircleIcon} title={"Reminder"} color="amber">
+                    <Text className="dark:text-slate-300">If you don't have an emergency fund, you should start one.</Text>
+                    <Text className="dark:text-slate-300">Cash is the only currency with guaranteed access. </Text>
+                    <Text className="dark:text-slate-300">You should have at least 3 months of expenses saved up in case of an emergency. <i>Anything can happen.</i></Text>
+                    <Text className="dark:text-slate-300">An "emergency fund" can also be considered a pot for large expenses such as traveling for when big transactions need to be made.</Text>
+                </Callout>
+                    <div className="py-5 grid grid-cols-3">
                         <div className="col-start-1 w-fit justify-center">
                             <div className="w-full text-sm font-medium leading-6 text-gray-900 dark:text-white">
-                                <Text className="text-center dark:text-white">Amount Accessible by Card</Text>
+                                <Text className="text-center dark:text-white">Amount (Virtually Accessible via Card, Bank, etc)</Text>
                                 <NumberInput
                                     icon={CurrencyDollarIcon}
                                     placeholder="Amount..."
@@ -56,7 +81,7 @@ export default function EmergencyFundModal({isOpen, setIsOpen, misc, setMisc} : 
                         </div>
                         <div className="col-start-2 w-fit justify-center">
                             <div className="text-sm font-medium leading-6 text-gray-900 dark:text-white">
-                            <Text className="text-center dark:text-white">Cash-on-Hand</Text>
+                            <Text className="text-center dark:text-white">Physical Money</Text>
                                 <NumberInput
                                     icon={CurrencyDollarIcon}
                                     placeholder="Amount..."
@@ -70,17 +95,23 @@ export default function EmergencyFundModal({isOpen, setIsOpen, misc, setMisc} : 
                             </div>
                         </div>
                         <div className="col-start-3 w-full justify-center">
-                            <Text className="text-center dark:text-white">Currency</Text>
-                            <Select enableClear={false} value={currency} onValueChange={(e)=>{setCurrency(e)}} className="w-full">
-                                {Object.keys(symbols).map((currency:string, index:number) => (<SelectItem className="text-center mx-auto text-red-400" value={currency}>{currency}</SelectItem>))}
+                            <div className="w-fit float-right">
+                            <Text className="text-center  dark:text-white">Currency</Text>
+                            <Select enableClear={false} value={currency} onValueChange={(e)=>{setCurrency(e)}} className="w-fit z-[60] float-right">
+                                {Object.keys(symbols).map((currency:string, index:number) => (<SelectItem className="text-center z-60 mx-auto" value={currency}>{currency}</SelectItem>))}
                             </Select>
+                            </div>
                         </div>
                     </div>
                 <Button className={`float-left ml-4 mb-4 my-5`} disabled={loading} onClick={() => setIsOpen(false)}> Cancel </Button>
                 <Button className={`float-right mr-4 mb-4 my-5`} disabled={loading} onClick={async() => await handleSave()}> Save </Button>
                 </div>
+                </div>
             </Dialog.Panel>
-          </div>
+            </Transition.Child>
+            </div>
+        </div>
         </Dialog>
+        </Transition>
     );
 }
