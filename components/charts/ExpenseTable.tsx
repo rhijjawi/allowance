@@ -41,7 +41,8 @@ export default function ExpTable({filter, sortBy, setSortBy, setExpenseFU} : {fi
         setPage(0)
     }, [expenseData])
     useEffect(()=>{ 
-        setPaginatedData(data.slice(page*pageSize, (page+1)*pageSize))
+        const spliced = data.slice(page*pageSize, (page+1)*pageSize)
+        setPaginatedData(spliced)
     }, [page, data])
     return (<>
     {selected.length > 0 && <Card className="fixed min-h-[4rem] max-h-fit max-w-fit z-50 border-neutral-900 border rounded-md bottom-5 left-5">
@@ -195,9 +196,12 @@ export default function ExpTable({filter, sortBy, setSortBy, setExpenseFU} : {fi
         })}
     </TableBody>
 </Table>
-<div className="relative mx-auto w-fit grid grid-cols-2 gap-x-2 mt-6">
-    <Button iconPosition={'left'} onClick={()=>{setPage((prev)=>prev-1)}} disabled={page < 1} icon={ArrowLeftIcon}>Previous</Button>
-    <Button iconPosition={'right'} onClick={()=>{setPage((prev)=>prev+1)}} disabled={expenseData.length < ((page+1)*pageSize)} icon={ArrowRightIcon}>Next</Button>
+<div className="relative mx-auto w-fit grid grid-cols-[auto_fit-content(100%)_auto] gap-x-2 mt-6">
+    <Button iconPosition={'left'} onClick={()=>{setPage((prev)=>prev-1)}} disabled={page < 1} icon={ArrowLeftIcon} tooltip='Previous Page'>Previous</Button>
+    <div className="w-fit h-fit my-auto"> 
+        <p className='align-middle h-fit whitespace-nowrap'>Page <strong>{page+1}</strong> of <strong>{Math.ceil(data.length / pageSize)}</strong></p>
+    </div>
+    <Button iconPosition={'right'} tooltip='Next Page' onClick={()=>{setPage((prev)=>prev+1)}} disabled={data.slice((page+1)*pageSize, (page+2)*pageSize).length == 0} icon={ArrowRightIcon}>Next</Button>
 </div>
 </>)
 }

@@ -81,7 +81,7 @@ let ChevronStyle = [
 export default function ListPage() {
   const { user, isSignedIn, isLoaded } = useUser();
   const router = useRouter();
-  const [filtermode, setFiltermode] = useState<0|1|2|3>(1); // 0: all, 1: past 2 weeks, 2: past month, 3: past year
+  const [filtermode, setFiltermode] = useState<0|1|2|3>(0); // 0: all, 1: past 2 weeks, 2: past month, 3: past year
   const filterlabels = [
     "All Expenditure",
     "Expenditure in the past 2 weeks",
