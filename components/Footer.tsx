@@ -9,7 +9,7 @@ const footerItems = [
         {name: "Blog", link: "/blog"}, {name: "Careers (Coming soon)", link: "#"}, {name: "Press", link: "/press"}
     ],
     [
-        {name: "Contact", link: "mailto:contact@logmoney.app"}, {name: "Donate", link: "https://buy.stripe.com/cN25lTc8w0D7eyY6oo"}
+        {name: "Contact", link: "mailto:contact@logmoney.app"}
     ],
 ]
 

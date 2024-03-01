@@ -13,6 +13,7 @@ import Head from "next/head";
 import { StrictMode, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import React from "react";
+import Intro from "@/components/ui/modals/Intro";
 const raleway = Raleway({ subsets: ["latin"] });
 
 export default function MyApp({
@@ -118,6 +119,7 @@ export default function MyApp({
                     </noscript>
 
                     <div className={`${raleway.className} antialiased`}>
+                      <Intro />
                       <Component {...pageProps} />
                     </div>
                   </Layout>

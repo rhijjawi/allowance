@@ -88,6 +88,7 @@ export default function ListPage() {
     "Expenditure in the past month",
     "Expenditure in the past year",
   ];
+
   const selectLabels = ["All", "14 days", "30 days", "365 days"];
   const [supportedBanks, setSupportedBanks] = useState<string[]>([]);
   const [search, setSearch] = useState<string>("")
@@ -340,10 +341,7 @@ export default function ListPage() {
                 <div className="">
                   <Card className="h-fit min-h-16 border-2 border-slate-400 bg-white shadow-md">
                     <Title>Upcoming Transactions</Title>
-                    <UpcomingTable
-                      expenses={expenseData}
-                      categories={categoryData}
-                    />
+                    <UpcomingTable/>
                   </Card>
                   <Card className="mt-3 grid flex-grow grid-cols-3 border-2 border-slate-400 bg-white shadow-md">
                     <Title className="col-span-1 col-start-1">
