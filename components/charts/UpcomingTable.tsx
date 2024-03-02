@@ -1,20 +1,23 @@
 import {useState, useEffect, Fragment} from "react"
-import { ExpenseType } from "../contexts/expenseCTX";
+import { ExpenseType, useExpenses } from "../contexts/expenseCTX";
 import { Card, Table, TableHead, Button, TableRow, TableHeaderCell, TableBody, TableCell, Text, Title, Badge, Subtitle } from "@tremor/react";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { Dialog, Transition } from "@headlessui/react";
 import { getColor, getBadge } from "@/components/static/categories";
 import HoverSwitchCurr from "@/components/ui/buttons/hoverSwitchCurr";
+import { ExpenseSchema } from "@/types/supabase";
 let TableHeadStyle = ["dark:bg-black bg-white select-none","h-6 relative right-0 bottom-0 top-0 left-0 mx-auto my-auto"]
-export default function table(props : {expenses : ExpenseType[], categories : any}){
-    let {expenses, categories} = props
+export default function table(){
+    const {expenseData : expenses, categoryData : categories} = useExpenses()
     const [modalOpen, setModalOpen] = useState<any>(false)
     const [recurring, setRecurring] = useState<any>([])
     useEffect(()=>{
-        let active = true
         setRecurring([])
         expenses.map((expense : ExpenseType) => {
             let date = new Date(expense.transaction_date)
+            if (date > new Date()){
+
+            }
             date.setUTCMonth(new Date().getUTCMonth())
             let DateDelta = Number(new Date(date)) - Number(new Date())
             if (DateDelta < 0){
@@ -25,9 +28,8 @@ export default function table(props : {expenses : ExpenseType[], categories : an
             if (expense.recurring || ((Number(new Date(expense.transaction_date)) - Number(new Date())) > 0)){
                 setRecurring((prevState : any) => [...prevState, expense])}
         })
-    }, [props.expenses])
+    }, [expenses])
     useEffect(()=>{
-
     }, [recurring])
     const closeModal = (): any => setModalOpen(false);
     return (
@@ -60,7 +62,20 @@ export default function table(props : {expenses : ExpenseType[], categories : an
                 </TableRow>
             </TableHead>
             <TableBody>
-                {recurring.map((item : ExpenseType, index: number) => {
+                {[expenses.filter((exp : ExpenseSchema)=>{
+                    console.log(new Date(exp.transaction_date), new Date())
+                    return (new Date(exp.transaction_date) > new Date())
+                }).map((item, index)=> {return (
+                    <TableRow key={index}>
+                        <TableCell className="w-full"><div className="min-w-12 break-normal whitespace-pre-wrap">{item.label}</div></TableCell>
+                        <TableCell>
+                        {/* <Text>In {Math.floor(DateDelta/(1000*3600*24))} day{Math.floor(DateDelta/(1000*3600*24)) > 1 ? "s" : ""}</Text> */}
+                        </TableCell>
+                        <TableCell>
+                        <Text className={`dark:text-white`}><HoverSwitchCurr size={'md'} expense={item}/></Text>
+                        </TableCell>
+                    </TableRow>
+                )}), recurring.map((item : ExpenseType, index: number) => {
                     let date = new Date(item.transaction_date)
                     date.setUTCMonth(new Date().getUTCMonth())
                     let DateDelta = Number(new Date(date)) - Number(new Date())
@@ -75,7 +90,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
                             <Text className={`dark:text-white`}><HoverSwitchCurr size={'md'} expense={item}/></Text>
                             </TableCell>
                         </TableRow>
-                )}).splice(0,2)}
+                )}).splice(0,2)]}
             </TableBody>
             </Table> : <p className="mt-5 text-indigo-500">No upcoming transactions</p>}
                 {recurring.length > 2 ? <div className="relative right-0 left-0 bottom-0 w-full h-8 mt-5"><Button 
@@ -156,7 +171,7 @@ export default function table(props : {expenses : ExpenseType[], categories : an
                                     <TableCell>
                                         <Text>
                                             <Badge tooltip={
-                                                    (categories.find((element : any) => {return element.id === item.category[0]})).subcategories[item.category[1]]
+                                                    (categories.find((element : any) => {return element.id === item.category[0]})!.subcategories[item.category[1]]) as string
                                                     //@ts-ignore
                                                 } size={'md'} color={getColor((categories.find((element) => {return element.id === item.category[0]})).id)} className={`select-none dark:bg-black/0 border border-${getColor((categories.find((element) => {return element.id === item.category[0]})).id)}-500`} icon={getBadge((categories.find((element) => {return element.id === item.category[0]})).id)}>{(categories.find((element) => {return element.id === item.category[0]})).category}</Badge>
                                         </Text>

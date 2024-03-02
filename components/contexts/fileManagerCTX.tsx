@@ -62,25 +62,7 @@ export function FileManagerProvider({children} : {children: React.ReactNode}){
                         <div className='text-base leading-relaxed text-gray-500 '>    
                             <div>
                         {resolvedExpense && (
-                        <div className="flex flex-col text-lg">
-                            <div className=" w-fit min-w-[40%] max-w-full">
-                                <div className="text-black">Transaction Label</div>
-                                <div className="text-black bg-gray-800/20 py-2 px-2 break-words border border-black rounded-md">{resolvedExpense.label}</div>
-                            </div>
-                            <div className=" w-fit min-w-[40%] max-w-full py-3">
-                                <div className="text-black">Transaction Amount</div>
-                                <div className="text-black bg-gray-800/20 py-2 px-2 break-words border border-black rounded-md">{new Intl.NumberFormat('en-US', {
-                                style: 'currency',
-                                currency: resolvedExpense.currency,
-                            }).format(resolvedExpense.amount)}</div>
-                            </div>
-                            <div className=" w-fit min-w-[40%] max-w-full py-3">
-                                <Text>This transaction took place on <Bold>{new Date(resolvedExpense.transaction_date).toLocaleDateString()}</Bold>.</Text>
-                            </div>
-                            <div className="min-w-full py-3">
-                                <DragAndDrop id={resolvedExpense.id!} user={user?.id}/>
-                            </div>
-                        </div>
+                            <DragAndDrop setOpen={setOpen} exp={resolvedExpense} id={resolvedExpense.id!} user={user?.id}/>
                         )}
                     </div>
                     </div>
