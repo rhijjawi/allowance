@@ -10,6 +10,8 @@ import {
   TextInput,
   Card,
   Button,
+  DateRangePickerValue,
+  DateRangePickerProps,
 } from "@tremor/react";
 import { ExpenseSchema, IncomeSchema } from "@/types/supabase";
 import {
@@ -17,6 +19,7 @@ import {
   ArrowRightIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import HoverSwitchCurr from "../ui/buttons/hoverSwitchCurr";
@@ -34,7 +37,7 @@ import { useUser } from "@clerk/nextjs";
 import { FileHover } from "@/components/ui/buttons/FileHover";
 import Filters from "../ui/Filters";
 let TableHeadStyle = [
-  "dark:bg-black bg-white select-none relative",
+  "dark:bg-black bg-white select-none relative border-x-2 dark:border-l-white border-x-black",
   "h-6 relative right-0 bottom-0 top-0 left-0 mx-auto my-auto",
 ];
 let ChevronStyle = [
@@ -46,6 +49,52 @@ const chevrons = [
   <ChevronUpIcon className={ChevronStyle[1]} />,
   <ChevronDownIcon className={ChevronStyle[1]} />,
 ];
+
+interface EXP_Filters {
+  date : DateRangePickerValue,
+  range : [number|undefined, number|undefined],
+  categories : string[]
+}
+
+function getPaginatedDataWithFilters(data: ExpenseSchema[], filters : EXP_Filters) {
+  // Early exit if no filters are applied
+  if (!areFiltersApplied(filters)) {
+      return data;
+  }
+
+  return data.filter(expense => {
+      return isCategoryMatch(expense, filters) &&
+        isInRange(expense, filters) &&
+        isDateMatch(expense, filters);
+  });
+}
+
+function areFiltersApplied(filters : EXP_Filters) {
+  return filters.categories.length > 0 ||
+    filters.range[0] ||
+    filters.range[1] ||
+    (filters.date as DateRangePickerValue).from ||
+    (filters.date as DateRangePickerValue).to;
+}
+
+function isCategoryMatch(expense: ExpenseSchema, filters : EXP_Filters) {
+  if (filters.categories.length === 0) return true;
+  return filters.categories.includes(String(expense.category[0]));
+}
+
+function isInRange(expense: ExpenseSchema, filters : EXP_Filters) {
+  if (!filters.range[0] && !filters.range[1]) return true;
+  const amount = expense.standardizedCurrency!;
+  return amount >= filters.range[0]! && amount <= filters.range[1]!;
+}
+
+function isDateMatch(expense: ExpenseSchema, filters : EXP_Filters) {
+  const transactionDate = new Date(expense.transaction_date);
+  const fromDate = filters.date.from!;
+  const toDate = filters.date.to!;
+  if (!fromDate && !toDate) return true;
+  return transactionDate >= fromDate && transactionDate <= toDate;
+}
 
 export default function ExpTable({
   filter,
@@ -69,11 +118,14 @@ export default function ExpTable({
   const { expenseData, categoryData, incomeData, _error, setExpenseData } =
     useExpenses();
   const [data, setData] = useState<ExpenseSchema[]>([]);
-  const [selected, setSelected] = useState<number[]>([]);
-  const [paginatedData, setPaginatedData] = useState<ExpenseSchema[]>([]);
+  const [selected, setSelected] = useState<number[]>([] as number[]);
+  const [paginatedData, setPaginatedData] = useState<[ExpenseSchema[], number]>([[], 0]);
   const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState<EXP_Filters>({date : {from : undefined, to: undefined}, range : [undefined, undefined] as [number|undefined, number|undefined], categories : [] as string[]})
   const pageSize = 25;
   const { user } = useUser();
+  
   useEffect(() => {
     if (filter) {
       switch (filter) {
@@ -94,12 +146,18 @@ export default function ExpTable({
     setPage(0);
   }, [expenseData]);
   useEffect(() => {
-    const spliced = data.slice(page * pageSize, (page + 1) * pageSize);
-    setPaginatedData(spliced);
-  }, [page, data]);
+    const filteredData = getPaginatedDataWithFilters(data, filters).filter((exp)=>{
+      if (search.toLowerCase().length == 0){return true}
+      return (exp.label.trim().toLowerCase().match(search.toLowerCase()) ? true : false)
+    })
+    
+    setPaginatedData([filteredData.slice(page * pageSize, (page + 1) * pageSize), filteredData.length]);
+  }, [page, data, search, filters]);
+  
   return (
     <>
-      <Filters categories={categoryData} userCurr={(user?.publicMetadata as {currency : string}).currency!}/>
+      <Filters categories={categoryData} userCurr={(user?.publicMetadata as {currency : string}).currency!} setFilters={setFilters} filters={filters}/>
+      <TextInput value={search} placeholder="Search your expenses" onValueChange={(e)=>setSearch((e as string))} className="relative top-0 translate-y-[-50%] float-right h-10 w-52" icon={MagnifyingGlassIcon} />
       {selected.length > 0 && (
         <Card className="fixed bottom-5 left-5 z-50 max-h-fit min-h-[4rem] max-w-fit rounded-md border border-neutral-900">
           <p>
@@ -130,7 +188,7 @@ export default function ExpTable({
           </strong>
         </Card>
       )}
-      <Table className="relative mt-5 grid w-full overflow-visible rounded-md rounded-b-md border-2">
+      {paginatedData[1] > 0 ? <Table className="relative mt-5 grid w-full overflow-visible rounded-md rounded-b-md border-2">
         {selected.length > 0 ? (
           <>
             <div
@@ -178,20 +236,26 @@ export default function ExpTable({
         ) : null}
         <TableHead>
           <TableRow className="border-b-2 border-b-black dark:border-b-white">
-            <TableHeaderCell className={`relative w-16 ${TableHeadStyle[0]}`}>
-              <div className={`h-full w-fit ${TableHeadStyle[1]}`}></div>
-            </TableHeaderCell>
-            <TableHeaderCell
-              className={`relative w-64 border-x border-x-gray-500 ${TableHeadStyle[0]}`}
-            >
-              <div className={`w-fit ${TableHeadStyle[1]}`}>
-                <Text className="h-full w-fit text-black hover:cursor-pointer hover:text-gray-300 dark:text-white dark:hover:text-stone-300">
-                  Recurring
-                </Text>
+            <TableHeaderCell className={`relative w-16 ${TableHeadStyle[0]} border-l-0`}>
+              <div className={`h-full w-fit ${TableHeadStyle[1]}`}>
+                <Button onClick={()=>{
+                  const selectedOnPage = selected.filter((id)=>paginatedData[0].flatMap((exp)=>exp.id).includes(id))
+                  const selectedNotOnPage = selected.filter((val)=>!(paginatedData[0].flatMap((exp)=>exp.id!).includes(val)))
+                  const flatMapPaginated = paginatedData[0].flatMap((val)=>val.id!)
+                  if (selectedOnPage.length != paginatedData[0].length){
+                    setSelected([...selectedNotOnPage, ...flatMapPaginated])
+                  }
+                  else if (selectedOnPage.length == paginatedData[0].length){
+                    setSelected([...selectedNotOnPage])
+                  }
+                  // else {
+                  //   setSelected([...selectedNotOnPage, ...flatMapPaginated])
+                  // }
+                }} className="px-1 py-[0.1875rem]" tooltip="Select all transactions on page">＊</Button>
               </div>
             </TableHeaderCell>
             <TableHeaderCell
-              className={`relative w-64 border-x border-x-gray-500 ${TableHeadStyle[0]}`}
+              className={`relative w-64 border-x  ${TableHeadStyle[0]}`}
             >
               <div
                 className={`w-fit ${TableHeadStyle[1]}`}
@@ -208,7 +272,16 @@ export default function ExpTable({
               </div>
             </TableHeaderCell>
             <TableHeaderCell
-              className={`relative w-24 border-x border-x-gray-500 ${TableHeadStyle[0]}`}
+              className={`relative w-64 border-x ${TableHeadStyle[0]}`}
+            >
+              <div className={`w-fit ${TableHeadStyle[1]}`}>
+                <Text className="h-full w-fit text-black hover:cursor-pointer hover:text-gray-300 dark:text-white dark:hover:text-stone-300">
+                  Recurring
+                </Text>
+              </div>
+            </TableHeaderCell>
+            <TableHeaderCell
+              className={`relative w-24 border-x  ${TableHeadStyle[0]}`}
             >
               <div className={`w-fit ${TableHeadStyle[1]}`}>
                 <Text className="h-full w-fit text-black hover:text-gray-300 dark:text-white dark:hover:text-stone-300">
@@ -217,7 +290,7 @@ export default function ExpTable({
               </div>
             </TableHeaderCell>
             <TableHeaderCell
-              className={`w-64 border-x border-x-gray-500 dark:border-l-white ${TableHeadStyle[0]}`}
+              className={`w-64 border-x   ${TableHeadStyle[0]}`}
             >
               <div
                 className={`w-fit ${TableHeadStyle[1]}`}
@@ -234,7 +307,7 @@ export default function ExpTable({
               </div>
             </TableHeaderCell>
             <TableHeaderCell
-              className={`w-16 border-x-gray-500 dark:border-l-white ${TableHeadStyle[0]}`}
+              className={`w-16   ${TableHeadStyle[0]}`}
             >
               <div
                 className={`w-fit ${TableHeadStyle[1]}`}
@@ -251,7 +324,7 @@ export default function ExpTable({
               </div>
             </TableHeaderCell>
             <TableHeaderCell
-              className={`w-8 border-x-gray-500 dark:border-l-white ${TableHeadStyle[0]}`}
+              className={`w-8   ${TableHeadStyle[0]}`}
             >
               <div className={`w-fit ${TableHeadStyle[1]}`}>
                 <Text className="w-fit break-words text-black  dark:text-white">
@@ -260,7 +333,7 @@ export default function ExpTable({
               </div>
             </TableHeaderCell>
             <TableHeaderCell
-              className={`w-8 border-x-gray-500 dark:border-l-white ${TableHeadStyle[0]}`}
+              className={`w-8 border-r-0  ${TableHeadStyle[0]}`}
             >
               <TrashIcon className="absolute bottom-0 left-0 right-0 top-0 mx-auto my-auto h-5 w-5 " />
             </TableHeaderCell>
@@ -268,7 +341,7 @@ export default function ExpTable({
         </TableHead>
 
         <TableBody className="h-fit divide-y divide-black  dark:divide-white">
-          {paginatedData.map((item: ExpenseSchema, index: number) => {
+          {paginatedData[0].map((item: ExpenseSchema, index: number) => {
             const daystoMs = [1209600000, 2678400000, 31557600000];
             if (Number.isInteger(filter) && filter != 0) {
               const filterTime = new Date(
@@ -322,9 +395,8 @@ export default function ExpTable({
               >
                 <TableCell
                   key={`${item.id}.2`}
-                  className="relative mx-0 my-auto w-8 "
+                  className="relative mx-0 my-auto w-8"
                 >
-                  <div className="absolute bottom-0 left-0 right-0 top-0 h-6 w-6 p-6 ">
                     <input
                       readOnly
                       id="comments"
@@ -332,25 +404,8 @@ export default function ExpTable({
                       aria-describedby="comments-description"
                       name="comments"
                       type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                      className="h-4 w-4 absolute bottom-0 left-0 right-0 top-0 mx-auto my-auto rounded border-gray-300 dark:bg-slate-600 text-indigo-600 focus:ring-indigo-600"
                     />
-                  </div>
-                </TableCell>
-                <TableCell
-                  key={`${item.id}.3`}
-                  className="relative mx-auto my-auto w-8"
-                >
-                  <div className="absolute bottom-0 left-0 right-0 top-0 mx-auto my-auto h-4 w-4">
-                    <input
-                      checked={item.recurring}
-                      readOnly
-                      disabled
-                      id="checked-checkbox"
-                      type="checkbox"
-                      value=""
-                      className="absolute aspect-square w-full  rounded border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                    />
-                  </div>
                 </TableCell>
                 <TableCell
                   key={`${item.id}.4`}
@@ -367,6 +422,22 @@ export default function ExpTable({
                         if (item.id == CurrentlyEditing){setCurrentlyEditing(null); return}; setCurrentlyEditing(item.id)}}>
                         {!(item.id == CurrentlyEditing) ? (<PencilIcon className="w-4 h-4 bottom-0 right-0 left-0 top-0 absolute mx-auto dark:text-white my-auto"/>) : (<CheckIcon className="w-4 h-4 bottom-0 right-0 left-0 top-0 absolute mx-auto my-auto" />)}
                     </div> */}
+                </TableCell>
+                <TableCell
+                  key={`${item.id}.3`}
+                  className="relative mx-auto my-auto w-8"
+                >
+                  <div className="absolute bottom-0 left-0 right-0 top-0 mx-auto my-auto h-4 w-4">
+                    <input
+                      checked={item.recurring}
+                      readOnly
+                      disabled
+                      id="checked-checkbox"
+                      type="checkbox"
+                      value=""
+                      className="absolute aspect-square w-full  rounded border-gray-300 bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                    />
+                  </div>
                 </TableCell>
                 <TableCell key={`${item.id}.5`} className="relative text-center">
                   <Badge
@@ -441,7 +512,11 @@ export default function ExpTable({
             );
           })}
         </TableBody>
-      </Table>
+      </Table> : <div className="w-full relative h-36  mt-5">
+        <div className="absolute text-center text-lg top-0 bottom-0 right-0 left-0 w-fit mx-auto my-auto h-12">
+          {search.length > 0 && ([`The search: `,<i>{search}</i>, ` has no results.`,<br/>,`Try a different query`])} 
+        </div>
+        </div>}
       <div className="relative mx-auto mt-6 grid w-fit grid-cols-[auto_fit-content(100%)_auto] gap-x-2">
         <Button
           iconPosition={"left"}
@@ -457,7 +532,7 @@ export default function ExpTable({
         <div className="my-auto h-fit w-fit">
           <p className="h-fit whitespace-nowrap align-middle">
             Page <strong>{page + 1}</strong> of{" "}
-            <strong>{Math.ceil(data.length / pageSize)}</strong>
+            <strong>{Math.ceil(paginatedData[1] / pageSize)}</strong>
           </p>
         </div>
         <Button
@@ -467,7 +542,7 @@ export default function ExpTable({
             setPage((prev) => prev + 1);
           }}
           disabled={
-            data.slice((page + 1) * pageSize, (page + 2) * pageSize).length == 0
+            page >= (Math.ceil(paginatedData[1] / pageSize) - 1)
           }
           icon={ArrowRightIcon}
         >

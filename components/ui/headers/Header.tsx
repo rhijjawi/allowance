@@ -262,7 +262,7 @@ export default function Header() {
             </Dialog.Panel>
         </Dialog>
         </header>
-        <div onClick={()=>{setBugReport(true)}} className="w-36 block h-12 z-[100] bg-white hover:bg-gray-200 rounded-full border fixed bottom-0 right-0 mr-10 mb-10 cursor-pointer">
+        <div onClick={()=>{setBugReport(true)}} className="w-36 block h-12 z-[90] dark:bg-slate-900 bg-white hover:bg-gray-200 dark:hover:bg-slate-800 rounded-full border fixed bottom-0 right-0 mr-10 mb-10 cursor-pointer">
         <div className="h-fit my-auto mx-auto right-0 left-0 bottom-0 top-0 w-fit absolute">
           <ExclamationCircleIcon className="w-8  text-red-500 h-6 ml-0 mb-[2px] -translate-x-1 bottom-0 top-0 right-0 left-0 inline-block" />
           <Subtitle className="inline-block h-full">Report Bug</Subtitle>

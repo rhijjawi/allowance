@@ -10,6 +10,7 @@ import { useAuth, useUser } from "@clerk/nextjs";
 import { ExpenseType } from "../contexts/expenseCTX";
 import { useAlerts } from "../contexts/alertHandler";
 import Link from "next/link";
+import { FolderOpenIcon } from "@heroicons/react/24/outline";
 export function DragAndDrop(props: {id : number, user : any, exp : ExpenseType, setOpen : React.Dispatch<React.SetStateAction<boolean>>}) {
   let { uploadToS3, files } = usePresignedUpload();
   const [dragActive, setDragActive] = useState<boolean>(false);
@@ -19,14 +20,14 @@ export function DragAndDrop(props: {id : number, user : any, exp : ExpenseType, 
   const {user, isLoaded, isSignedIn} = useUser();
   const {getToken} = useAuth()
   const {addAlert} = useAlerts()
-  const [fileURLs, setFileURLs] = useState<string[]>([])
+  const [fileURLs, setFileURLs] = useState<{[key : string] : string}>({})
 
   useEffect(()=>{
     let active = true
     if (!props.exp && !active) return
     async function getURLs(){
-      const tempURLs = (await generateTemporaryUrl(props.exp.files, props.exp.id!)).data
-      setFileURLs((prev)=>[...prev, ...tempURLs])
+      const tempURLs = ((await generateTemporaryUrl(props.exp.files, props.exp.id!)).data as [string, string])
+      setFileURLs((prev)=>({...prev, [tempURLs[0]]: tempURLs[1]}))
     }
     getURLs()
     return () => {
@@ -61,7 +62,7 @@ export function DragAndDrop(props: {id : number, user : any, exp : ExpenseType, 
         fileKeys = [...fileKeys, key]
         if (url){
           const r = await axios.post(`/api/generate-temporary-url`, {keys : [key]})
-          setFileURLs((prev)=>[...prev, ...r.data.temporaryUrls])
+          setFileURLs((prev)=>({...prev, [r.data.temporaryUrls[0]]: r.data.temporaryUrls[1]}))
         }
       }
       let {data, error} = await (await getSupabase(await getToken({template: "supabase"}))).from('expenses').update({files: fileKeys.map((key : string)=>key.split('/').splice(-1))}).eq('id', props.id).select()
@@ -129,10 +130,10 @@ export function DragAndDrop(props: {id : number, user : any, exp : ExpenseType, 
           <Text>This transaction took place on <Bold>{new Date(props.exp.transaction_date).toLocaleDateString()}</Bold>.</Text>
       </div>
       <div className="min-w-full col-span-2">
-      <div className="py-3 flex flex-wrap flex-row">
+      <div className="py-3 grid grid-cols-3">
         {fileURLs.map((file : string, idx : number)=>{
-          return (<div className="">
-            <Link target="_blank" href={file[1]}>{idx}</Link>
+          return (<div className="w-12 h-fit mx-auto">
+            <Link target="_blank" href={file[1]}><FolderOpenIcon className="h-full"/></Link>
           </div>)
         })}
       </div>

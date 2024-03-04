@@ -43,6 +43,7 @@ import {
   ExclamationCircleIcon,
   EyeIcon,
   MagnifyingGlassCircleIcon,
+  MagnifyingGlassIcon,
   PlusCircleIcon,
   QuestionMarkCircleIcon,
   TableCellsIcon,
@@ -91,7 +92,7 @@ export default function ListPage() {
 
   const selectLabels = ["All", "14 days", "30 days", "365 days"];
   const [supportedBanks, setSupportedBanks] = useState<string[]>([]);
-  const [search, setSearch] = useState<string>("")
+  
   const { expenseData, categoryData, incomeData, _error, setExpenseData } =
     useExpenses();
   const [sortBy, setSortBy] = useState<[number, number]>([0, 0]);
@@ -132,6 +133,9 @@ export default function ListPage() {
     .reverse();
 
   const [bank, setBank] = useState<string | undefined>(undefined);
+  useEffect(()=>{
+
+  })
   useEffect(() => {
     fetch("/api/expenses/supported").then((res) => {
       if (res.status === 200) {
@@ -343,7 +347,7 @@ export default function ListPage() {
                     <Title>Upcoming Transactions</Title>
                     <UpcomingTable/>
                   </Card>
-                  <Card className="mt-3 grid flex-grow grid-cols-3 border-2 border-slate-400 bg-white shadow-md">
+                  {/* <Card className="mt-3 grid flex-grow grid-cols-3 border-2 border-slate-400 bg-white shadow-md">
                     <Title className="col-span-1 col-start-1">
                       Copy your invite code
                     </Title>
@@ -354,7 +358,7 @@ export default function ListPage() {
                     >
                       Copy
                     </Button>
-                  </Card>
+                  </Card> */}
                   <Card className="mt-3 grid flex-grow grid-cols-3 border-2 border-slate-400 bg-white shadow-md">
                     <Button
                       className="col-start-1 h-12"
@@ -419,14 +423,13 @@ export default function ListPage() {
                     {filterlabels[filtermode]}
                   </Title>
                   {/* @ts-ignore */}
-                  <Select
+                  {/* <Select
                     className="relative top-1 float-right h-12 w-[20%]"
                     value={String(filtermode)}
                     onValueChange={(v) => {
                       setFiltermode(Number(v) as 0|1|2|3);
                     }}
                   >
-                    {/* @ts-ignore */}
                     {selectLabels.map((item, index) => {
                       return (
                         <SelectItem
@@ -438,22 +441,18 @@ export default function ListPage() {
                         </SelectItem>
                       );
                     })}
-                  </Select>
+                  </Select> */}
+                  
                 </div>
                 <div className="block ">
-                  {expenseData.length > 0 ? (
+                  
                     <ExpenseTable
                       filter={filtermode}
                       setSortBy={setSortBy}
                       setExpenseFU={setExpense}
                       sortBy={sortBy}
                     />
-                  ) : (
-                    <motion.div className="mt-5 block h-full w-full text-center">
-                      No data. To get started, go to the overview tab via the
-                      tab list above.
-                    </motion.div>
-                  )}
+
                 </div>
               </Card>
               </Col>
@@ -529,7 +528,7 @@ export default function ListPage() {
                 numItemsLg={1}
                 className="mt-6 gap-6"
               >
-                <Card className="mx-auto aspect-[3/1] w-[32rem]">
+                <Card className="mx-auto aspect-[3/1] w-[32rem] border-2">
                   <div className="float-right aspect-square h-9">
                     <ArrowDownOnSquareIcon className="float-right aspect-square h-full w-fit" />
                   </div>
