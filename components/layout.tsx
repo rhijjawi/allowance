@@ -7,9 +7,9 @@ export default function Layout({ children } : any) {
     <>
       <link rel="shortcut icon" href="/favicon.ico" />
       <Header />
-        <StrictMode>
+      <StrictMode>
         {children}
-        </StrictMode>
+      </StrictMode>
       <Footer />
     </>
   )

@@ -7,7 +7,7 @@ import { usePresignedUpload, useS3Upload } from "next-s3-upload";
 import {generateTemporaryUrl} from "@/utils/functions/s3"
 import { getSupabase } from "@/utils/supabase";
 import { useAuth, useUser } from "@clerk/nextjs";
-import { ExpenseType } from "../contexts/expenseCTX";
+import { ExpenseType, useExpenses } from "../contexts/expenseCTX";
 import { useAlerts } from "../contexts/alertHandler";
 import Link from "next/link";
 import { FolderOpenIcon } from "@heroicons/react/24/outline";
@@ -15,26 +15,31 @@ export function DragAndDrop(props: {id : number, user : any, exp : ExpenseType, 
   let { uploadToS3, files } = usePresignedUpload();
   const [dragActive, setDragActive] = useState<boolean>(false);
   const inputRef = useRef<any>(null);
-  const [filesArr, setFilesArr] = useState<any>([]);
+  const [filesArr, setFilesArr] = useState<File[]>([]);
   const [fileKeys, setFileKeys] = useState<any>([]);
   const {user, isLoaded, isSignedIn} = useUser();
   const {getToken} = useAuth()
   const {addAlert} = useAlerts()
   const [fileURLs, setFileURLs] = useState<{[key : string] : string}>({})
-
+  const {setExpenseData, expenseData} = useExpenses()
   useEffect(()=>{
     let active = true
     if (!props.exp && !active) return
     async function getURLs(){
       const tempURLs = ((await generateTemporaryUrl(props.exp.files, props.exp.id!)).data as [string, string])
-      setFileURLs((prev)=>({...prev, [tempURLs[0]]: tempURLs[1]}))
+      tempURLs.forEach((url)=>{
+        setFileURLs((prev)=>({...prev, [url[0]]: url[1]}))
+        console.log({[url[0]]: url[1]})
+      })
     }
     getURLs()
     return () => {
       active = false;
     };
   },[props.exp])
-
+  useEffect(()=>{
+    console.log(fileURLs)
+  }, [fileURLs])
   function handleChange(e: any) {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
@@ -61,9 +66,13 @@ export function DragAndDrop(props: {id : number, user : any, exp : ExpenseType, 
         })
         fileKeys = [...fileKeys, key]
         if (url){
-          const r = await axios.post(`/api/generate-temporary-url`, {keys : [key]})
-          setFileURLs((prev)=>({...prev, [r.data.temporaryUrls[0]]: r.data.temporaryUrls[1]}))
+          const tempURLs = ((await generateTemporaryUrl([key], props.exp.id!)).data as [string, string][])
+          tempURLs.forEach((url)=>{
+            setFileURLs((prev)=>({...prev, [url[0]]: url[1]}))
+          })
         }
+        setFilesArr((prev)=>prev.filter((file)=>file!=filesArr[i]))
+        setExpenseData((prev : ExpenseType[])=>[...prev, {...props.exp, files : [...Object.keys(fileURLs)]}])
       }
       let {data, error} = await (await getSupabase(await getToken({template: "supabase"}))).from('expenses').update({files: fileKeys.map((key : string)=>key.split('/').splice(-1))}).eq('id', props.id).select()
       return {error : !(error == null)}
@@ -131,9 +140,9 @@ export function DragAndDrop(props: {id : number, user : any, exp : ExpenseType, 
       </div>
       <div className="min-w-full col-span-2">
       <div className="py-3 grid grid-cols-3">
-        {fileURLs.map((file : string, idx : number)=>{
-          return (<div className="w-12 h-fit mx-auto">
-            <Link target="_blank" href={file[1]}><FolderOpenIcon className="h-full"/></Link>
+        {Object.keys(fileURLs).map((key : string, idx : number)=>{
+          return (<div className="w-fit max-w-full h-fit mx-auto">
+            <Link target="_blank" href={fileURLs[key]} className="max-w-full "><FolderOpenIcon className="h-20 aspect-square mx-auto text-indigo-400"/><p className="text-sm w-fit mx-auto text-center break-normal break-words whitespace-pre-wrap text-ellipsis max-w-[50%]">{key.split('/').splice(-1)}</p></Link>
           </div>)
         })}
       </div>
