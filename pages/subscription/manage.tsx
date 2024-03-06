@@ -19,9 +19,10 @@ export const getStaticProps = (async (context : any) => {
     return {props: {prods : data}, revalidate: 60}
 })
 
+const MotionButton = motion(Button)
+
 export default function Subscriptions({prods} : {prods : Stripe.Price[]}){
     const {user, isSignedIn, isLoaded} = useUser();
-    const MotionButton = motion(Button)
     const {addAlert} = useAlerts()
     const [loading, setLoading] = useState<any>({})
     const [disabled, setDisabled] = useState<any>({})

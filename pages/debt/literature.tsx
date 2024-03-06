@@ -4,6 +4,8 @@ import { useUser } from "@clerk/nextjs"
 import { Button, Icon } from "@tremor/react"
 import { useEffect, useState } from "react"
 import LegalModal from "@/components/ui/modals/LegalDebtDisc"
+
+const MotionButton = motion(Button)
 export default function Index() {
     const methods = [
         {
@@ -22,7 +24,7 @@ export default function Index() {
         }
     ]
     const {user, isLoaded, isSignedIn} = useUser()
-    const MotionButton = motion(Button)
+    
     const [visible, setVisible] = useState(false)
     useEffect(()=>{
         if (typeof localStorage === "undefined") return;

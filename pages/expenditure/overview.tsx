@@ -20,7 +20,7 @@ import {
   PencilIcon,
   ArrowsPointingOutIcon,
 } from "@heroicons/react/24/outline";
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useUser, useAuth, useSignIn } from "@clerk/nextjs";
 import { getSupabase } from "../../utils/supabase";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -42,15 +42,15 @@ import { MonthExpenses } from "@/utils/functions/filterData";
 import { BudgetStatus, BudgetMath } from "@/utils/functions/math";
 import { SavingsModal } from "@/components/forms/savingsDialogue";
 import EmergencyFundModal from "@/components/forms/EmergencyFund";
-const chartVariants = {
-  animate: { opacity: 1, width: "99%" },
-  initial: { opacity: 0, width: "100%" },
-};
+import { useSession } from "@clerk/nextjs";
+
 const cardVariants = {
   animate: { opacity: 1 },
   initial: { opacity: 0 },
 };
 
+const CustomCard = motion(Card, { forwardMotionProps: true });
+const CustomBarChart = motion(BarChart, { forwardMotionProps: true });
 export default function Expenditure() {
   const { user, isLoaded, isSignedIn } = useUser();
   const [checked, setChecked] = useState(false);
@@ -59,8 +59,6 @@ export default function Expenditure() {
   const [chartData, setChartData] = useState<any>([]);
   const [presentCategories, setPresentCategories] = useState<any>([]);
   const [percentage, setPercentage] = useState<[number, number]>([0, 0]);
-  const CustomCard = motion(Card, { forwardMotionProps: true });
-  const CustomBarChart = motion(BarChart, { forwardMotionProps: true });
   const [hideRent, setHideRent] = useState<boolean>(false);
   const [isSavingsOpen, setIsSavingsOpen] = useState<boolean>(false);
   const [isEmergencyOpen, setIsEmergencyOpen] = useState<boolean>(false);
@@ -187,7 +185,7 @@ export default function Expenditure() {
   }, [sum]);
   if (!isLoaded || loading || misc == null) return <></>;
   return (
-    <main className="bg-dark-tremor-background-muted/75 -z-[100] flex min-h-screen flex-col items-center px-6 py-12 md:px-24">
+    <motion.main className="bg-dark-tremor-background-muted/75 -z-[100] flex min-h-screen flex-col items-center px-6 py-12 md:px-24">
       {/* <Card className="relative h-16">
         <div className="absolute left-0 right-0 top-[50%] z-0 m-auto ml-5 w-fit -translate-y-[50%] text-left">
           <Button size="md" className="h-full">
@@ -350,10 +348,10 @@ export default function Expenditure() {
             </div>
             <div className="">
               <CustomBarChart
-                variants={chartVariants}
-                animate={chartData.length > 0 ? "animate" : "initial"}
-                exit={{ size: 0, opacity: 0 }}
-                transition={{ duration: 0.3 }}
+                animate={{ opacity: 1, width: "99%" }}
+                initial={{opacity : 0}}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1, delay : 1 }}
                 id={"barChart"}
                 className="mt-6 aspect-square min-h-[400px] w-full min-w-fit"
                 data={chartData}
@@ -399,6 +397,6 @@ export default function Expenditure() {
       </div> */}
 
       <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left"></div>
-    </main>
+    </motion.main>
   );
 }

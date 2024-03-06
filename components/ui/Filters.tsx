@@ -47,7 +47,7 @@ export default function Filters(props: {
         },
         visible: {
           zIndex: 60,
-          translate : "0 0 0",
+          translate : "0% 0 0",
         },
       };
     return (
@@ -57,8 +57,7 @@ export default function Filters(props: {
       </AnimatePresence>
 
       <AnimatePresence>
-          <motion.div key={"filter_cards"} exit={'isClosed'} transition={{ease : "linear"}} animate={isActive ? "isOpen" : "isClosed"} variants={{isOpen : {width : "fit-content"}, isClosed: {width : 0 }}} className="fixed left-0 z-[1000] -translate-x-1 top-0 bottom-0 my-auto h-fit">
-            <AnimatePresence>
+          <motion.div key={"filter_cards"} exit={'isClosed'} transition={{ease : "linear", duration : 0.21}} animate={isActive ? "isOpen" : "isClosed"} variants={{isOpen : {width : "fit-content"}, isClosed: {width : 0 }}} className="fixed left-0 z-[1000] -translate-x-1 top-0 bottom-0 my-auto h-fit">
               <motion.div className="absolute translate-x-[94%] top-0 bottom-0 right-0 w-fit h-fit my-auto z-[999]">
                 <Card key={"chevron_card"} className="px-1 py-1 rounded-l-none border-y-2 border-r-2 ring-0 dark:border-white cursor-pointer" onClick={()=>setIsActive(!isActive)}>
                   <AnimatePresence>
@@ -66,9 +65,7 @@ export default function Filters(props: {
                   </AnimatePresence>
                 </Card>
               </motion.div>
-            </AnimatePresence>
-      <AnimatePresence >
-            <MotionCard variants={variants} transition={{ease : "linear"}} exit={'hidden'} animate={!isActive ? "hidden" : "visible"} className="w-fit h-fit max-w-md px-4 py-4 bg-white border-2 dark:border-white border-black rounded-r-sm rounded-l-none z-[1000] ring-0">
+            <MotionCard initial={"hidden"} variants={variants} transition={{ease : "linear", duration : 0.2}} exit={'hidden'} animate={!isActive ? "hidden" : "visible"} className="w-fit h-fit max-w-md px-4 py-4 bg-white border-2 dark:border-white border-black rounded-r-sm rounded-l-none z-[1000] ring-0">
               <Text className="dark:text-white text-tremor-content-strong text-center">Filters</Text>
               <Text className="dark:text-white ">Category</Text>
               <MultiSelect value={filteredCategories} onValueChange={(e)=>setFilteredCategories(e)}>
@@ -96,7 +93,6 @@ export default function Filters(props: {
               }}>Apply Filter(s)</button>
             </div>
           </MotionCard>
-        </AnimatePresence>
           </motion.div>
         </AnimatePresence>
       
