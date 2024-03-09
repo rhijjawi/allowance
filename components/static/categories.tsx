@@ -1,46 +1,138 @@
-import { CheckIcon, PencilIcon, TrashIcon, HeartIcon} from "@heroicons/react/24/solid"
-import {ChevronDownIcon, ChevronUpIcon, HomeIcon, BoltIcon, GiftIcon, ShoppingCartIcon, AcademicCapIcon, FilmIcon, PaperAirplaneIcon, ScissorsIcon, CloudIcon, QuestionMarkCircleIcon, FireIcon, BanknotesIcon, XMarkIcon, TruckIcon} from '@heroicons/react/24/outline'
-import { CategorySchema } from "@/types/supabase"
-import { Badge, Color } from "@tremor/react"
-export default function CategoryBadge() : {[key: number]: [any, Color|null]} {
+import {
+    CheckIcon,
+    PencilIcon,
+    TrashIcon,
+    HeartIcon,
+} from '@heroicons/react/24/solid'
+import {
+    ChevronDownIcon,
+    ChevronUpIcon,
+    HomeIcon,
+    BoltIcon,
+    GiftIcon,
+    ShoppingCartIcon,
+    AcademicCapIcon,
+    FilmIcon,
+    PaperAirplaneIcon,
+    ScissorsIcon,
+    CloudIcon,
+    QuestionMarkCircleIcon,
+    FireIcon,
+    BanknotesIcon,
+    XMarkIcon,
+    TruckIcon,
+} from '@heroicons/react/24/outline'
+import { CategorySchema } from '@/types/supabase'
+import { Badge, Color } from '@tremor/react'
+export default function CategoryBadge(): {
+    [key: number]: [any, Color | null]
+} {
     return {
-        0 : [XMarkIcon, "red"],
-        1 : [HomeIcon, "blue"],
-        2 : [BoltIcon, "yellow"],
-        3 : [TruckIcon, "zinc"],
-        4 : [ShoppingCartIcon, "green"],
-        5 : [AcademicCapIcon, "violet"] , 
-        6: [HeartIcon, "red"],
-        7: [FilmIcon, "pink"],
-        8: [PaperAirplaneIcon, "sky"],
-        9 : [ScissorsIcon, "purple"],
-        10: [BanknotesIcon, "blue"],
-        11 : [GiftIcon, "red"],
-        12: [CloudIcon, "lime"],
-        13: [QuestionMarkCircleIcon, "lime"],
-        14: [FireIcon, "lime"],
-        15: [HomeIcon, "zinc"],
+        0: [XMarkIcon, 'red'],
+        1: [HomeIcon, 'blue'],
+        2: [BoltIcon, 'yellow'],
+        3: [TruckIcon, 'zinc'],
+        4: [ShoppingCartIcon, 'green'],
+        5: [AcademicCapIcon, 'violet'],
+        6: [HeartIcon, 'red'],
+        7: [FilmIcon, 'pink'],
+        8: [PaperAirplaneIcon, 'sky'],
+        9: [ScissorsIcon, 'purple'],
+        10: [BanknotesIcon, 'blue'],
+        11: [GiftIcon, 'red'],
+        12: [CloudIcon, 'lime'],
+        13: [QuestionMarkCircleIcon, 'lime'],
+        14: [FireIcon, 'lime'],
+        15: [HomeIcon, 'zinc'],
     }
 }
-export function getBadge(id : number) {
+export function getIcon(id: number) {
     let badges = CategoryBadge()
-    return (badges[id][0])
+    return badges[id][0]
 }
 
-export function getIDByCategoryName(name : string, categoryData : CategorySchema[]) : number {
-    return (categoryData.find((element : CategorySchema) => {return element.category === name}))!.id!
+export function getIDByCategoryName(
+    name: string,
+    categoryData: CategorySchema[]
+): number {
+    return categoryData.find((element: CategorySchema) => {
+        return element.category === name
+    })!.id!
 }
-export function getBadgeById(id : [number, number], categoryData : CategorySchema[], size : string = "md", styling : string = "") {
+export function getBadgeById(
+    id: [number, number],
+    categoryData: CategorySchema[],
+    size: string = 'md',
+    styling: string = ''
+) {
     let badges = CategoryBadge()
-    return (<Badge tooltip={
-        String((categoryData.find((element) => {return element.id === id[0]}))!.subcategories[id[1]])} size={size} color={getColor((categoryData.find((element : CategorySchema) => {return element.id === id[0]})!.id!))} className={`select-none dark:bg-black/0 border border-${getColor((categoryData.find((element : CategorySchema) => {return element.id === id[0]}))!.id!)}-500 ${styling}`} icon={getBadge((categoryData.find((element : CategorySchema) => {return element.id === id[0]}))!.id!)}>{(categoryData.find((element : CategorySchema) => {return element.id === id[0]}))!.category}</Badge>)
+    return (
+        <Badge
+            tooltip={String(
+                categoryData.find((element) => {
+                    return element.id === id[0]
+                })!.subcategories[id[1]]
+            )}
+            size={size}
+            color={getColor(
+                categoryData.find((element: CategorySchema) => {
+                    return element.id === id[0]
+                })!.id!
+            )}
+            className={`select-none dark:bg-black/0 border border-${getColor(
+                categoryData.find((element: CategorySchema) => {
+                    return element.id === id[0]
+                })!.id!
+            )}-500 ${styling}`}
+            icon={getIcon(
+                categoryData.find((element: CategorySchema) => {
+                    return element.id === id[0]
+                })!.id!
+            )}
+        >
+            {
+                categoryData.find((element: CategorySchema) => {
+                    return element.id === id[0]
+                })!.category
+            }
+        </Badge>
+    )
 }
-export function getBadgeByCategoryName(name : string, categoryData : CategorySchema[], size : string = "md", styling : string = "") {
+export function getBadgeByCategoryName(
+    name: string,
+    categoryData: CategorySchema[],
+    size: string = 'md',
+    styling: string = ''
+) {
     let badges = CategoryBadge()
-    return (<Badge size={size} color={getColor((categoryData.find((element : CategorySchema) => {return element.category === name})!.id!))} className={`select-none dark:bg-black/0 border border-${getColor((categoryData.find((element : CategorySchema) => {return element.category === name}))!.id!)}-500 ${styling}`} icon={getBadge((categoryData.find((element : CategorySchema) => {return element.category === name}))!.id!)}>{(categoryData.find((element : CategorySchema) => {return element.category === name}))!.category}</Badge>)
+    return (
+        <Badge
+            size={size}
+            color={getColor(
+                categoryData.find((element: CategorySchema) => {
+                    return element.category === name
+                })!.id!
+            )}
+            className={`select-none dark:bg-black/0 border border-${getColor(
+                categoryData.find((element: CategorySchema) => {
+                    return element.category === name
+                })!.id!
+            )}-500 ${styling}`}
+            icon={getIcon(
+                categoryData.find((element: CategorySchema) => {
+                    return element.category === name
+                })!.id!
+            )}
+        >
+            {
+                categoryData.find((element: CategorySchema) => {
+                    return element.category === name
+                })!.category
+            }
+        </Badge>
+    )
 }
-export function getColor(id : number) {
+export function getColor(id?: number) {
     let badges = CategoryBadge()
-    return (badges[id][1])
+    return (id ? badges[id][1] : 'gray')
 }
-

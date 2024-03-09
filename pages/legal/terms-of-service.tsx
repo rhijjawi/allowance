@@ -1,3 +1,3 @@
-export default function TsandCs(){
-    return (<></>)
+export default function TsandCs() {
+    return <></>
 }

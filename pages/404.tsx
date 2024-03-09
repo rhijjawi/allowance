@@ -1,20 +1,20 @@
-"use client";
-import { GetStaticProps } from "next";
-import { useRouter } from "next/router";
-import Error from "next/error";
-import { useUser } from "@clerk/nextjs";
-import { useExpenses } from "@/components/contexts/expenseCTX";
-import { useEffect } from "react";
+'use client'
+import { GetStaticProps } from 'next'
+import { useRouter } from 'next/router'
+import Error from 'next/error'
+import { useUser } from '@clerk/nextjs'
+import { useExpenses } from '@/components/contexts/expenseCTX'
+import { useEffect } from 'react'
 
-export const getStaticProps = ({ res }: {res: any}) => {
-    return { props: {errorCode : 404}};
-};
-export default function FourOhFour({ errorCode } : {errorCode : number}){
-    const {user, isLoaded, isSignedIn} = useUser();
-    const {_error, _setError} = useExpenses()
-    const router = useRouter();
+export const getStaticProps = ({ res }: { res: any }) => {
+    return { props: { errorCode: 404 } }
+}
+export default function FourOhFour({ errorCode }: { errorCode: number }) {
+    const { user, isLoaded, isSignedIn } = useUser()
+    const { _error, _setError } = useExpenses()
+    const router = useRouter()
     if (!isLoaded) return <></>
-    useEffect(()=>{
+    useEffect(() => {
         _setError(true)
     }, [isLoaded])
     return (
@@ -24,9 +24,22 @@ export default function FourOhFour({ errorCode } : {errorCode : number}){
                     <div className="w-full text-black dark:text-white">
                         <p className="text-2xl font-bold">/404</p>
                         <p className="font-bold">Page Not Found</p>
-                        <p className="text-sm">The page you are looking for does not exist.</p>
-                        <button onClick={() => router.push('/')} className=" bg-orange-500 hover:bg-orange-600 text-white px-3 mt-3 rounded-md mx-auto w-fit py-2 right-0">Go Home</button>
-                        <button hidden={!isSignedIn} onClick={() => router.push('/expenditure/overview')} className="bg-orange-500 hover:bg-orange-600 text-white px-3 mt-3 rounded-md mx-auto w-fit py-2 right-0 float-right">Go to Dashboard</button>
+                        <p className="text-sm">
+                            The page you are looking for does not exist.
+                        </p>
+                        <button
+                            onClick={() => router.push('/')}
+                            className=" bg-orange-500 hover:bg-orange-600 text-white px-3 mt-3 rounded-md mx-auto w-fit py-2 right-0"
+                        >
+                            Go Home
+                        </button>
+                        <button
+                            hidden={!isSignedIn}
+                            onClick={() => router.push('/expenditure/overview')}
+                            className="bg-orange-500 hover:bg-orange-600 text-white px-3 mt-3 rounded-md mx-auto w-fit py-2 right-0 float-right"
+                        >
+                            Go to Dashboard
+                        </button>
                     </div>
                 </div>
             </div>
@@ -34,6 +47,5 @@ export default function FourOhFour({ errorCode } : {errorCode : number}){
                 <Error statusCode={errorCode}></Error>
             </div>
         </>
-        
     )
 }
