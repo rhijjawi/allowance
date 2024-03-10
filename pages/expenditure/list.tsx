@@ -73,6 +73,7 @@ import React from 'react'
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react'
 import { useRouter } from 'next/router'
 import { useAlerts } from '@/components/contexts/alertHandler'
+import { Content } from '@/components/Common'
 
 let ChevronStyle = [
     'absolute w-8 aspect-square rounded-full right-0 bottom-0 top-0 my-auto mr-4',
@@ -255,7 +256,7 @@ export default function ListPage() {
     if (!isLoaded) return null
     return (
         <>
-            <main className="bg-dark-tremor-background-muted/75 min-h-screen p-12">
+            <Content>
                 <ExpenditureDialog isOpen={isOpen} setIsOpen={setIsOpen} />
                 <IncomeDialogue
                     isOpen={isIncomeOpen}
@@ -736,7 +737,7 @@ export default function ListPage() {
                         </TabPanel>
                     </TabPanels>
                 </TabGroup>
-            </main>
+            </Content>
         </>
     )
 }

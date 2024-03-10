@@ -4,7 +4,7 @@ import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
     Bars3Icon,
     BookOpenIcon,
-    ChartPieIcon,
+    
     ExclamationCircleIcon,
     HomeIcon,
     SquaresPlusIcon,
@@ -13,6 +13,7 @@ import {
 } from '@heroicons/react/24/outline'
 import {
     ChevronDownIcon,
+    ChartPieIcon,
     PhoneIcon,
     PlayCircleIcon,
     PlusCircleIcon,
@@ -31,12 +32,19 @@ import { useRouter } from 'next/router'
 import ParentHeader from './ParentHeader'
 import { Subtitle } from '@tremor/react'
 import BugReport from '@/components/forms/bug'
+import { PiggyBank } from '../icons/piggyBank'
 const products = [
     {
         name: 'Overview',
         description: 'Get a better understanding of your expenditure',
         href: '/expenditure/overview',
         icon: ChartPieIcon,
+    },
+    {
+        name: 'Savings Goals',
+        description: 'Visualize your savings goals',
+        href: '/expenditure/goals',
+        icon: PiggyBank,
     },
     {
         name: 'My Money',
@@ -163,7 +171,7 @@ export default function Header() {
                                             >
                                                 <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
                                                     <item.icon
-                                                        className="h-6 w-6 text-gray-600 group-hover:text-indigo-600"
+                                                        className="h-6 w-6 fill-gray-600 group-hover:fill-indigo-600 text-gray-600 group-hover:text-indigo-600"
                                                         aria-hidden="true"
                                                     />
                                                 </div>

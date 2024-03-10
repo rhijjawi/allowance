@@ -38,6 +38,8 @@ import { BudgetStatus, BudgetMath } from '@/utils/functions/math'
 import { SavingsModal } from '@/components/forms/savingsDialogue'
 import EmergencyFundModal from '@/components/forms/EmergencyFund'
 import { useSession } from '@clerk/nextjs'
+import { Content } from '@/components/Common'
+import { Spinner } from '@nextui-org/react'
 
 const cardVariants = {
     animate: { opacity: 1 },
@@ -184,9 +186,11 @@ export default function Expenditure() {
         }
         a()
     }, [sum])
-    if (!isLoaded || loading || misc == null) return <></>
+    if (!isLoaded || loading || misc == null) return (<Content>
+        <div className="h-24 w-24 absolute top-0 bottom-0 right-0 left-0 mx-auto my-auto"><Spinner className='relative' size="lg" /></div>
+    </Content>)
     return (
-        <motion.main className="bg-dark-tremor-background-muted/75 -z-[100] flex min-h-screen flex-col items-center px-6 py-12 md:px-24">
+        <Content>
             {/* <Card className="relative h-16">
         <div className="absolute left-0 right-0 top-[50%] z-0 m-auto ml-5 w-fit -translate-y-[50%] text-left">
           <Button size="md" className="h-full">
@@ -416,6 +420,6 @@ export default function Expenditure() {
       </div> */}
 
             <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left"></div>
-        </motion.main>
+        </Content>
     )
 }
