@@ -4,7 +4,6 @@ import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
     Bars3Icon,
     BookOpenIcon,
-    
     ExclamationCircleIcon,
     HomeIcon,
     SquaresPlusIcon,
@@ -43,7 +42,7 @@ const products = [
     {
         name: 'Savings Goals',
         description: 'Visualize your savings goals',
-        href: '/expenditure/goals',
+        href: '/goals',
         icon: PiggyBank,
     },
     {

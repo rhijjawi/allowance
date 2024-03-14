@@ -124,7 +124,7 @@ export type Database = {
             expenses: {
                 Row: {
                     amount: number
-                    standardizedCurrency? : number
+                    standardizedCurrency?: number
                     category: [number, number]
                     created_at: string
                     currency: string
@@ -207,7 +207,7 @@ export type Database = {
                 Row: {
                     category: string
                     id: number
-                    subcategories: string|Json
+                    subcategories: string | Json
                 }
                 Insert: {
                     category: string

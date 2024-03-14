@@ -14,7 +14,7 @@ import { StrictMode, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import React from 'react'
 import Intro from '@/components/ui/modals/Intro'
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from '@vercel/speed-insights/next'
 const raleway = Raleway({ subsets: ['latin'] })
 
 export default function MyApp({
@@ -40,7 +40,12 @@ export default function MyApp({
     return (
         <>
             <StrictMode>
-                <ClerkProvider>
+                <ClerkProvider
+                    supportEmail="support@logmoney.app"
+                    navigate={(url) => {
+                        router.push(url)
+                    }}
+                >
                     <MemoizedAlertProvider>
                         <ExpenseCTXProvider>
                             <FileManagerProvider>
@@ -147,7 +152,7 @@ export default function MyApp({
                     </MemoizedAlertProvider>
                 </ClerkProvider>
             </StrictMode>
-            <SpeedInsights/>
+            <SpeedInsights />
         </>
     )
 }

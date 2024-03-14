@@ -76,13 +76,11 @@ async function GET(req: NextApiRequest, res: NextApiResponse) {
                 }
             })
         )
-        return res
-            .status(200)
-            .send({
-                role: (sessionClaims!.metadata as { role: string }).role,
-                oversight: data,
-                supervisorProfiles: supervisorProfiles,
-            })
+        return res.status(200).send({
+            role: (sessionClaims!.metadata as { role: string }).role,
+            oversight: data,
+            supervisorProfiles: supervisorProfiles,
+        })
     } else {
         const { data, error } = await upsertRow(userId)
         if (error) {

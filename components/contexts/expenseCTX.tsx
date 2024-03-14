@@ -34,9 +34,8 @@ export function ExpenseCTXProvider({
     const { user, isSignedIn, isLoaded } = useUser()
     const { getToken } = useAuth()
     const { addAlert } = useAlerts()
-    const disabledRoutes = ['/', '/404', '/debt/literature']
+    const disabledRoutes = ['/', '/404', '/debt/literature', '/goals']
     useEffect(() => {
-        
         if (!user && isLoaded) {
             setLoading(false)
             _setError(true)
@@ -47,7 +46,7 @@ export function ExpenseCTXProvider({
             if (user?.publicMetadata.role == 'parent') return null
             const token = await getToken({ template: 'supabase' })
             const supabase = await getSupabase(token)
-            
+
             const categories = await supabase
                 .from('categories')
                 .select('*')
@@ -60,11 +59,12 @@ export function ExpenseCTXProvider({
             if (incomeCategories.data) {
                 setIncomeCategoryData(incomeCategories.data)
             }
-                
+
             categories.data
                 ? setcategoryData(categories.data)
                 : setcategoryData([])
-            if (_error == true || disabledRoutes.indexOf(router.route) != -1) return
+            if (_error == true || disabledRoutes.indexOf(router.route) != -1)
+                return
             const { data, error } = (await supabase
                 .from('expenses')
                 .select('*')
@@ -114,11 +114,9 @@ export function ExpenseCTXProvider({
             incomeCategories.data
                 ? setIncomeCategoryData(incomeCategories.data)
                 : setIncomeCategoryData([])
-            
         }
         if (user && isLoaded && !_error) {
-            fetchExpenses().then(()=>setLoading(false))
-            
+            fetchExpenses().then(() => setLoading(false))
         }
     }, [isLoaded])
     return (

@@ -153,6 +153,39 @@ module.exports = {
             pattern:
                 /^(fill-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
         },
+        ...[
+            '[#0066FF]', // Blue
+            '[#0099FF]', // Blue
+            '[#00FFFF]', // Blue-Cyan
+            '[#00FFCC]', // Cyan-Blue
+            '[#00FF99]', // Cyan
+            '[#00FF66]', // Cyan-Green
+            '[#00FF33]', // Green-Cyan
+            '[#00FF00]', // Green
+            '[#33FF00]', // Green-Yellow
+            '[#66FF00]', // Green-Yellow
+            '[#99FF00]', // Green-Yellow
+            '[#CCFF00]', // Yellow
+            '[#FFFF00]', // Yellow
+            '[#FFCC00]', // Yellow
+            '[#FF9900]', // Orange-Yellow
+            '[#FF6600]', // Orange
+            '[#FF3300]', // Red-Orange
+            '[#FF0000]', // Red
+        ].flatMap((customColor) => [
+            `bg-${customColor}`,
+            `border-${customColor}`,
+            `hover:bg-${customColor}`,
+            `hover:border-${customColor}`,
+            `hover:text-${customColor}`,
+            `fill-${customColor}`,
+            `ring-${customColor}`,
+            `stroke-${customColor}`,
+            `text-${customColor}`,
+            `ui-selected:bg-${customColor}`,
+            `ui-selected:border-${customColor}`,
+            `ui-selected:text-${customColor}`,
+        ]),
     ],
     plugins: [
         require('@headlessui/tailwindcss'),

@@ -1,4 +1,4 @@
-export const PiggyBank = (props : {className : string}) => {
+export const PiggyBank = (props: { className: string }) => {
     console.log(props)
     return (
         <svg

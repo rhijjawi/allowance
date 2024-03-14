@@ -55,12 +55,10 @@ async function GET(req: NextApiRequest, res: NextApiResponse) {
         (item) => products.indexOf(item.price.product) !== -1
     )
     if (value.length > 0 && active) {
-        return res
-            .status(200)
-            .json({
-                isActive: active,
-                items: value.map((item) => item.price.product),
-            })
+        return res.status(200).json({
+            isActive: active,
+            items: value.map((item) => item.price.product),
+        })
     } else {
         return res.status(401).send('No active subscription')
     }

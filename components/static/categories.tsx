@@ -134,5 +134,5 @@ export function getBadgeByCategoryName(
 }
 export function getColor(id?: number) {
     let badges = CategoryBadge()
-    return (id ? badges[id][1] : 'gray')
+    return id ? badges[id][1] : 'gray'
 }

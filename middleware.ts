@@ -1,5 +1,8 @@
 import { authMiddleware } from '@clerk/nextjs/server'
-
+// ```js
+// const sessions = await clerk.user.getSessions();
+// sessions.map((session)=>session.revoke());
+// ```
 export default authMiddleware({
     publicRoutes: [
         '/',

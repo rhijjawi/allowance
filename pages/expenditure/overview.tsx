@@ -38,8 +38,7 @@ import { BudgetStatus, BudgetMath } from '@/utils/functions/math'
 import { SavingsModal } from '@/components/forms/savingsDialogue'
 import EmergencyFundModal from '@/components/forms/EmergencyFund'
 import { useSession } from '@clerk/nextjs'
-import { Content } from '@/components/Common'
-import { Spinner } from '@nextui-org/react'
+import { Content, Loader } from '@/components/Common'
 
 const cardVariants = {
     animate: { opacity: 1 },
@@ -186,9 +185,7 @@ export default function Expenditure() {
         }
         a()
     }, [sum])
-    if (!isLoaded || loading || misc == null) return (<Content>
-        <div className="h-24 w-24 absolute top-0 bottom-0 right-0 left-0 mx-auto my-auto"><Spinner className='relative' size="lg" /></div>
-    </Content>)
+    if (!isLoaded || loading || misc == null) return <Loader />
     return (
         <Content>
             {/* <Card className="relative h-16">
@@ -213,17 +210,25 @@ export default function Expenditure() {
             >
                 <CustomCard
                     variants={cardVariants}
+                    className="min-h-[200px]"
                     animate={!loading ? 'animate' : 'initial'}
                 >
                     <Title>Budget Status</Title>
                     {misc.budget[0] == 0 ? (
-                        <p className="text-xl">
-                            Please{' '}
-                            <Link className="font-bold" href="/profile/manage">
-                                set
-                            </Link>{' '}
-                            a budget
-                        </p>
+                        <>
+                            <div className="">
+                                <p className="text-xl">
+                                    Please{' '}
+                                    <Link
+                                        className="font-bold"
+                                        href="/profile/manage"
+                                    >
+                                        set
+                                    </Link>{' '}
+                                    a budget
+                                </p>
+                            </div>
+                        </>
                     ) : (
                         <ProgressCircle
                             showAnimation

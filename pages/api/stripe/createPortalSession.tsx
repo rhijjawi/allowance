@@ -32,13 +32,11 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
             customer: data![0]['stripe_id'],
             return_url: `https://logmoney.app${req.query.backurl}`,
         })
-        return res
-            .status(200)
-            .json({
-                message: 'OK',
-                portalSession: portalSession.url,
-                error: null,
-            })
+        return res.status(200).json({
+            message: 'OK',
+            portalSession: portalSession.url,
+            error: null,
+        })
     } else if (data!.length == 0) {
         return res
             .status(404)
