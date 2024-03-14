@@ -10,6 +10,7 @@ import { currFormatter } from "@/utils/functions/valueFormatters"
 import { TrashIcon } from "@heroicons/react/24/outline"
 import { AnimatePresence } from "framer-motion"
 import {motion} from "framer-motion"
+import { useRouter } from "next/router"
 type GoalType = {id :number|string, label : string, amount_total : number, amount_saved : number, currency : string}
 const MotionCard = motion(Card)
 export default function Page(){
@@ -20,6 +21,7 @@ export default function Page(){
     const [isLoading, setIsLoading] = useState(false)
     const [TBD, setTBD] = useState<null|string|number>(null)
     const {getToken} = useAuth()
+    const router = useRouter()
     useEffect(()=>{
         async function a(){
             const supabase = await getSupabase(await getToken({template : "supabase"}))
@@ -88,11 +90,12 @@ export default function Page(){
         return "blue";
     }
     if (!isLoaded || loading) return <Loader/>
+    if (isLoaded && !isSignedIn) router.push("/sign-in?redirect_url=/goals")
     return (<>
         <GoalModal user={user?.id!} setGoals={setGoals} isOpen={isOpen} setIsOpen={setIsOpen} defaultCurrency={(user?.publicMetadata as {currency : string}).currency}/>
         <DeletePrompt user={user?.id!} id={TBD} setId={setTBD} delete={deleteGoal}/>
         <Content>
-            <div className="grid grid-cols-1 min-h-[90%] h-[90%] ">
+            <div className="grid grid-cols-1 min-h-[90vh] h-[90vh] ">
                 <Card className="h-full flex flex-col gap-y-3 overflow-y-scroll">
                     <Title className="mb-2">Saving Goals</Title>
                     {goals.length == 0 ? <Goals openModal={openModal} /> : <div className="absolute -translate-y-1 right-0 w-fit mr-6"><button className="justify-center rounded-md border border-transparent bg-green-100 px-6 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2" onClick={()=>setIsOpen(true)}>Add a goal</button></div>}
