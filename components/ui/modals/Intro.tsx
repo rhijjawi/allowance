@@ -2,10 +2,12 @@ import { Dialog, Transition } from '@headlessui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { Fragment, useEffect, useState } from 'react'
-
+import { useRouter } from 'next/router'
 export default function Introduction() {
     const [isOpen, setIsOpen] = useState(false)
     const [page, setPage] = useState(0)
+    const router = useRouter()
+    const ignoredPaths = "/sign-in"
     async function closeModal() {
         localStorage.setItem(
             'modals',
@@ -19,6 +21,11 @@ export default function Introduction() {
     }
     useEffect(() => {
         if (typeof localStorage === 'undefined') return
+        for (let ignored of ignoredPaths){
+            if (router.asPath.match(ignored)){
+                return undefined
+            }
+        }
         const hasSeenIntro =
             localStorage.getItem('modals')?.indexOf('intro') != -1
         setIsOpen(!hasSeenIntro)
