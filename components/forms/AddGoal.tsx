@@ -94,7 +94,7 @@ export function GoalModal(props: {
 }) {
     const [savedGoal, setSavedGoal] = useState<number | undefined>(undefined)
     const [goal, setGoal] = useState<number | undefined>(undefined)
-    const [currency, setCurrency] = useState(props.defaultCurrency)
+    const [currency, setCurrency] = useState(props.defaultCurrency ?? "USD")
     const [label, setLabel] = useState<undefined | string>()
     const [loading, setIsLoading] = useState(false)
     const { getToken } = useAuth()
