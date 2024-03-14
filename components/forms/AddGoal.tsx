@@ -177,7 +177,7 @@ export function GoalModal(props: {
                                         placeholder="Saved thus far"
                                         icon={() => (
                                             <span className="w-fit select-none ml-2 mr-1 text-xs ">
-                                                {(0)
+                                                {(currency || currency !== "") && (0)
                                                     .toLocaleString(
                                                         navigator
                                                             ? navigator
@@ -185,7 +185,7 @@ export function GoalModal(props: {
                                                             : 'en-US',
                                                         {
                                                             style: 'currency',
-                                                            currency,
+                                                            currency : currency,
                                                             minimumFractionDigits: 0,
                                                             maximumFractionDigits: 0,
                                                         }
