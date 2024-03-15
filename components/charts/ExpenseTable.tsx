@@ -179,62 +179,61 @@ export default function ExpTable({
                     : false
             }
         )
-        const columns = [
-            {
-                header: 'Selected',
-                accessorKey : 'selected',
-                enableSorting: false,
-                
-            },
-            {
-                header: 'Label',
-                accessorKey: 'label',
-                enableSorting: true,
-            },
-            {
-                header: 'Recurring',
-                accessorKey: 'recurring',
-                enableSorting: true,
-            },
-            {
-                header: 'Category',
-                accessorKey: 'category',
-                enableSorting: true,
-            },
-            {
-                header: 'Date',
-                accessorKey: 'date',
-                enableSorting: true,
-            },
-            {
-                header: 'Amount',
-                accessorKey: 'amount',
-                enableSorting: true,
-            },
-            {
-                header: 'Reciept(s)',
-                accessorKey: 'reciepts',
-                enableSorting: false,
-            },
-        ]
-        const table = useReactTable({
-            data: expenseData,
-            columns: columns,
-            getCoreRowModel: getCoreRowModel(),
-            getSortedRowModel: getSortedRowModel(),
-            initialState: {
-                sorting: [{
-                    id: 'date',
-                    desc: false,
-                }],
-            }, 
-        });
         setPaginatedData([
             filteredData.slice(page * pageSize, (page + 1) * pageSize),
             filteredData.length,
         ])
     }, [page, data, search, filters])
-
+    const columns = [
+        {
+            header: 'Selected',
+            accessorKey : 'selected',
+            enableSorting: false,
+            
+        },
+        {
+            header: 'Label',
+            accessorKey: 'label',
+            enableSorting: true,
+        },
+        {
+            header: 'Recurring',
+            accessorKey: 'recurring',
+            enableSorting: true,
+        },
+        {
+            header: 'Category',
+            accessorKey: 'category',
+            enableSorting: true,
+        },
+        {
+            header: 'Date',
+            accessorKey: 'date',
+            enableSorting: true,
+        },
+        {
+            header: 'Amount',
+            accessorKey: 'amount',
+            enableSorting: true,
+        },
+        {
+            header: 'Reciept(s)',
+            accessorKey: 'reciepts',
+            enableSorting: false,
+        },
+    ]
+    const table = useReactTable({
+        data: expenseData,
+        columns: columns,
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        initialState: {
+            sorting: [{
+                id: 'date',
+                desc: false,
+            }],
+        }, 
+    });
     return (
         <>
             <Filters

@@ -7,7 +7,7 @@ export default function Introduction() {
     const [isOpen, setIsOpen] = useState(false)
     const [page, setPage] = useState(0)
     const router = useRouter()
-    const ignoredPaths = ["/sign-in"]
+    const ignoredPaths = ["/sign-in", "/sign-up"]
     async function closeModal() {
         localStorage.setItem(
             'modals',
