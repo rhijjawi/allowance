@@ -7,7 +7,7 @@ export default function Introduction() {
     const [isOpen, setIsOpen] = useState(false)
     const [page, setPage] = useState(0)
     const router = useRouter()
-    const ignoredPaths = "/sign-in"
+    const ignoredPaths = ["/sign-in"]
     async function closeModal() {
         localStorage.setItem(
             'modals',
@@ -22,6 +22,7 @@ export default function Introduction() {
     useEffect(() => {
         if (typeof localStorage === 'undefined') return
         for (let ignored of ignoredPaths){
+            console.log(router.asPath, router.asPath.match(ignored))
             if (router.asPath.match(ignored)){
                 return undefined
             }

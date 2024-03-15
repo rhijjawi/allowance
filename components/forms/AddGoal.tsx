@@ -7,13 +7,14 @@ import {
     SelectItem,
     TextInput,
 } from '@tremor/react'
-import { Fragment, useState } from 'react'
+import { ChangeEvent, ChangeEventHandler, Fragment, useEffect, useRef, useState } from 'react'
 import symbols from '@/components/static/symbols.json'
 import { Input, Tooltip } from '@nextui-org/react'
 import { ExclamationTriangleIcon, FolderIcon } from '@heroicons/react/24/outline'
 import { useAuth } from '@clerk/nextjs'
 import { getSupabase } from '@/utils/supabase'
 import { useAlerts } from '../contexts/alertHandler'
+import { FileChangeInfo } from 'fs/promises'
 
 
 export function DeletePrompt(props : {id : string|number|null, setId : React.Dispatch<React.SetStateAction<string|number|null>>, user : string, delete : (id : string|number) => Promise<void>}){
@@ -30,7 +31,6 @@ export function DeletePrompt(props : {id : string|number|null, setId : React.Dis
           >
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
-  
           <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
             <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
               <Transition.Child
@@ -97,8 +97,17 @@ export function GoalModal(props: {
     const [currency, setCurrency] = useState(props.defaultCurrency ?? "USD")
     const [label, setLabel] = useState<undefined | string>()
     const [loading, setIsLoading] = useState(false)
+    const [file, setFile] = useState<File|null>(null)
+    const uploadFile = useRef<any>(null)
     const { getToken } = useAuth()
     const { addAlert } = useAlerts()
+    useEffect(()=>{console.log(file)})
+    const handleFileChange : ChangeEventHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setFile(e.target.files[0])
+        }
+        return null;
+    }
     return (
         <Transition appear show={props.isOpen} as={Fragment}>
             <Dialog
@@ -138,15 +147,20 @@ export function GoalModal(props: {
                                 <Tooltip
                                     delay={100}
                                     closeDelay={100}
-                                    content="Coming soon..."
+                                    content={file ? "Change the image" : "Upload an image"}
                                 >
                                     <div className="w-full h-fit flex flex-col align-middle justify-center">
-                                        <div className="mx-auto border relative h-24 w-24 cursor-not-allowed rounded-md  bg-white hover:bg-slate-100/20 block">
-                                            <FolderIcon className="h-[50%] translate-x-[50%] translate-y-[50%] text-orange-300" />
+                                        <div onClick={()=>{
+                                                console.log(file)
+                                                setFile(null)
+                                                uploadFile.current.click()
+                                            }} className="mx-auto border relative max-w-fit h-fit w-fit cursor-pointer rounded-md  bg-white hover:bg-slate-100/20 block">
+                                            {!file ? <FolderIcon className="h-16 text-orange-300 m-4"/> : <img className="rounded-sm my-2" src={URL.createObjectURL(file)} />}
                                         </div>
                                         <span className="w-fit mx-auto text-black/40">
                                             Upload an Icon
                                         </span>
+                                        <input type='file' accept="image/*" ref={uploadFile} hidden onChange={handleFileChange} />
                                     </div>
                                 </Tooltip>
                                 <TextInput
@@ -167,6 +181,7 @@ export function GoalModal(props: {
                                         return (
                                             <SearchSelectItem
                                                 value={curr}
+                                                className='cursor-pointer'
                                                 //@ts-ignore
                                             >{`(${curr}) ${symbols[curr]}`}</SearchSelectItem>
                                         )
@@ -175,13 +190,13 @@ export function GoalModal(props: {
                                 <div className="mt-2">
                                     <NumberInput
                                         placeholder="Saved thus far"
+                                        className='[&>input]:pl-1'
                                         icon={() => (
                                             <span className="w-fit select-none ml-2 mr-1 text-xs ">
                                                 {(currency || currency !== "") && (0)
                                                     .toLocaleString(
                                                         navigator
-                                                            ? navigator
-                                                                  .languages[0]
+                                                            ? navigator.languages[0]
                                                             : 'en-US',
                                                         {
                                                             style: 'currency',
@@ -207,13 +222,13 @@ export function GoalModal(props: {
                                 <div className="mt-2">
                                     <NumberInput
                                         placeholder="Total Amount"
+                                        className='[&>input]:pl-1'
                                         icon={() => (
                                             <span className="w-fit select-none ml-2 mr-1 text-xs ">
                                                 {(currency || currency !== "") && (0)
                                                     .toLocaleString(
                                                         navigator
-                                                            ? navigator
-                                                                  .languages[0]
+                                                            ? navigator.languages[0]
                                                             : 'en-US',
                                                         {
                                                             style: 'currency',
