@@ -695,7 +695,7 @@ export default function ListPage() {
                             >
                                 <Card className="mt-6 border-2 border-slate-400 bg-white">
                                     <div className="flex justify-between">
-                                        <Title className="mb-6">
+                                        <Title className="mb-0">
                                             Uncategorized Transactions
                                         </Title>
                                     </div>
@@ -724,14 +724,12 @@ export default function ListPage() {
                                             </Subtitle>
                                         </>
                                     ) : null}
-                                    <div className="block">
                                         <ExpenseTable
                                             filter={'uncategorized'}
                                             sortBy={sortBy}
                                             setSortBy={setSortBy}
                                             setExpenseFU={setExpense}
                                         />
-                                    </div>
                                 </Card>
                             </Col>
                         </TabPanel>

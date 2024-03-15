@@ -406,7 +406,7 @@ export default function ExpTable({
                                     }}
                                 >
                                     <Text className="h-full w-fit text-black hover:cursor-pointer hover:text-gray-300 dark:text-white dark:hover:text-stone-300">
-                                        Transaction Label
+                                        Label
                                     </Text>
                                 </div>
                                 <div className={ChevronStyle[0]}>
@@ -443,7 +443,7 @@ export default function ExpTable({
                                     }}
                                 >
                                     <p className="w-fit text-black hover:cursor-pointer hover:text-gray-300 dark:text-white dark:hover:text-stone-300">
-                                        Transaction Date
+                                        Date
                                     </p>
                                 </div>
                                 <div className={ChevronStyle[0]}>
@@ -462,7 +462,7 @@ export default function ExpTable({
                                     }}
                                 >
                                     <Text className="w-fit text-black hover:cursor-pointer hover:text-gray-300 dark:text-white dark:hover:text-stone-300">
-                                        Transaction Amount
+                                        Amount
                                     </Text>
                                 </div>
                                 <div className={ChevronStyle[0]}>

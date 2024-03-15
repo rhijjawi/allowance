@@ -1,5 +1,5 @@
 'use client'
-import Image from 'next/image'
+
 import {
     ArrowTrendingDownIcon,
     BanknotesIcon,
@@ -19,11 +19,18 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import DownButtonJump from '@/components/ui/buttons/DownButtonJump'
 import { useUser } from '@clerk/nextjs'
-
+import useEmblaCarousel from "embla-carousel-react"
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
+import Autoplay from 'embla-carousel-autoplay'
 export default function Home(props: any) {
     const [value, setValue] = useState('0')
     const { user } = useUser()
-
+    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ playOnInit: true, delay: 3000, stopOnInteraction : false })])
+    useEffect(() => {
+        if (emblaApi) {
+          console.log(emblaApi.slideNodes()) // Access API
+        }
+    }, [emblaApi])
     return (
         <>
             <DownButtonJump />
@@ -60,10 +67,11 @@ export default function Home(props: any) {
                 </div>
                 <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                     {value == '0' || value == '' ? (
+                        
                         <motion.div
                             initial={{ opacity: 1 }}
                             animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
+                            exit={{ opacity: 0}}
                             transition={{ duration: 1.6 }}
                             className="mx-auto mb-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2"
                         >
@@ -154,15 +162,43 @@ export default function Home(props: any) {
                                     </dl>
                                 </div>
                             </div>
-                            <img
-                                src="/marketing/main.png"
-                                alt="Product screenshot"
-                                className="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
-                                width={2432}
-                                height={1442}
-                            />
+                            <div className="overflow-hidden" ref={emblaRef}>
+                                <div className="flex items-center">
+                                    <img
+                                        src="/marketing/list-1.png"
+                                        alt="Product screenshot"
+                                        className="flex-[0_0_100%] h-[100%] min-w-0 rounded-md mr-[20px]"
+                                        width={2432}
+                                        height={1442}
+                                    />
+                                    <img
+                                        src="/marketing/goals.png"
+                                        alt="Product screenshot"
+                                        className="flex-[0_0_100%] min-w-0 rounded-md mr-[20px]"
+                                        width={2432}
+                                        height={1442}
+                                    />
+                                    <img
+                                        src="/marketing/list.png"
+                                        alt="Product screenshot"
+                                        className="flex-[0_0_100%] min-w-0 rounded-md mr-[20px]"
+                                        width={2432}
+                                        height={1442}
+                                    />
+                                    <img
+                                        src="/marketing/mtd.png"
+                                        alt="Product screenshot"
+                                        className="flex-[0_0_100%] min-w-0 rounded-md mr-[20px]"
+                                        width={2432}
+                                        height={1442}
+                                    />
+                                    
+                                </div>
+                            </div>
                         </motion.div>
+                        
                     ) : null}
+                    
                     {value == '1' ? (
                         <motion.div
                             initial={{ opacity: 0 }}
@@ -264,16 +300,44 @@ export default function Home(props: any) {
                                     </dl>
                                 </div>
                             </div>
-                            <img
-                                src="/marketing/main.png"
-                                alt="Product screenshot"
-                                className="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
-                                width={2432}
-                                height={1442}
-                            />
+                            <div className="overflow-hidden" ref={emblaRef}>
+                                <div className="flex items-center">
+                                    <img
+                                        src="/marketing/list-1.png"
+                                        alt="Product screenshot"
+                                        className="flex-[0_0_100%] h-[100%] min-w-0 rounded-md mr-[20px]"
+                                        width={2432}
+                                        height={1442}
+                                    />
+                                    <img
+                                        src="/marketing/goals.png"
+                                        alt="Product screenshot"
+                                        className="flex-[0_0_100%] min-w-0 rounded-md mr-[20px]"
+                                        width={2432}
+                                        height={1442}
+                                    />
+                                    <img
+                                        src="/marketing/list.png"
+                                        alt="Product screenshot"
+                                        className="flex-[0_0_100%] min-w-0 rounded-md mr-[20px]"
+                                        width={2432}
+                                        height={1442}
+                                    />
+                                    <img
+                                        src="/marketing/mtd.png"
+                                        alt="Product screenshot"
+                                        className="flex-[0_0_100%] min-w-0 rounded-md mr-[20px]"
+                                        width={2432}
+                                        height={1442}
+                                    />
+                                    
+                                </div>
+                            </div>
                         </motion.div>
                     ) : null}
+                    
                     {value == '2' ? (
+                        
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -362,14 +426,34 @@ export default function Home(props: any) {
                                     </dl>
                                 </div>
                             </div>
-                            <img
-                                src="/marketing/main.png"
-                                alt="Product screenshot"
-                                className="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
-                                width={2432}
-                                height={1442}
-                            />
+                            <div className="overflow-hidden" ref={emblaRef}>
+                                <div className="flex items-center">
+                                    <img
+                                        src="/marketing/list-1.png"
+                                        alt="Product screenshot"
+                                        className="flex-[0_0_100%] h-[100%] min-w-0 rounded-md mr-[20px]"
+                                        width={2432}
+                                        height={1442}
+                                    />
+                                    <img
+                                        src="/marketing/goals.png"
+                                        alt="Product screenshot"
+                                        className="flex-[0_0_100%] min-w-0 rounded-md mr-[20px]"
+                                        width={2432}
+                                        height={1442}
+                                    />
+                                    <img
+                                        src="/marketing/list.png"
+                                        alt="Product screenshot"
+                                        className="flex-[0_0_100%] min-w-0 rounded-md mr-[20px]"
+                                        width={2432}
+                                        height={1442}
+                                    />
+                                    
+                                </div>
+                            </div>
                         </motion.div>
+                        
                     ) : null}
                     <div
                         id="cta-box"

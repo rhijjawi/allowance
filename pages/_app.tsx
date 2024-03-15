@@ -7,6 +7,7 @@ import Layout from '../components/layout'
 import { TransactionHandlerProvider } from '@/components/contexts/transactionHandler'
 import { AlertProvider } from '@/components/contexts/alertHandler'
 import { ClerkProvider } from '@clerk/nextjs'
+import { enUS } from "@clerk/localizations";
 import { GuardianOnboardingProvider } from '@/components/contexts/GuardianOnboardingCTX'
 import Script from 'next/script'
 import Head from 'next/head'
@@ -36,6 +37,9 @@ export default function MyApp({
             localStorage.setItem('modals', JSON.stringify([]))
         }
     }, [])
+    const localization = Object.assign({}, enUS)
+    console.log(localization.signIn?.start)
+    localization!.signIn!.start!.subtitle = "Continue to {{applicationName}} to get on demand, doorstep pickups and exclusive access to e-commerce carriers."
     const MemoizedAlertProvider = React.memo(AlertProvider)
     return (
         <>
@@ -45,6 +49,7 @@ export default function MyApp({
                     navigate={(url) => {
                         router.push(url)
                     }}
+                    localization={localization}
                 >
                     <MemoizedAlertProvider>
                         <ExpenseCTXProvider>

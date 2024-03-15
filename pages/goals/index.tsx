@@ -3,7 +3,7 @@ import { Goals } from "@/components/ui/buttons/NoUserData"
 import { useAuth, useUser } from "@clerk/nextjs"
 import { Card, Grid, ProgressBar, Title } from "@tremor/react"
 import { useCallback, useEffect, useState } from "react"
-import {GoalModal, DeletePrompt} from "@/components/forms/AddGoal"
+import {GoalModal, DeletePrompt, EditGoalAmounts} from "@/components/forms/AddGoal"
 import { getSupabase } from "@/utils/supabase"
 import {FireConfetti} from "@/utils/fun"
 import { currFormatter } from "@/utils/functions/valueFormatters"
@@ -19,7 +19,7 @@ export default function Page(){
     const [isOpen, setIsOpen] = useState(false)
     const [loading, setLoading] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
-    const [TBD, setTBD] = useState<null|string|number>(null)
+    const [id, setId] = useState<{action : string|null, goal : GoalType|null}>({action : null, goal : null})
     const {getToken} = useAuth()
     const router = useRouter()
     useEffect(()=>{
@@ -61,14 +61,14 @@ export default function Page(){
         return new Promise((resolve) => {
             setTimeout(resolve, time);
     })};
-    async function PromptdeleteGoal(id: string | number) {
-        setTBD(id)
+    async function PromptdeleteGoal(goal: GoalType) {
+        setId({action: "delete", goal})
     }
-    async function deleteGoal(id: string | number) {
+    async function deleteGoal(id: GoalType) {
         setIsLoading(true)
         const supabase = await getSupabase(await getToken({template : "supabase"}))
-        await supabase.from("goals").delete({count : "exact"}).eq("id", id)
-        setGoals((goals)=>[...goals.filter((goal)=>goal.id != id)])
+        await supabase.from("goals").delete({count : "exact"}).eq("id", Number(id))
+        setGoals((goals)=>[...goals.filter((gl)=>gl.id != Number(id))])
     }
     function getColorRange(number: number): "slate" | "gray" | "zinc" | "neutral" | "stone" | "red" | "orange" | "amber" | "yellow" | "lime" | "green" | "emerald" | "teal" | "cyan" | "sky" | "blue" | "indigo" | "violet" | "purple" | "fuchsia" | "pink" | "rose" {
         const percentage = number/100;
@@ -93,7 +93,8 @@ export default function Page(){
     if (isLoaded && !isSignedIn) router.push("/sign-in?redirect_url=/goals")
     return (<>
         <GoalModal user={user?.id!} setGoals={setGoals} isOpen={isOpen} setIsOpen={setIsOpen} defaultCurrency={(user?.publicMetadata as {currency : string}).currency}/>
-        <DeletePrompt user={user?.id!} id={TBD} setId={setTBD} delete={deleteGoal}/>
+        <DeletePrompt user={user?.id!} id={id} setId={setId} delete={deleteGoal}/>
+        <EditGoalAmounts user={user?.id!} id={id} setId={setId} delete={deleteGoal}/>
         <Content>
             <div className="grid grid-cols-1 min-h-[90vh] h-[90vh] ">
                 <Card className="h-full flex flex-col gap-y-3 overflow-y-scroll">
@@ -126,9 +127,9 @@ export default function Page(){
                                             <button className="justify-center rounded-md border border-transparent bg-green-100 px-6 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 disabled:cursor-wait" disabled={isLoading} onClick={()=>{updateSaved(goal,100)}}>+<span className="">{currFormatter(100, goal.currency)}</span></button>
                                         </div>
                                         <div className="my-2"/>
-                                        <button className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-6 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">Set new value</button>
+                                        <button onClick={()=>setId({goal, action : "edit"})} className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-6 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">Set new value</button>
                                     </div>
-                                    <TrashIcon className="h-8 border rounded-md cursor-pointer hover:bg-slate-100/80 text-black p-1 absolute right-0 bottom-0 mb-1 mr-3" onClick={()=>{PromptdeleteGoal(goal.id)}}/>
+                                    <TrashIcon className="h-8 border rounded-md cursor-pointer hover:bg-slate-100/80 text-black p-1 absolute right-0 bottom-0 mb-1 mr-3" onClick={()=>{PromptdeleteGoal(goal)}}/>
                                 </div>
                             </MotionCard>
                         )})}

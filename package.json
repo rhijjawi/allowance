@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.1.0",
+    "@clerk/localizations": "^1.26.16",
     "@clerk/nextjs": "^4.26.1",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
@@ -35,7 +36,9 @@
     "csv-parse": "^5.5.3",
     "csv-parser": "^3.0.0",
     "discord-webhook-node": "^1.1.8",
+    "embla-carousel-autoplay": "^8.0.0",
     "embla-carousel-react": "^8.0.0",
+    "embla-carousel-wheel-gestures": "^8.0.0-rc05",
     "express": "^4.18.2",
     "formidable": "^3.5.1",
     "framer-motion": "^10.17.12",
