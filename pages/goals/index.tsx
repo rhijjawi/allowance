@@ -64,7 +64,7 @@ export default function Page(){
     async function PromptdeleteGoal(goal: GoalType) {
         setId({action: "delete", goal})
     }
-    async function deleteGoal(id: number|string) {
+    async function deleteGoal(id: GoalType) {
         setIsLoading(true)
         const supabase = await getSupabase(await getToken({template : "supabase"}))
         await supabase.from("goals").delete({count : "exact"}).eq("id", Number(id))
