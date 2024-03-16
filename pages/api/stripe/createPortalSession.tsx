@@ -26,7 +26,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
         .from('parents')
         .select('*')
         .eq('clerk_id', userId)
-    console.log(data, error)
+    
     if (data!.length > 0) {
         const portalSession = await stripe.billingPortal.sessions.create({
             customer: data![0]['stripe_id'],

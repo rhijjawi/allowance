@@ -1,5 +1,5 @@
 export const PiggyBank = (props: { className: string }) => {
-    console.log(props)
+    
     return (
         <svg
             className={`tremor-Tab-icon ${props.className}`}

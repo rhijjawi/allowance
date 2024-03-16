@@ -119,7 +119,7 @@ export default function Subscriptions({ prods }: { prods: Stripe.Price[] }) {
                                                     })
                                                     const resp =
                                                         await res.json()
-                                                    console.log(resp)
+                                                    
                                                     window.open(
                                                         resp.goto,
                                                         '_self'

@@ -14,7 +14,7 @@ import { useAlerts } from '@/components/contexts/alertHandler'
 // export const getServerSideProps : GetServerSideProps = async (context: GetServerSidePropsContext) => {
 //     let data, error;
 //     const user = getAuth(context.req);
-//     console.log(user)
+//     
 //     if (!((user as SignedOutAuthObject)?.userId)) {
 //         return {
 //             redirect: {
@@ -49,7 +49,7 @@ import { useAlerts } from '@/components/contexts/alertHandler'
 //         }
 //       }
 //     } catch (e : unknown) {
-//         console.log(e)
+//         
 //         data = [];
 //     }
 //     return { props: { reports: data } };

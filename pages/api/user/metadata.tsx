@@ -59,7 +59,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
 }
 async function PUT(req: NextApiRequest, res: NextApiResponse) {
     const { userId } = getAuth(req)
-    console.log(req.body)
+    
     if (!userId) return res.status(401).json({ error: 'Unauthorized' })
 
     let user = await clerkClient.users.getUser(userId)
@@ -75,7 +75,7 @@ async function PUT(req: NextApiRequest, res: NextApiResponse) {
 async function GET(req: NextApiRequest, res: NextApiResponse) {
     const { userId } = getAuth(req)
     let user
-    console.log(req.body)
+    
     if (!userId) return res.status(401).json({ error: 'Unauthorized' })
     try {
         user = await clerkClient.users.getUser(userId)

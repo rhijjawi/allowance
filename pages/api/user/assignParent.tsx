@@ -127,7 +127,7 @@ async function DELETE(req: NextApiRequest, res: NextApiResponse) {
         return res.status(400).send('shite request')
     }
     const { data } = await upsertRow(userId)
-    console.log(await upsertRow(userId))
+    )
     if (data![0].supervisors.indexOf(supervisor) !== -1) {
         const { data: data1, error: error1 } = await supabase
             .from('oversight')

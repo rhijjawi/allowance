@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 export function SignInPage() {
     const params = useSearchParams()
     useEffect(() => {
-        console.log()
+        
     }, [params])
     return (
         <div className="">

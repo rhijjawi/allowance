@@ -25,7 +25,7 @@ export function SavingsModal({
 
     const handleSave = async () => {
         setLoading(true)
-        console.log(misc.savings, saved, GoalAmount, currency)
+        
         if (
             misc.savings[0] == saved &&
             misc.savings[1] == GoalAmount &&

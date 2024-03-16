@@ -22,21 +22,20 @@ export default function Introduction() {
     useEffect(() => {
         if (typeof localStorage === 'undefined') return
         for (let ignored of ignoredPaths){
-            console.log(router.asPath, router.asPath.match(ignored))
+            )
             if (router.asPath.match(ignored)){
                 return undefined
             }
         }
-        const hasSeenIntro =
-            localStorage.getItem('modals')?.indexOf('intro') != -1
+        const hasSeenIntro = (localStorage.getItem('modals') ?? [] as string[]).indexOf('intro') != -1
         setIsOpen(!hasSeenIntro)
-    }, [])
+    })
     return (
         <>
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog
                     as="div"
-                    className="relative z-10"
+                    className="relative z-1000"
                     onClose={() => {
                         closeModal()
                     }}

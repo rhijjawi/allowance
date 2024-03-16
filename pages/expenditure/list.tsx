@@ -158,14 +158,14 @@ export default function ListPage() {
         }
         form.append('csvFile', file as File)
         form.append('bank', bank as string)
-        console.log(form)
+        
         const res = await fetch('/api/expenses/add', {
             method: 'POST',
             body: form,
         })
         if (res.status === 200) {
             res.json().then((data) => {
-                console.log(data.results.length)
+                
                 if (data.results.length > 0) {
                     addAlert(
                         'success',

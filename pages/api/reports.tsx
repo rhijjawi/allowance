@@ -28,7 +28,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
         .eq('parent_id', userId)
         .range(page * perpage, (page + 1) * perpage)
     if (error) {
-        console.log(error)
+        
         return res.status(500).json({ data: error })
     } else if (data) {
         return res.status(200).json({ data: data, count, perpage })

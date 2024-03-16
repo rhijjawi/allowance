@@ -90,7 +90,7 @@ export function simulateRepayments(
         monthlyBalances.push(currentMonthBalances)
         totalInterestPaid += monthlyInterestPaid
     }
-    console.log(monthlyBalances)
+    
     return { monthlyBalances, totalInterestPaid }
 }
 
@@ -125,7 +125,7 @@ export function snowballStrategy(debts: Debt[], totalMonthlyPayment: number) {
 export function allocatePayments(debts: Debt[], totalMonthlyPayment: number) {
     let remainingPayment = totalMonthlyPayment
     const paymentPlan = debts.map((debt: Debt) => {
-        console.log(debt.balance, debt.monthlyInterest(), remainingPayment)
+        , remainingPayment)
         const payment = Math.min(
             debt.balance + debt.monthlyInterest(),
             remainingPayment

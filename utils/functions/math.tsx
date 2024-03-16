@@ -36,6 +36,6 @@ export async function BudgetMath(
         prefferedCurr,
         budgetCurrency
     )
-    console.log(sumInBudgetCurrency, budgetAmount)
+    
     return [(sumInBudgetCurrency / budgetAmount) * 100, sumInBudgetCurrency]
 }
