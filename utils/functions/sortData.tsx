@@ -51,6 +51,6 @@ export function sortData(sortBy: any, expenses: ExpenseType[]) {
             return 0
         })
     }
-    
+    console.log(expenses)
     return expenses.sort((a: ExpenseType, b: ExpenseType) => b.id! - a.id!)
 }

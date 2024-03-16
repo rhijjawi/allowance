@@ -99,7 +99,7 @@ export async function getServerSideProps(
         const expenseData: {} = {}
         const _currency: { [index: string]: number } = {}
         let uniqueCurrencies: string[] = []
-        .toTimeString())
+        console.log(new Date().toTimeString())
         if (expenses.length > 0) {
             filteredExpenses = expenses.filter((exp) => {
                 return true
@@ -114,7 +114,7 @@ export async function getServerSideProps(
                     uniqueCurrencies.push(currency)
                 }
             })
-            )
+            console.log('startConversion', new Date())
             for (let curr of currencies) {
                 !_currency[curr]
                     ? (_currency[curr] = await standardizeCurrencyGeneral(

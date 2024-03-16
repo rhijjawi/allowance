@@ -33,7 +33,7 @@ function SignUpPage() {
                             You are already signed in. To sign up, you'll need
                             to sign out first.
                         </p>
-                        <SignOutButton 
+                        <SignOutButton
                             signOutCallback={() => {
                                 router.push('/')
                             }}

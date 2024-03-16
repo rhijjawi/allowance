@@ -1,4 +1,3 @@
-import { clerkClient } from '@clerk/nextjs/server'
 import { authMiddleware } from '@clerk/nextjs/server'
 // ```js
 // const sessions = await clerk.user.getSessions();

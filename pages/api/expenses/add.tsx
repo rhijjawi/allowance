@@ -30,7 +30,7 @@ export default async function handler(
             return
         }
         try {
-            
+            console.log(fields, files)
             if (!Object.keys(functions).includes(fields.bank![0])) {
                 return res.status(400).json({ error: 'Unsupported bank' })
             }
@@ -60,7 +60,7 @@ export default async function handler(
                 throw Error(error.message)
             }
         } catch (error) {
-            
+            console.log(error)
             res.status(500).json({ error: 'Internal Server Error' })
         }
     })
@@ -91,7 +91,7 @@ function convertCsvToJson(
             refunded: bankData.recurring,
             is_displayed: bankData.is_displayed,
         }
-        
+        console.log(jsonObject)
         return jsonObject
     })
     return results.filter((value: any) => {

@@ -35,7 +35,7 @@ const handleStripeWebhook = async (
         case 'invoice.upcoming':
 
         default:
-            
+            console.log(`Unhandled event type ${event.type}`)
     }
 
     return res.status(200).send('OK')

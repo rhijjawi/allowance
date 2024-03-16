@@ -91,7 +91,7 @@ const actFromHash = async (hash: string, wasApproved: boolean) => {
         error: any
     }
     invalidateHash(hashCheck[0], wasApproved).then((e) => {
-        
+        console.log(e)
     })
     if (wasApproved) {
         return await approveFromHash({

@@ -21,7 +21,7 @@ export const getStaticProps: GetStaticProps = async (context: any) => {
                 : 'https://logmoney.app/api/stripe/getProds'
         )
         data = await res.json()
-        
+        console.log(data)
     } catch (e) {
         data = []
     }
@@ -37,7 +37,7 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
     const { hasValidStripeSubscription, subscriptionId } =
         useGuardianOnboarding()
     useEffect(() => {
-        
+        console.log(hasValidStripeSubscription, subscriptionId)
     }, [hasValidStripeSubscription])
     return (
         <>

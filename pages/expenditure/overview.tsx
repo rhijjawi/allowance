@@ -65,7 +65,7 @@ export default function Expenditure() {
     useEffect(() => {
         if (expenseData.length > 0) {
             setSum(0)
-            
+            console.log(expenseData)
             MonthExpenses(expenseData, new Date()).forEach((exp: ExpenseType) =>
                 setSum((...prev) => prev[0] + exp.standardizedCurrency!)
             )
