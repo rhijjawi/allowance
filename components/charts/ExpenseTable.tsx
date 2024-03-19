@@ -93,7 +93,7 @@ function isCategoryMatch(expense: ExpenseSchema, filters: EXP_Filters) {
 function isInRange(expense: ExpenseSchema, filters: EXP_Filters) {
     if (!filters.range[0] && !filters.range[1]) return true
     const amount = expense.standardizedCurrency!
-    return amount >= filters.range[0]! && amount <= filters.range[1]!
+    return amount >= (filters.range[0] ? filters.range[0] : 0) && (filters.range[1] ? amount <= filters.range[1]! : amount <= 99999999999999)
 }
 
 function isDateMatch(expense: ExpenseSchema, filters: EXP_Filters) {

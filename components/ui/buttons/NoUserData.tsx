@@ -1,9 +1,9 @@
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 
-export function Goals(props: { openModal: () => void }) {
+export function Goals(props: { openModal: () => void, className? : string }) {
     return (
         <div
-            className="border-dashed hover:bg-slate-200/40 my-2 cursor-pointer flex-grow border-2 rounded-md relative"
+            className={`${props.className ? props.className : ""} border-dashed hover:bg-slate-200/40 my-2 cursor-pointer flex-grow border-2 rounded-md relative`}
             onClick={() => props.openModal()}
         >
             <div className="absolute right-0 w-fit flex flex-col text-center h-fit left-0 top-0 bottom-0 my-auto mx-auto">

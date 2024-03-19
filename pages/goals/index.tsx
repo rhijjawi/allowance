@@ -7,11 +7,11 @@ import {GoalModal, DeletePrompt, EditGoalAmounts} from "@/components/forms/AddGo
 import { getSupabase } from "@/utils/supabase"
 import {FireConfetti} from "@/utils/fun"
 import { currFormatter } from "@/utils/functions/valueFormatters"
-import { TrashIcon } from "@heroicons/react/24/outline"
+import { BanknotesIcon, EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline"
 import { AnimatePresence } from "framer-motion"
 import {motion} from "framer-motion"
 import { useRouter } from "next/router"
-type GoalType = {id :number|string, label : string, amount_total : number, amount_saved : number, currency : string}
+type GoalType = {icon?: string|null, id :number|string, label : string, amount_total : number, amount_saved : number, currency : string}
 const MotionCard = motion(Card)
 export default function Page(){
     const {user, isLoaded, isSignedIn} = useUser()
@@ -64,7 +64,7 @@ export default function Page(){
     async function PromptdeleteGoal(goal: GoalType) {
         setId({action: "delete", goal})
     }
-    async function deleteGoal(id: GoalType) {
+    async function deleteGoal(id: string|number) {
         setIsLoading(true)
         const supabase = await getSupabase(await getToken({template : "supabase"}))
         await supabase.from("goals").delete({count : "exact"}).eq("id", Number(id))
@@ -96,17 +96,31 @@ export default function Page(){
         <DeletePrompt user={user?.id!} id={id} setId={setId} delete={deleteGoal}/>
         <EditGoalAmounts user={user?.id!} id={id} setId={setId} delete={deleteGoal}/>
         <Content>
-            <div className="grid grid-cols-1 min-h-[90vh] h-[90vh] ">
+            <div className="grid grid-cols-1 min-h-fit ">
                 <Card className="h-full flex flex-col gap-y-3 overflow-y-scroll">
                     <Title className="mb-2">Saving Goals</Title>
                     {goals.length == 0 ? <Goals openModal={openModal} /> : <div className="absolute -translate-y-1 right-0 w-fit mr-6"><button className="justify-center rounded-md border border-transparent bg-green-100 px-6 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2" onClick={()=>setIsOpen(true)}>Add a goal</button></div>}
                     <AnimatePresence>
                     {goals.sort((a,b) => Number(a.id) - Number(b.id)).map((goal, index)=>{
+                        function previewImage() {
+                            throw new Error("Function not implemented.")
+                        }
+                        function EditImage() {
+                            throw new Error("Function not implemented.")
+                        }
+
                         return (
-                            <MotionCard key={`card_${index}`} className="p-2 h-48 flex flex-row dark:border-white border-2">
-                                <img src="https://picsum.photos/1000" className="h-[100%] aspect-square rounded-md" alt="" />
+                            <MotionCard key={`card_${index}`} className="p-0 h-48 min-h-[12rem] flex flex-row dark:border-white border-2">
+                                <div className="h-[100%] relative aspect-square rounded-md m">
+                                    <div className="absolute right-0 h-[100%] z-30 w-[1%] bg-blue-500/100"></div>
+                                    <div className={`h-[100%] rounded-l-md grid grid-rows-2 aspect-square z-20 absolute top-0 left-0 opacity-0 hover:${goal.icon ? "opacity-100" : "opacity-100 bg-white"}`}>
+                                        {goal.icon && <div onClick={()=>{previewImage()}} className="row-span-1 col-span-1 relative cursor-pointer bg-gray-200/10 hover:bg-gray-200/20"><EyeIcon className="h-[50%] aspect-square absolute left-0 right-0 top-0 bottom-0 my-auto mx-auto text-white"/></div>}
+                                        <div onClick={()=>{EditImage()}} className={`${goal.icon ? "row-span-1" : "row-span-2"} col-span-1 relative cursor-pointer bg-gray-200/10 hover:bg-gray-200/20`}><PencilIcon className={`h-[50%] aspect-square absolute left-0 right-0 top-0 bottom-0 my-auto mx-auto ${goal.icon ? "text-white" : "text-slate-300"}`}/></div>
+                                    </div>
+                                    {goal.icon ? <img src="https://picsum.photos/1000" className="z-10 rounded-l-md" alt="" /> : <BanknotesIcon className="h-[50%] translate-x-[50%] z-10 translate-y-[50%] aspect-square stroke-1 rounded-md"/>}
+                                </div>
                                 <div className="flex-grow relative">
-                                    <div className="absolute top-0 leading-6 bottom-0 mb-auto align-middle h-fit left-0">
+                                    <div className="absolute top-3 leading-6 bottom-0 mb-auto align-middle h-fit left-0">
                                         <p className="text-2xl translate-x-5">Goal</p>
                                         <p className="mx-6 text-4xl top-0">{goal.label}</p>
                                     </div>
@@ -117,7 +131,7 @@ export default function Page(){
                                         </p>
                                         <ProgressBar value={goal.amount_saved/goal.amount_total*100} color={getColorRange(Math.round(goal.amount_saved/goal.amount_total*100))} className="mt-3" />
                                     </div>
-                                    <div className="absolute flex flex-col right-0 top-0 w-fit">
+                                    <div className="absolute flex flex-col right-2 top-3 w-fit">
                                         <div className="w-full flex gap-x-2 h-10">
                                             <button className="justify-center rounded-md border border-transparent bg-red-100 px-6 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:cursor-wait " disabled={isLoading} onClick={()=>{updateSaved(goal,-100)}}><span className="">{currFormatter(- 100, goal.currency)}</span></button>
                                             <button className="justify-center rounded-md border border-transparent bg-red-100 px-6 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:cursor-wait" disabled={isLoading} onClick={()=>{updateSaved(goal,-10)}}><span className="">{currFormatter(- 10, goal.currency)}</span></button>
@@ -133,6 +147,7 @@ export default function Page(){
                                 </div>
                             </MotionCard>
                         )})}
+                        <Goals className="min-h-[12rem]" openModal={openModal} />
                     </AnimatePresence>
                 </Card>
             </div>
