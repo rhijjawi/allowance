@@ -99,7 +99,7 @@ export default function Page(){
             <div className="grid grid-cols-1 min-h-fit ">
                 <Card className="h-full flex flex-col gap-y-3 overflow-y-scroll">
                     <Title className="mb-2">Saving Goals</Title>
-                    {goals.length == 0 ? <Goals openModal={openModal} /> : <div className="absolute -translate-y-1 right-0 w-fit mr-6"><button className="justify-center rounded-md border border-transparent bg-green-100 px-6 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2" onClick={()=>setIsOpen(true)}>Add a goal</button></div>}
+                    {goals.length == 0 ? <Goals openModal={openModal} className="min-h-[12rem]" /> : <div className="absolute -translate-y-1 right-0 w-fit mr-6"><button className="justify-center rounded-md border border-transparent bg-green-100 px-6 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2" onClick={()=>setIsOpen(true)}>Add a goal</button></div>}
                     <AnimatePresence>
                     {goals.sort((a,b) => Number(a.id) - Number(b.id)).map((goal, index)=>{
                         function previewImage() {
@@ -147,7 +147,7 @@ export default function Page(){
                                 </div>
                             </MotionCard>
                         )})}
-                        <Goals className="min-h-[12rem]" openModal={openModal} />
+                        {goals.length > 0 && <Goals className="min-h-[12rem]" openModal={openModal} />}
                     </AnimatePresence>
                 </Card>
             </div>

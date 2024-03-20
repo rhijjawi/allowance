@@ -9,6 +9,9 @@ import { Button, Title } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { TextInput } from '@tremor/react'
 import { useAlerts } from '@/components/contexts/alertHandler'
+import { EnvelopeIcon } from '@heroicons/react/20/solid'
+import { useUser } from '@clerk/nextjs'
+import Loading from '@/pages/_loading'
 
 export function UserCard({
     user,
@@ -48,10 +51,12 @@ export function UserCard({
 }
 
 export function UserAddCard(props: {
+    type : "email"|"code"
     isReadOnly?: boolean
     code?: string
     setSupervisors?: (supervisors: string[]) => void
 }) {
+    const {user, isLoaded, isSignedIn} = useUser()
     const [code, setCode] = useState<null[] | string[]>([
         null,
         null,
@@ -60,21 +65,37 @@ export function UserAddCard(props: {
         null,
         null,
     ])
+    const [inviteEmail, setInviteEmail] = useState<string>("")
     useEffect(() => {
         if (props.isReadOnly) {
-            fetch('/api/user/parent').then(async (res) => {
-                if (res.status == 200) {
-                    const r = await res.json()
-                    setCode(r.code.split(''))
-                }
-            })
+            if (props.type == "code"){
+                fetch('/api/user/parent').then(async (res) => {
+                    if (res.status == 200) {
+                        const r = await res.json()
+                        setCode(r.code.split(''))
+                    }
+                })
+            }
+            if (props.type == "email"){
+                setInviteEmail(user!.emailAddresses[0].emailAddress!)
+            }
         }
     }, [props.isReadOnly])
-    const { addAlert } = useAlerts()
+    const { addAlert } = useAlerts();
+    const isEmail = (email : string) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)
+    if (!isLoaded){
+        return <Loading/>
+    }
     return (
-        <div className="relative mx-auto my-1 grid h-24 w-[70%] grid-cols-12 rounded-md border-2 bg-gray-300/0 dark:border-white/20 ">
+        <div className="relative mx-auto my-1 grid h-24 w-[70%] grid-cols-12 rounded-md border-2 bg-gray-300/0 dark:border-white/20">
             <div className="col-span-12 mr-12 flex items-center justify-center">
-                {[0, 1, 2, 3, 4, 5].map((e) => (
+                {props.type == "email" && <>
+                    <TextInput icon={EnvelopeIcon} type="email" onValueChange={(e)=>{
+                        
+                        setInviteEmail(e)
+                    }} value={inviteEmail} className='max-w-full w-[90%]' />
+                </>}
+                {props.type == "code" && [0, 1, 2, 3, 4, 5].map((e) => (
                     <div
                         key={e}
                         className="mx-2 inline-block h-[85%] w-14 min-w-[5%] rounded-md bg-gray-300"
@@ -103,7 +124,7 @@ export function UserAddCard(props: {
                     </div>
                 ))}
                 <Button
-                    disabled={!(code.join('').length == 6)}
+                    disabled={props.type == "code" ? !(code.join('').length == 6) : !isEmail(inviteEmail)}
                     className="absolute right-0 mr-2 aspect-square max-h-[7%] min-h-[70%]"
                     icon={
                         props.isReadOnly
@@ -111,10 +132,11 @@ export function UserAddCard(props: {
                             : PlusCircleIcon
                     }
                     color={props.isReadOnly ? 'blue' : 'green'}
-                    onClick={async () => {
+                    onClick={
+                        props.type == "code" ? 
+                    async () => {
                         if (!props.isReadOnly) {
                             if (!(code.join('').length == 6)) return
-
                             fetch('/api/user/parent', {
                                 method: 'POST',
                                 headers: {
@@ -151,7 +173,36 @@ export function UserAddCard(props: {
                                 )
                             }
                         }
-                    }}
+                    } 
+                    : async () => {
+                        if (props.isReadOnly){
+                            try {
+                                await navigator.clipboard.writeText(inviteEmail)
+                            } catch {
+                                alert(
+                                    `Error copying to clipboard: ${inviteEmail}`
+                                )
+                            }
+                        }
+                        if (!isEmail(inviteEmail)){
+                            return await addAlert("error", "The email entered is not valid!", 5000)
+                        }
+                        else {
+                            fetch('/api/user/parent/invite', {
+                                method : "POST",
+                                headers : {
+                                    'Content-Type' : "application/json"
+                                },
+                                body : JSON.stringify({
+                                    inviteEmail
+                                })
+                            }).then(async(res)=>{
+                                const data = (await res.json())
+                                res.status == 200 ? addAlert("success", data.message, 3000) : addAlert("error", data.error, 3000)
+                            })
+                        }
+                    }
+                }
                 />
             </div>
         </div>

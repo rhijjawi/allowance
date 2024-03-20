@@ -38,8 +38,7 @@ export default function MyApp({
         }
     }, [])
     const localization = Object.assign({}, enUS)
-    console.log(localization.signIn?.start)
-    localization!.signIn!.start!.subtitle = "Continue to {{applicationName}} to get the best LogMoney has to offer."
+    localization!.signIn!.start!.subtitle = "Sign in to {{applicationName}} to continue."
     const MemoizedAlertProvider = React.memo(AlertProvider)
     return (
         <>

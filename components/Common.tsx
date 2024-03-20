@@ -8,7 +8,7 @@ export function Content({
 }) {
     return (
         <>
-            <main className="bg-dark-tremor-background-muted/75 min-h-screen h-fit relative p-12">
+            <main className="bg-dark-tremor-background-muted/75 min-h-screen w-screen h-fit relative p-12">
                 {children}
             </main>
         </>

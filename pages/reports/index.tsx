@@ -4,6 +4,7 @@ import {
     ChatBubbleLeftRightIcon,
     Cog8ToothIcon,
     ClipboardDocumentIcon,
+    EnvelopeIcon,
 } from '@heroicons/react/24/outline'
 import {
     Button,
@@ -26,12 +27,26 @@ import { fetcher } from '@/utils/fetcher'
 import { UserCard, UserAddCard } from '@/components/ui/User/UserCards'
 import { User } from '@clerk/clerk-sdk-node'
 import { Content, Loader } from '@/components/Common'
+import { Tab, Tabs } from '@nextui-org/tabs'
+
+function Zeroes(){
+    return (
+        <><span className="inline-block font-mono tracking-tighter text-xs">0</span>
+        <span className="inline-block font-mono tracking-tighter text-xs">0</span>
+        <span className="inline-block font-mono tracking-tighter text-xs">0</span>
+        <span className="inline-block font-mono tracking-tighter text-xs">0</span>
+        <span className="inline-block font-mono tracking-tighter text-xs">0</span>
+        <span className="inline-block font-mono tracking-tighter text-xs">0</span>
+        </>
+    )
+}
 
 export default function Index() {
     const { user, isLoaded, isSignedIn } = useUser()
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const { addAlert } = useAlerts()
+    const [selected, setSelected] = useState<"email"|"code">("email")
     const [supervisorData, setSupervisorData] = useState<null | {
         oversight: { supervisors: any[]; unconfirmed: any[] }
         supervisorProfiles: User[]
@@ -129,8 +144,7 @@ export default function Index() {
                                     </div>
                                     <div className="mt-2 max-w-xl text-sm text-gray-500 dark:text-gray-400">
                                         <p>
-                                            Configure reports to be sent to your
-                                            parents or guardians
+                                            Configure reports to be sent to your parents or guardians
                                         </p>
                                     </div>
                                 </div>
@@ -139,12 +153,16 @@ export default function Index() {
                         <div className="mb-6 mt-3 w-full border border-indigo-600/70"></div>
                         <div className="grid grid-cols-2">
                             <Title className="mb-3">Settings</Title>
-                            <div className="relative col-span-2 col-start-1 mx-auto mb-5 w-[80%]  rounded-md border-2 border-indigo-500 bg-indigo-200/50 px-4 py-4 shadow-sm dark:border-cyan-500">
+                            <div className="relative glass col-span-2 col-start-1 mx-auto mb-5 w-[80%]  rounded-md border-2 border-black/70  px-4 py-4 shadow-sm dark:border-whtie">
                                 <Title>Pair a parent account</Title>
                                 <Subtitle>
                                     Enter the unique ID of the parent account
                                     you want to pair with
                                 </Subtitle>
+                                <Tabs selectedKey={selected} onSelectionChange={setSelected as React.Dispatch<React.SetStateAction<string|number>>} className='absolute mr-2 mt-2 top-0 right-0'>
+                                    <Tab key={"code"} title={<><Zeroes/>{" "}<span>Pair with Code</span></>} /> 
+                                    <Tab key={"email"} title={<><EnvelopeIcon className='w-4 inline-block'/><span className='ml-2'>Invite with Email</span></>} /> 
+                                </Tabs>
                                 {supervisorData &&
                                     user?.publicMetadata.role == 'student' &&
                                     supervisorData.supervisorProfiles
@@ -250,7 +268,7 @@ export default function Index() {
                                                         user={user}
                                                         supervisorDelete={async () => {
                                                             const res =
-                                                                axios.delete(
+                                                                await axios.delete(
                                                                     '/api/user/assignParent',
                                                                     {
                                                                         data: {
@@ -265,6 +283,7 @@ export default function Index() {
                                             )}
                                 </div>
                                 <UserAddCard
+                                    type={selected}
                                     isReadOnly={
                                         user?.publicMetadata.role == 'parent'
                                     }

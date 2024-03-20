@@ -8,6 +8,7 @@ import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import currencies from '@/components/static/symbols.json'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
+import { Loader } from '@/components/Common'
 
 export default function Manage() {
     const { user, isLoaded, isSignedIn } = useUser()
@@ -73,7 +74,7 @@ export default function Manage() {
                 addAlert('error', 'Error changing report currency', 5000)
             })
     }, [currency])
-    if (!isLoaded || isLoading) return <div>Loading...</div>
+    if (!isLoaded || isLoading) return <Loader/>
     if (!isSignedIn) return <div>Not signed in</div>
     return (
         <div className="min-h-screen relative h-12 flex flex-1 justify-center align-middle">

@@ -16,6 +16,7 @@
         -moz-appearance: textfield !important;
     }
 }
+
 .highlight_child > :nth-child(1) {
     border-color: red !important;
     border-width: 2px;

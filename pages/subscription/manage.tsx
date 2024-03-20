@@ -7,6 +7,7 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { useAlerts } from '@/components/contexts/alertHandler'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { Loader } from '@/components/Common'
 export const getStaticProps = async (context: any) => {
     let data
     try {
@@ -41,7 +42,7 @@ export default function Subscriptions({ prods }: { prods: Stripe.Price[] }) {
         return () => {}
     }, [isLoaded])
     if (!isLoaded) {
-        return <>Loading...</>
+        return <Loader/>
     }
 
     return (

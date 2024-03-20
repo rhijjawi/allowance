@@ -266,6 +266,16 @@ export default function ListPage() {
                 <Text className="text-slate-300">
                     A detailed overview of your finances.
                 </Text>
+                <div className="absolute right-0 -translate-x-12 grid grid-cols-2 gap-x-4 w-fit">
+                    <button onClick={()=>{
+                        setIsOpen(true)
+                        setIncomeIsOpen(false)
+                    }} className="h-full w-36 rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2">Record Expense</button>
+                    <button onClick={()=>{
+                        setIsOpen(false)
+                        setIncomeIsOpen(true)
+                    }} className="h-full w-36 rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2">Record Income</button>
+                </div>
 
                 <TabGroup className="mt-6" index={tab} onIndexChange={setTab}>
                     <TabList>
@@ -312,11 +322,13 @@ export default function ListPage() {
                                 numItemsLg={3}
                                 className="mt-6 gap-6"
                             >
+                                
                                 <Card className="h-fit border-2 border-slate-400 bg-white">
                                     {user ? (
                                         <DonutCategory
                                             expenseData={expenseData}
                                             categoryData={categoryData}
+                                            className="glass"
                                         />
                                     ) : null}
                                     <motion.div

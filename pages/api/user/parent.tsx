@@ -84,12 +84,13 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
         .select('*')
         .eq('code', code.toUpperCase())
     if (error) return res.status(500).send('Internal Server Error')
-    if (data.length === 0) return res.status(404).send('Not Found')
+    if (data.length === 0) return res.status(404).json({error: 'Not Found'})
     const insertion = await insertRow(userId, data[0].parentId)
     if (insertion.error == 'exists') {
         return res.status(400).json({ error: 'exists' })
     }
-    await axios.post('http://127.0.0.1:2999/pair_request', {
+    const postUrl = process.env.NODE_ENV == "development" ? "http://127.0.0.1:2999/pair_request" : "https://mail.ramzihijjawi.me/pair_request"
+    await axios.post(postUrl, {
         reqUser: userId,
         parent: data[0].parentId,
     })

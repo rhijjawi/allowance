@@ -123,12 +123,12 @@ async function GET(req: NextApiRequest, res: NextApiResponse) {
     }
     const data = await actFromHash(hash, action == 'approve')
     if (data == null) {
-        res.status(400).send('Hash does not exist!')
+        return res.status(400).send('Hash does not exist!')
     }
     if (data == false) {
-        res.status(400).send('Hash is no longer valid')
+        return res.status(400).send('Hash is no longer valid')
     }
-    res.redirect('/')
+    return res.redirect('/')
 }
 
 export default handler
