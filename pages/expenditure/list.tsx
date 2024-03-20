@@ -36,6 +36,7 @@ import {
     ArrowDownOnSquareIcon,
     BanknotesIcon,
     CalendarDaysIcon,
+    CameraIcon,
     ChevronDownIcon,
     ChevronUpIcon,
     ClipboardDocumentIcon,
@@ -59,6 +60,7 @@ import {
     ExpenditureDialog,
     IncomeDialogue,
 } from '@/components/forms/QuickForms'
+import SavedForLater from "@/components/ui/S4L"
 import getPrevious from '@/functions/getPrevious'
 import { CategorySchema, ExpenseSchema, IncomeSchema } from '@/types/supabase'
 import {
@@ -70,10 +72,10 @@ import { motion } from 'framer-motion'
 import { NumToMonth, currFormatter } from '@/utils/functions/valueFormatters'
 import ExpenseTable from '@/components/charts/ExpenseTable'
 import React from 'react'
-import { Autocomplete, AutocompleteItem } from '@nextui-org/react'
 import { useRouter } from 'next/router'
 import { useAlerts } from '@/components/contexts/alertHandler'
 import { Content } from '@/components/Common'
+import Link from 'next/link'
 
 let ChevronStyle = [
     'absolute w-8 aspect-square rounded-full right-0 bottom-0 top-0 my-auto mr-4',
@@ -302,6 +304,12 @@ export default function ListPage() {
                             className="text-white hover:text-slate-400"
                         >
                             Import
+                        </Tab>
+                        <Tab
+                            icon={CameraIcon}
+                            className="text-white hover:text-slate-400"
+                        >
+                            Saved for Later
                         </Tab>
                         {uncategorized.length > 0 ? (
                             <Tab
@@ -698,6 +706,24 @@ export default function ListPage() {
                                     </div>
                                 </Card>
                             </Grid>
+                        </TabPanel>
+                        <TabPanel>
+                            <Col    
+                                numColSpan={1}
+                                numColSpanLg={3}
+                                className="mt-6 gap-6 "
+                            >
+                                <Card className="mt-6 border-2 border-slate-400 bg-white">
+                                    <Title className="mb-0">
+                                        Saved For Later
+                                    </Title>
+                                    <Subtitle>
+                                        You can add images of reciepts that you have right now, but maybe don't want to deal with.<br></br>
+                                        You can also visit <Link className='text-blue-400 underline' href={"https://logmoney.app/quickadd"}>logmoney.app/quickadd</Link> to add them directly from your mobile device.
+                                    </Subtitle>
+                                    <SavedForLater />
+                                </Card>
+                            </Col>
                         </TabPanel>
                         <TabPanel>
                             <Col

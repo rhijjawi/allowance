@@ -16,8 +16,9 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import Intro from '@/components/ui/modals/Intro'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-const raleway = Raleway({ subsets: ['latin'] })
+import { dark } from '@clerk/themes';
 
+const raleway = Raleway({ subsets: ['latin'] })
 export default function MyApp({
     Component,
     pageProps,
@@ -37,6 +38,9 @@ export default function MyApp({
             localStorage.setItem('modals', JSON.stringify([]))
         }
     }, [])
+    useEffect(()=>{
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+    }, [])
     const localization = Object.assign({}, enUS)
     localization!.signIn!.start!.subtitle = "Sign in to {{applicationName}} to continue."
     const MemoizedAlertProvider = React.memo(AlertProvider)
@@ -44,6 +48,7 @@ export default function MyApp({
         <>
             <StrictMode>
                 <ClerkProvider
+                    appearance={{baseTheme : (typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? dark : undefined}}
                     supportEmail="support@logmoney.app"
                     navigate={(url) => {
                         router.push(url)

@@ -19,6 +19,8 @@ import {
     ArrowRightIcon,
     ChevronDownIcon,
     ChevronUpIcon,
+    EyeIcon,
+    EyeSlashIcon,
     MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline'
 import { TrashIcon } from '@heroicons/react/24/solid'
@@ -33,10 +35,12 @@ import {
 import { useExpenses } from '../contexts/expenseCTX'
 import { useTransactionHandler } from '../contexts/transactionHandler'
 import { currFormatter } from '@/utils/functions/valueFormatters'
-import { useUser } from '@clerk/nextjs'
+import { useAuth, useUser } from '@clerk/nextjs'
 import { FileHover } from '@/components/ui/buttons/FileHover'
 import Filters from '../ui/Filters'
 import { ExpenseSchema } from '@/types/supabase'
+import { Tooltip } from '@nextui-org/react';
+import { getSupabase } from '@/utils/supabase';
 let TableHeadStyle = [
     'dark:bg-black bg-white select-none relative border-x-2 dark:border-l-white border-x-black',
     'h-6 relative right-0 bottom-0 top-0 left-0 mx-auto my-auto',
@@ -142,7 +146,7 @@ export default function ExpTable({
     })
     const pageSize = 25
     const { user } = useUser()
-
+    const {getToken} = useAuth()
     useEffect(() => {
         if (filter) {
             switch (filter) {
@@ -416,7 +420,7 @@ export default function ExpTable({
                                 </div>
                             </TableHeaderCell>
                             <TableHeaderCell
-                                className={`relative w-64 border-x ${TableHeadStyle[0]}`}
+                                className={`relative w-fit border-x ${TableHeadStyle[0]}`}
                             >
                                 <div className={`w-fit ${TableHeadStyle[1]}`}>
                                     <Text className="h-full w-fit text-black hover:cursor-pointer hover:text-gray-300 dark:text-white dark:hover:text-stone-300">
@@ -481,10 +485,15 @@ export default function ExpTable({
                                 </div>
                             </TableHeaderCell>
                             <TableHeaderCell
-                                className={`w-8 border-r-0  ${TableHeadStyle[0]}`}
+                                className={`w-8 border-r-0 ${TableHeadStyle[0]}`}
+                            >
+                                Visibility
+                            </TableHeaderCell>
+                            {/* <TableHeaderCell
+                                className={`w-8 border-r-0 ${TableHeadStyle[0]}`}
                             >
                                 <TrashIcon className="absolute bottom-0 left-0 right-0 top-0 mx-auto my-auto h-5 w-5 " />
-                            </TableHeaderCell>
+                            </TableHeaderCell> */}
                         </TableRow>
                     </TableHead>
 
@@ -732,6 +741,31 @@ export default function ExpTable({
                                             />
                                         </TableCell>
                                         <TableCell
+                                            key={`${item.id}.10`}
+                                            className="relative mx-auto"
+                                        >
+                                            <div onClick={async(e)=>{
+                                                    e.stopPropagation();
+                                                    e.preventDefault();
+                                                    setExpenseData((prev)=>{
+                                                        let _data = Object.assign([], prev) as ExpenseSchema[]
+                                                        _data.forEach((expense, index)=>{
+                                                            if (expense.id == item.id){
+                                                                _data[index].is_displayed = !(_data[index].is_displayed)
+                                                            }
+                                                        })
+                                                        return _data
+                                                    })
+                                                    const token = await getToken({template : "supabase"})
+                                                    const supabase = await getSupabase(token)
+                                                    const {data, error} = await supabase.from("expenses").update({is_displayed : !(item.is_displayed)}).eq("id", item.id).select("*")
+                                                }} className="rounded hover:bg-slate-100 border-1 absolute w-fit p-2 h-fit top-0 bottom-0 right-0 left-0 mx-auto my-auto">
+                                                <Tooltip content={item.is_displayed ? "Click to hide from report" : "Click to show on report"}>
+                                                    {item.is_displayed ? <EyeIcon className='aspect-square h-8'/> : <EyeSlashIcon className='aspect-square h-8' />}
+                                                </Tooltip>
+                                            </div>
+                                        </TableCell>
+                                        {/* <TableCell
                                             key={`${item.id}.9`}
                                             className="relative mx-auto"
                                         >
@@ -747,7 +781,7 @@ export default function ExpTable({
                                             >
                                                 <TrashIcon className="absolute bottom-0 left-0 right-0 top-0 mx-auto my-auto h-5 w-5" />
                                             </div>
-                                        </TableCell>
+                                        </TableCell> */}
                                     </TableRow>
                                 )
                             }
