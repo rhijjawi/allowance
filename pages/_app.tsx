@@ -48,7 +48,6 @@ export default function MyApp({
         <>
             <StrictMode>
                 <ClerkProvider
-                    appearance={{baseTheme : (typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? dark : undefined}}
                     supportEmail="support@logmoney.app"
                     navigate={(url) => {
                         router.push(url)
