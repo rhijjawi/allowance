@@ -7,7 +7,7 @@ const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_SUPABASE_SECRET_KEY!
 )
-const upsertRow = async (userId: string | null) => {
+export const upsertRow = async (userId: string | null) => {
     let { data, error } = await supabase
         .from('oversight')
         .select('supervisors, unconfirmed')
@@ -21,7 +21,7 @@ const upsertRow = async (userId: string | null) => {
             .select('supervisors, unconfirmed')
     }
 }
-const insertRow = async (userId: string | null, supervisor: string) => {
+export const insertRow = async (userId: string | null, supervisor: string) => {
     const { data } = await upsertRow(userId)
     if (
         data![0] &&

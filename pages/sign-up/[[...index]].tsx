@@ -1,12 +1,20 @@
 import { SignOutButton, SignUp, useUser } from '@clerk/nextjs'
 import { motion } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button, Select, SelectItem, Subtitle } from '@tremor/react'
 import symbols from '@/components/static/symbols.json'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
+import { useSearchParams } from 'next/navigation'
 function SignUpPage() {
     const { user, isLoaded, isSignedIn } = useUser()
+    const params = useSearchParams()
+    useEffect(()=>{
+        if (params.get('role')=="parent"){
+            setRoleType(1)
+            setOnboardingStep(1)
+        }
+    }, [])
     const router = useRouter()
     const [roleType, setRoleType] = useState<0 | 1 | 2>(0)
     const [boardingcomplete, setBoardingComplete] = useState<boolean>(false)
@@ -58,12 +66,12 @@ function SignUpPage() {
                         className="mx-auto my-auto bottom-0 right-0 top-0 left-0 absolute max-w-md max-h-fit h-fit min-w-2xl py-6 px-8 bg-white dark:bg-black rounded-md outline-indigo-500 outline"
                     >
                         <p className="font-bold leading-7 text-lg text-black dark:text-white py-2">
-                            Are you a Parent or Student?
+                            Are you a Spender or a Guardian?
                         </p>
                         <div className="py-5">
-                            <div className="grid grid-cols-2">
+                            <div className="grid grid-rows-2 gap-y-2 md:grid-cols-2 md:min-w-24">
                                 <Button
-                                    className={`col-start-1 w-[80%] mx-auto bg-black hover:bg-gray-900/90 ${roleType == 2 ? '!bg-green-500 !hover:bg-green-500' : ''}`}
+                                    className={`min-w-fit w-[50%] mx-auto bg-black hover:bg-gray-900/90 ${roleType == 2 ? '!bg-green-500 !hover:bg-green-500' : ''}`}
                                     onClick={() => {
                                         setRoleType(Number(2) as 0 | 1 | 2)
                                     }}
@@ -71,7 +79,7 @@ function SignUpPage() {
                                     Spender
                                 </Button>
                                 <Button
-                                    className={`col-start-2 w-[80%] mx-auto bg-black hover:bg-gray-900/90 ${roleType == 1 ? '!bg-green-500 !hover:bg-green-500' : ''}`}
+                                    className={`min-w-fit w-[50%] mx-auto bg-black hover:bg-gray-900/90 ${roleType == 1 ? '!bg-green-500 !hover:bg-green-500' : ''}`}
                                     onClick={() => {
                                         setRoleType(Number(1) as 0 | 1 | 2)
                                     }}
@@ -158,6 +166,7 @@ function SignUpPage() {
                             unsafeMetadata={{
                                 role: `${['parent', 'student'][Number(roleType) - 1]}`,
                                 currency: `${preferredCurr}`,
+                                invitedBy : params.get('from') ? atob(params.get('from')!) : undefined
                             }}
                             appearance={{
                                 elements: {
@@ -166,6 +175,9 @@ function SignUpPage() {
                                         'rounded-md border border-indigo-600/30',
                                     card: 'overflow-hidden m-0',
                                 },
+                            }}
+                            initialValues={{
+                                emailAddress : params.get('hash') ? atob(params.get('hash')!) : undefined
                             }}
                             path="/sign-up"
                             routing="virtual"

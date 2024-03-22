@@ -22,7 +22,9 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
         return res.status(401).send("")
     }
     const users = await clerkClient.users.getUserList({emailAddress : inviteEmail})
+    
     let userExists = !(users.length == 0)
+    console.log(userExists)
     if (userExists){
         if (userExists && users[0].publicMetadata.role == "parent"){
             await createConnectUserRequest(userId, users[0].id)
@@ -33,8 +35,9 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
         }  
     }
     else {
-        await createUserInvite(inviteEmail, userId)
-        return res.status(200).json({message : "Parent Invited!"})
+        const _ = await createUserInvite(inviteEmail, userId)
+        res.json(_.data)
+
     }
 }
 
