@@ -42,12 +42,12 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function createUserInvite(inviteEmail : string, child : string) {
-    const postUrl = process.env.NODE_ENV == "development" ? "http://127.0.0.1:2999/invite_parent" : "https://mail.ramzihijjawi.me/invite_parent"
+    const postUrl = process.env.NODE_ENV == "development" ? "http://127.0.0.1:2999/invite_parent" : "https://mail.logmoney.app/invite_parent"
     return await axios.post(postUrl, {inviteEmail, child}, {headers : {'Content-Type' : "application/json"}})
 }
 
 async function createConnectUserRequest(child : string, parent : string) {
-    const postUrl = process.env.NODE_ENV == "development" ? "http://127.0.0.1:2999/pair_request" : "https://mail.ramzihijjawi.me/pair_request"
+    const postUrl = process.env.NODE_ENV == "development" ? "http://127.0.0.1:2999/pair_request" : "https://mail.logmoney.app/pair_request"
     return await axios.post(postUrl, {reqUser : child, parent}, {headers : {'Content-Type' : "application/json"}})
 }
 

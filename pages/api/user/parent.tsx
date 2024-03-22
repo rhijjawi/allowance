@@ -89,7 +89,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
     if (insertion.error == 'exists') {
         return res.status(400).json({ error: 'exists' })
     }
-    const postUrl = process.env.NODE_ENV == "development" ? "http://127.0.0.1:2999/pair_request" : "https://mail.ramzihijjawi.me/pair_request"
+    const postUrl = process.env.NODE_ENV == "development" ? "http://127.0.0.1:2999/pair_request" : "https://mail.logmoney.app/pair_request"
     await axios.post(postUrl, {
         reqUser: userId,
         parent: data[0].parentId,
