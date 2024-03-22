@@ -36,7 +36,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
     }
     else {
         const _ = await createUserInvite(inviteEmail, userId)
-        res.json(_.data)
+        return res.json(_.data)
 
     }
 }
