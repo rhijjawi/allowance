@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { clerkClient } from '@clerk/nextjs'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
-import { insertRow, upsertRow } from '../user/parent'
+import { insertRowConfirmed } from '../user/parent'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: '2023-10-16',
@@ -37,7 +37,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
                 customer,
             })
             if (data.unsafe_metadata.invitedBy){
-                await insertRow(data.unsafe_metadata.invitedBy, data.id)
+                await insertRowConfirmed(data.unsafe_metadata.invitedBy, data.id)
             }
             await supabase.from('parents').insert({
                 clerk_id: data.id,

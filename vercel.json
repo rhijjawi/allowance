@@ -1,0 +1,7 @@
+{
+    "regions": ["fra1"],
+    "cron" : [{
+        "path" : "/api/cron",
+        "schedule" : "00 12 28 * *"
+    }]
+}

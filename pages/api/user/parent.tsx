@@ -40,6 +40,25 @@ export const insertRow = async (userId: string | null, supervisor: string) => {
         .select('supervisors, unconfirmed')
 }
 
+export const insertRowConfirmed = async (userId: string | null, supervisor: string) => {
+    const { data } = await upsertRow(userId)
+    if (
+        data![0] &&
+        (data![0].unconfirmed.indexOf(supervisor) != -1 ||
+            data![0].supervisors.indexOf(supervisor) != -1)
+    ) {
+        return { data: data, error: 'exists' }
+    }
+    return await supabase
+        .from('oversight')
+        .upsert({
+            childId: userId,
+            unconfirmed: data![0].unconfirmed,
+            supervisors: [...data![0].supervisors, supervisor],
+        })
+        .select('supervisors, unconfirmed')
+}
+
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
