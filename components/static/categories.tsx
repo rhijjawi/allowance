@@ -21,6 +21,7 @@ import {
     BanknotesIcon,
     XMarkIcon,
     TruckIcon,
+    UserIcon,
 } from '@heroicons/react/24/outline'
 import { CategorySchema } from '@/types/supabase'
 import { Badge, Color } from '@tremor/react'
@@ -44,6 +45,7 @@ export default function CategoryBadge(): {
         13: [QuestionMarkCircleIcon, 'lime'],
         14: [FireIcon, 'lime'],
         15: [HomeIcon, 'zinc'],
+        16: [UserIcon, 'amber']
     }
 }
 export function getIcon(id: number) {
