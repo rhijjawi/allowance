@@ -511,9 +511,9 @@ export default function Report(props: {
                                         )
                                     )
                                 })}
-                                <Card className="col-span-3 w-fit min-h-12 mx-auto">
+                                <Card className="col-span-3 w-fit max-w-full min-h-12 mx-auto">
                                     {props.expenses.length > 0 ? (
-                                        <Table className="w-fit mx-auto">
+                                        <Table className="mx-auto w-full">
                                             <TableHead className="w-full">
                                                 <TableHeaderCell>
                                                     Date
@@ -528,7 +528,7 @@ export default function Report(props: {
                                                     Category
                                                 </TableHeaderCell>
                                             </TableHead>
-                                            <TableBody>
+                                            <TableBody className='w-full'>
                                                 {props.expenses.map((exp) => {
                                                     return (
                                                         <TableRow
@@ -568,7 +568,7 @@ export default function Report(props: {
                                                                 ).toDateString()}
                                                             </TableCell>
                                                             <TableCell>
-                                                                <p className='max-w-52 overflow-ellipsis overflow-hidden break-words whitespace-nowrap'>
+                                                                <p className='overflow-ellipsis w-[25rem] overflow-hidden break-words whitespace-nowrap max-w-fit'>
                                                                     {exp.label}
                                                                 </p>
                                                             </TableCell>
