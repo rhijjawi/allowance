@@ -524,7 +524,6 @@ export default function Report(props: {
                                                 <TableHeaderCell>
                                                     Amount
                                                 </TableHeaderCell>
-
                                                 <TableHeaderCell>
                                                     Category
                                                 </TableHeaderCell>
@@ -568,7 +567,7 @@ export default function Report(props: {
                                                                     exp.transaction_date
                                                                 ).toDateString()}
                                                             </TableCell>
-                                                            <TableCell className="w-fit">
+                                                            <TableCell className="max-w-52 overflow-ellipsis overflow-hidden break-words whitespace-nowrap">
                                                                 {exp.label}
                                                             </TableCell>
                                                             <TableCell>
