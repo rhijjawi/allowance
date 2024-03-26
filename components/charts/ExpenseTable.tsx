@@ -758,7 +758,7 @@ export default function ExpTable({
                                                     })
                                                     const token = await getToken({template : "supabase"})
                                                     const supabase = await getSupabase(token)
-                                                    const {data, error} = await supabase.from("expenses").update({is_displayed : !(item.is_displayed)}).eq("id", item.id).select("*")
+                                                    const {data, error} = await supabase.from("expenses").update({is_displayed : (item.is_displayed)}).eq("id", item.id).select("*")
                                                 }} className="rounded hover:bg-slate-100 border-1 absolute w-fit p-2 h-fit top-0 bottom-0 right-0 left-0 mx-auto my-auto">
                                                 <Tooltip content={item.is_displayed ? "Click to hide from report" : "Click to show on report"}>
                                                     {item.is_displayed ? <EyeIcon className='aspect-square h-8'/> : <EyeSlashIcon className='aspect-square h-8' />}
