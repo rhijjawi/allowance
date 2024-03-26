@@ -36,7 +36,7 @@ class Transaction {
     ) {
         this.line = line
         this.label = line[label]
-        this.amount = Math.abs(Number(line[amount]))
+        this.amount = Math.abs(Number(line[amount])) ?? Math.abs(Number(line[amount].replace(",", ".")))
         this.currency = line[currency]
         this.category = category ? category : [0, 0]
         this.transaction_date = fnsparse(
@@ -110,7 +110,7 @@ function Revolut(arr: any) {
 
 function CommerzBank(arr: string[]) {
     if (arr.length > 0) {
-        if (arr[2] == 'debit') {
+        if (arr[2].toLowerCase() == 'debit') {
             const transaction = new Transaction(
                 arr,
                 3,
@@ -124,6 +124,7 @@ function CommerzBank(arr: string[]) {
                 []
             )
             transaction.label = transaction.label.split('/')[0]
+            transaction.amount = Math.abs(Number(arr[4].split(",").join(".")))
             return transaction.toJSONData()
         } else {
             return null

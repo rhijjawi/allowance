@@ -30,7 +30,6 @@ export default async function handler(
             return
         }
         try {
-            console.log(fields, files)
             if (!Object.keys(functions).includes(fields.bank![0])) {
                 return res.status(400).json({ error: 'Unsupported bank' })
             }
@@ -71,7 +70,7 @@ function convertCsvToJson(
     userId: string,
     bank: string
 ): any[] {
-    const csv = parse(csvString, { encoding: 'utf-8', skip_empty_lines: true })
+    const csv = parse(csvString, { encoding: 'utf-8', skip_empty_lines: true, relax_column_count : true, delimiter: bank == "commerzbank" ? ";" : "," })
     let results = csv.splice(1).map((line: any) => {
         let bankData = functions[bank](line)
         if (bankData == null) {
@@ -79,6 +78,7 @@ function convertCsvToJson(
         }
         bankData = bankData as InsertExp
         const files: string[] = []
+        console.log(bankData)
         const jsonObject: ExpenseSchema = {
             amount: bankData.amount,
             currency: bankData.currency,
