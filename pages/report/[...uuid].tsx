@@ -94,6 +94,7 @@ export async function getServerSideProps(
         .eq('user_id', data![0].forchild)
         .gte('transaction_date', new Date(data[0].date_range[0]).toISOString())
         .lte('transaction_date', new Date(data[0].date_range[1]).toISOString())
+        .eq('is_displayed', true)
     if (_expenses && !expensesError) {
         const expenses: ExpenseType[] = _expenses
         const expenseData: {} = {}
