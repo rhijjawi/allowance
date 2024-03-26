@@ -167,7 +167,6 @@ export default function ExpTable({
         } else {
             setData(expenseData)
         }
-        setPage(0)
     }, [expenseData])
     useEffect(() => {
         const filteredData = getPaginatedDataWithFilters(data, filters).filter(
@@ -747,15 +746,14 @@ export default function ExpTable({
                                             <div onClick={async(e)=>{
                                                     e.stopPropagation();
                                                     e.preventDefault();
-                                                    setExpenseData((prev)=>{
-                                                        let _data = Object.assign([], prev) as ExpenseSchema[]
-                                                        _data.forEach((expense, index)=>{
-                                                            if (expense.id == item.id){
-                                                                _data[index].is_displayed = !(_data[index].is_displayed)
+                                                    setExpenseData(prev => {
+                                                        return prev.map(expense => {
+                                                            if (expense.id === item.id) {
+                                                                return {...expense, is_displayed: !expense.is_displayed};
                                                             }
-                                                        })
-                                                        return _data
-                                                    })
+                                                            return expense;
+                                                        });
+                                                    });
                                                     const token = await getToken({template : "supabase"})
                                                     const supabase = await getSupabase(token)
                                                     const {data, error} = await supabase.from("expenses").update({is_displayed : (item.is_displayed)}).eq("id", item.id).select("*")
