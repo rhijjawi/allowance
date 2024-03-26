@@ -569,8 +569,10 @@ export default function Report(props: {
                                                                     exp.transaction_date
                                                                 ).toDateString()}
                                                             </TableCell>
-                                                            <TableCell className="max-w-52 overflow-ellipsis overflow-hidden break-words whitespace-nowrap">
-                                                                {exp.label}
+                                                            <TableCell>
+                                                                <p className='max-w-52 overflow-ellipsis overflow-hidden break-words whitespace-nowrap'>
+                                                                    {exp.label}
+                                                                </p>
                                                             </TableCell>
                                                             <TableCell>
                                                                 <HoverCurrGeneral
