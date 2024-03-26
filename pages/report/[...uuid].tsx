@@ -46,12 +46,14 @@ export async function getServerSideProps(
             .select('parent_id, forchild, date_range, no_login, uuid')
             .eq('uuid', context.params?.uuid[0])
             .eq('parent_id', user.userId)
+            .eq('is_displayed', true)
     } else if (context.params.uuid.length > 1) {
         req = supabase
             .from('reports')
             .select('parent_id, forchild, date_range, no_login, uuid')
             .eq('uuid', context.params?.uuid[0])
             .eq('no_login', context.params?.uuid[1])
+            .eq('is_displayed', true)
     }
     console.time('getdata')
     const { data, error } = await req!
