@@ -168,6 +168,9 @@ export default function ExpTable({
             setData(expenseData)
         }
     }, [expenseData])
+    useEffect(()=>{
+        setPage(0)
+    }, [search])
     useEffect(() => {
         const filteredData = getPaginatedDataWithFilters(data, filters).filter(
             (exp) => {
