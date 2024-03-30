@@ -454,6 +454,7 @@ export default function Report(props: {
                                         // @ts-ignore
                                     )}
                             </span>
+                            {/* @ts-ignore */}
                             <span>{' '}+ {currFormatter(props.parent.allowanceHomeCurr, props.homeCurr)}</span><span>{' '}(Allowance)</span>
                             <AreaChart
                                 curveType="step"
