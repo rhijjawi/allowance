@@ -136,7 +136,7 @@ export async function getServerSideProps(
                 expenses,
                 _currency,
                 dates: data[0].date_range,
-                parent: { id: _user.id, allowanceHomeCurr : (_misc && _misc.length > 0 && _misc[0].allowance[2] && _misc[0].allowance[2] > 0) ? await standardizeCurrencyGeneral(_misc[0].allowance[2], _misc[0].allowance[1], (_user.publicMetadata.reports as {currency : string}).currency) : null },
+                parent: { id: _user.id, allowanceHomeCurr : (_misc && _misc.length > 0 && _misc[0].allowance[2] && _misc[0].allowance[2] > 0) ? await standardizeCurrencyGeneral(_misc[0].allowance[0], _misc[0].allowance[1], (_user.publicMetadata.reports as {currency : string}).currency) : null },
                 homeCurr: (_user.publicMetadata.reports as { currency: string })
                 .currency,
                 child: {
@@ -441,7 +441,7 @@ export default function Report(props: {
                                     Number(props.dates[1])
                                 ).toDateString()}
                             </h3>
-                            <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">
+                            <span className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">
                                 {sum &&
                                     currFormatter(
                                         Object.values(sum!).reduce(
@@ -452,8 +452,9 @@ export default function Report(props: {
                                         ),
                                         props.homeCurr
                                         // @ts-ignore
-                                    )}{' '} + {props.parent.allowanceHomeCurr}
-                            </p>
+                                    )}
+                            </span>
+                            <span>{' '}+ {currFormatter(props.parent.allowanceHomeCurr, props.homeCurr)}</span><span>{' '}(Allowance)</span>
                             <AreaChart
                                 curveType="step"
                                 showGradient={true}

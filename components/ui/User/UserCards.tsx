@@ -87,21 +87,21 @@ export function UserAddCard(props: {
         return <Loading/>
     }
     return (
-        <div className="relative mx-auto my-1 grid h-24 w-[70%] grid-cols-12 rounded-md border-2 bg-gray-300/0 dark:border-white/20">
-            <div className="col-span-12 mr-12 flex items-center justify-center">
+        <>
+            <div className="w-full rounded-md bg-slate-100 py-2">
+            <div className="flex max-w-full flex-row w-full gap-x-2 h-fit overflow-x-scroll justify-center align-middle flex-nowrap">
                 {props.type == "email" && <>
                     <TextInput icon={EnvelopeIcon} type="email" onValueChange={(e)=>{
                         
                         setInviteEmail(e)
-                    }} value={inviteEmail} className='max-w-full w-[90%]' />
+                    }} value={inviteEmail} className='h-12 flex-shrink w-auto' />
                 </>}
-                {props.type == "code" && [0, 1, 2, 3, 4, 5].map((e) => (
-                    <div
-                        key={e}
-                        className="mx-2 inline-block h-[85%] w-14 min-w-[5%] rounded-md bg-gray-300"
-                    >
+
+                {props.type == "code" && 
+                [0, 1, 2, 3, 4, 5].map((e) => (
                         <input
                             id={String(e)}
+                            key={e}
                             maxLength={1}
                             type="text"
                             readOnly={props.isReadOnly}
@@ -119,13 +119,13 @@ export function UserAddCard(props: {
                                 setCode(_code)
                                 document.getElementById(String(e + 1))?.focus()
                             }}
-                            className="border-3 read relative block h-full max-w-full rounded-md border-cyan-800/80 bg-cyan-700/30 px-[30%] text-center text-xl uppercase text-black read-only:outline-none"
+                            className="border-3 h-20 w-[3.5rem] max-w-[auto] min-w-[4rem] mx-2 bg-gray-300 rounded-md border-cyan-800/80 bg-cyan-700/30 text-center text-xl uppercase text-black read-only:outline-none"
                         />
-                    </div>
                 ))}
+
                 <Button
                     disabled={props.type == "code" ? !(code.join('').length == 6) : !isEmail(inviteEmail)}
-                    className="absolute right-0 mr-2 aspect-square max-h-[7%] min-h-[70%]"
+                    className={props.type == "code" ? "max-h-full w-16 aspect-square" : ""}
                     icon={
                         props.isReadOnly
                             ? ClipboardDocumentIcon
@@ -206,5 +206,6 @@ export function UserAddCard(props: {
                 />
             </div>
         </div>
+        </>
     )
 }

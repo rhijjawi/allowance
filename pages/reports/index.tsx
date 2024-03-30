@@ -153,7 +153,7 @@ export default function Index() {
                         <div className="mb-6 mt-3 w-full border border-indigo-600/70"></div>
                         <div className="grid grid-cols-2">
                             <Title className="mb-3">Settings</Title>
-                            <div className="relative glass col-span-2 col-start-1 mx-auto mb-5 w-[80%]  rounded-md border-2 border-black/70  px-4 py-4 shadow-sm dark:border-whtie">
+                            <div className="relative glass col-span-2 col-start-1 mx-auto mb-5 w-[80%] rounded-md border-2 border-black/70 px-4 py-4 shadow-sm dark:border-whtie">
                                 <Title>Pair a parent account</Title>
                                 <Subtitle>
                                     Enter the unique ID of the parent account
@@ -256,7 +256,7 @@ export default function Index() {
                                                 }}
                                             />
                                         ))}
-                                <div className="">
+                                <div className="relative">
                                     {supervisorData &&
                                         user?.publicMetadata.role == 'parent' &&
                                         supervisorData.supervisorProfiles
