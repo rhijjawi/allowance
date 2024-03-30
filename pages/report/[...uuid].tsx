@@ -456,6 +456,8 @@ export default function Report(props: {
                             </span>
                             {/* @ts-ignore */}
                             <span>{' '}+ {currFormatter(props.parent.allowanceHomeCurr, props.homeCurr)}</span><span>{' '}(Allowance)</span>
+                            {/* @ts-ignore */}
+                            <span>{' '}= {currFormatter(props.parent.allowanceHomeCurr+Object.values(sum!).reduce((previous, current) => {return current.sum + previous},0), props.homeCurr)}</span>
                             <AreaChart
                                 curveType="step"
                                 showGradient={true}
@@ -519,8 +521,13 @@ export default function Report(props: {
                                     Allowance
                                 </h3>
                                 <p className="mt-2 font-semibold">
-                                    {/* @ts-ignore */}
-                                    {currFormatter(props.child.allowance[2], props.child.allowance[1])} ≈ {currFormatter(
+                                    
+                                    {
+                                    //@ts-ignore
+                                    props.child.allowance[1] != props.homeCurr ?
+                                    //@ts-ignore
+                                    <>{currFormatter(props.child.allowance[2], props.child.allowance[1])
+                                    +`≈`}</> : ``} {currFormatter(
                                         //@ts-ignore
                                         props.parent.allowanceHomeCurr,
                                         props.homeCurr
