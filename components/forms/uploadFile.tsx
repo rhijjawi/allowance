@@ -36,7 +36,6 @@ export function DragAndDrop(props: {
             ).data as [string, string]
             tempURLs.forEach((url) => {
                 setFileURLs((prev) => ({ ...prev, [url[0]]: url[1] }))
-                console.log({ [url[0]]: url[1] })
             })
         }
         getURLs()
@@ -44,9 +43,6 @@ export function DragAndDrop(props: {
             active = false
         }
     }, [props.exp])
-    useEffect(() => {
-        console.log(fileURLs)
-    }, [fileURLs])
     function handleChange(e: any) {
         e.preventDefault()
         if (e.target.files && e.target.files[0]) {

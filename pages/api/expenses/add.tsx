@@ -59,7 +59,6 @@ export default async function handler(
                 throw Error(error.message)
             }
         } catch (error) {
-            console.log(error)
             res.status(500).json({ error: 'Internal Server Error' })
         }
     })
@@ -78,7 +77,6 @@ function convertCsvToJson(
         }
         bankData = bankData as InsertExp
         const files: string[] = []
-        console.log(bankData)
         const jsonObject: ExpenseSchema = {
             amount: bankData.amount,
             currency: bankData.currency,
@@ -91,7 +89,6 @@ function convertCsvToJson(
             refunded: bankData.recurring,
             is_displayed: bankData.is_displayed,
         }
-        console.log(jsonObject)
         return jsonObject
     })
     return results.filter((value: any) => {

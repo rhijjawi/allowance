@@ -54,9 +54,6 @@ export default function Filters(props: {
         setMax(undefined)
         return
     }
-    useEffect(() => {
-        console.log([filteredCategories, min, max, dateRange])
-    }, [filteredCategories, min, max, dateRange])
     const variants = {
         hidden: {
             translate: '-100% 0 0',

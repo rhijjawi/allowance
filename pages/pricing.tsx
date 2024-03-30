@@ -34,11 +34,7 @@ export default function PricingPage({ prods }: { prods: Stripe.Price[] }) {
     const { addAlert } = useAlerts()
     const { user, isSignedIn, isLoaded } = useUser()
     const router = useRouter()
-    const { hasValidStripeSubscription, subscriptionId } =
-        useGuardianOnboarding()
-    useEffect(() => {
-        console.log(hasValidStripeSubscription, subscriptionId)
-    }, [hasValidStripeSubscription])
+    const { hasValidStripeSubscription, subscriptionId } = useGuardianOnboarding()
     return (
         <>
             <div className="h-fit w-full overflow-hidden border-t-2 bg-white dark:bg-black">

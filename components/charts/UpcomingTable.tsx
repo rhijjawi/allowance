@@ -90,10 +90,6 @@ export default function table() {
                         {[
                             expenses
                                 .filter((exp: ExpenseSchema) => {
-                                    console.log(
-                                        new Date(exp.transaction_date),
-                                        new Date()
-                                    )
                                     return (
                                         new Date(exp.transaction_date) >
                                         new Date()

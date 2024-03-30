@@ -28,7 +28,6 @@ export default function Home(props: any) {
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ playOnInit: true, delay: 3000, stopOnInteraction : false })])
     useEffect(() => {
         if (emblaApi) {
-          console.log(emblaApi.slideNodes()) // Access API
         }
     }, [emblaApi])
     return (

@@ -219,7 +219,7 @@ export function GoalModal(props: {
                                 >
                                     <div className="w-full h-fit flex flex-col align-middle justify-center">
                                         <div onClick={()=>{
-                                                console.log(file)
+
                                                 setFile(null)
                                                 uploadFile.current.click()
                                             }} className="mx-auto border relative max-w-fit h-fit w-fit cursor-pointer rounded-md  bg-white hover:bg-slate-100/20 block">

@@ -94,7 +94,7 @@ export function GuardianOnboardingProvider({
                         }
                     })
                     .then((json: { isActive: boolean; items: string[] }) => {
-                        console.log(json)
+
                         addAlert('success', 'subscription is valid :)', 5000)
                         setSubscriptionId(json.items)
                         setHasValidStripeSubscription(true)

@@ -30,8 +30,6 @@ import { useEffect, useState } from 'react'
 export async function getServerSideProps(
     context: GetServerSidePropsContext & { params: { uuid: string[] } }
 ) {
-    console.time('end')
-    console.time('supabase')
     const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_SUPABASE_SECRET_KEY!
@@ -78,7 +76,6 @@ export async function getServerSideProps(
             },
         }
     }
-    console.time('clerk')
     let users = (await clerkClient.users.getUserList({
         userId: [data[0].parent_id, data[0].forchild],
     })) as User[]
@@ -86,8 +83,7 @@ export async function getServerSideProps(
         users.filter((user) => user.id == data[0].parent_id)[0],
         users.filter((user) => user.id == data[0].forchild)[0],
     ]
-    console.timeEnd('clerk')
-    console.time('expenses')
+    const {data : _misc, error: _miscError} = await supabase.from("misc").select("*").eq("clerk_id", child.id)
     const { data: _expenses, error: expensesError } = await supabase
         .from('expenses')
         .select('*')
@@ -134,20 +130,21 @@ export async function getServerSideProps(
         } else {
             shareLink = null
         }
-        console.timeEnd('end')
+
         return {
             props: {
                 expenses,
                 _currency,
                 dates: data[0].date_range,
+                parent: { id: _user.id, allowanceHomeCurr : (_misc && _misc.length > 0 && _misc[0].allowance[2] && _misc[0].allowance[2] > 0) ? await standardizeCurrencyGeneral(_misc[0].allowance[2], _misc[0].allowance[1], (_user.publicMetadata.reports as {currency : string}).currency) : null },
                 homeCurr: (_user.publicMetadata.reports as { currency: string })
-                    .currency,
+                .currency,
                 child: {
                     firstName: child.firstName,
                     lastName: child.lastName,
                     metadata: child.publicMetadata,
+                    allowance : (_misc && _misc.length > 0 && _misc[0].allowance[2] && _misc[0].allowance[2] > 0) ? _misc[0].allowance : null
                 },
-                parent: { id: _user.id },
                 shareLink: shareLink,
             },
         }
@@ -432,6 +429,7 @@ export default function Report(props: {
                                 </div>
                             )}
                             <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
+                                { /*@ts-ignore*/ }
                                 {props.child.firstName}'s Expenditure Report
                             </h3>
                             <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
@@ -453,7 +451,8 @@ export default function Report(props: {
                                             0
                                         ),
                                         props.homeCurr
-                                    )}{' '}
+                                        // @ts-ignore
+                                    )}{' '} + {props.parent.allowanceHomeCurr}
                             </p>
                             <AreaChart
                                 curveType="step"
@@ -512,6 +511,21 @@ export default function Report(props: {
                                         )
                                     )
                                 })}
+                                {/* @ts-ignore */}
+                                {props.parent.allowanceHomeCurr && <Card className={`bg-blue-300 dark:border-2 dark:border-blue-300 mx-auto w-[85%]`}>
+                                <h3 className="text-lg font-semibold mb-4 ">
+                                    Allowance
+                                </h3>
+                                <p className="mt-2 font-semibold">
+                                    {/* @ts-ignore */}
+                                    {currFormatter(props.child.allowance[2], props.child.allowance[1])} ≈ {currFormatter(
+                                        //@ts-ignore
+                                        props.parent.allowanceHomeCurr,
+                                        props.homeCurr
+                                    )}
+                                </p>
+                                    
+                                </Card>}
                                 <Card className="col-span-3 w-fit max-w-full min-h-12 mx-auto">
                                     {props.expenses.length > 0 ? (
                                         <Table className="mx-auto w-full">
