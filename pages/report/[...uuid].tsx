@@ -1,6 +1,6 @@
 import { useAlerts } from '@/components/contexts/alertHandler'
 import { ExpenseType, useExpenses } from '@/components/contexts/expenseCTX'
-import { getBadgeById, getColor } from '@/components/static/categories'
+import { SpecialGetColor, getBadgeById, getColor } from '@/components/static/categories'
 import { HoverCurrGeneral } from '@/components/ui/buttons/hoverSwitchCurr'
 import { CategorySchema } from '@/types/supabase'
 import {
@@ -16,6 +16,9 @@ import {
     AreaChart,
     Button,
     Card,
+    Color,
+    Divider,
+    DonutChart,
     Table,
     TableBody,
     TableCell,
@@ -182,6 +185,7 @@ export default function Report(props: {
     const [dayByDay, setdayByDay] = useState<any[] | null>(null)
     const [selectedExpenses, setSelectedExpenses] = useState<number[]>([])
     const supabase = noAuthSupaBase()
+    const [actualSum, setActualSum] = useState(0)
     const { addAlert } = useAlerts()
 
     if (props.error) {
@@ -319,6 +323,7 @@ export default function Report(props: {
         })
         if (active) {
             setSum(expenseList)
+            setActualSum(Object.values(expenseList).reduce((previous, current) => { return ( current.sum + previous)}, 0 ))
             setdayByDay(dateArray)
         }
         return () => {
@@ -471,6 +476,25 @@ export default function Report(props: {
                                     currFormatter(val, props.homeCurr)
                                 }
                             />
+                            <Divider className='col-span-3'/>
+                            <div className="my-5 h-[24rem] relative">
+                                <div className="absolute bg-white p-3 right-5 top-5 w-36 h-fit gap-y-2 rounded-md flex flex-col flex-wrap shadow-md shadow-slate-300/10 border border-slate-400 z-20">
+                                    {Object.values(categoryData).filter((cat)=>sum![cat.id]).map((cat)=>{
+                                        return (<div className="flex flex-row align-center gap-x-1"><div className={`rounded-full w-4 h-4 bg-slate-300/10 border-[0.5px] inline-block relative`}><div className={`rounded-full absolute right-0 left-0 top-0 bottom-0 mx-auto my-auto w-3 h-3 bg-${SpecialGetColor(cat.id, 500)} inline-block`}></div></div><span className='leading-none text-sm inline-block'>{cat.category}</span></div>)
+                                    })}
+                                </div>
+                                <DonutChart
+                                    colors={Object.values(categoryData).filter((cat)=>sum![cat.id]).map((cat)=>getColor(cat.id)) as Color[]} 
+                                    className='h-full'
+                                    data={sum ? Object.values(categoryData).filter((cat)=>sum![cat.id]).flatMap((cat)=>{
+                                        return {index : cat.category, ofTotal : sum[cat.id].sum / actualSum}
+                                    }) : []}
+                                    variant='pie'
+                                    index='index'
+                                    category='ofTotal'
+                                    valueFormatter={(val)=>(val*100).toPrecision(3)+"%"}
+                                />
+                            </div>
                             <div className="grid grid-cols-3 gap-y-5 w-full">
                                 {Object.values(categoryData!).map((cat) => {
                                     return (
@@ -535,6 +559,7 @@ export default function Report(props: {
                                 </p>
                                     
                                 </Card>}
+                                <Divider className='col-span-3'/>
                                 <Card className="col-span-3 w-fit max-w-full min-h-12 mx-auto">
                                     {props.expenses.length > 0 ? (
                                         <Table className="mx-auto w-full">

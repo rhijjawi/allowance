@@ -37,7 +37,6 @@ async function GET(req: NextApiRequest, res: NextApiResponse) {
 async function PUT(req: NextApiRequest, res: NextApiResponse) {
     const { userId } = getAuth(req)
     if (!userId) return res.status(401).json({ error: 'Unauthorized' })
-    const { savings, emergency } = req.body
     const { data, error } = await supabase
         .from('misc')
         .select('savings, emergency')

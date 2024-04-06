@@ -16,7 +16,12 @@ module.exports = {
         current: 'currentColor',
         extend: {
             colors: {
-                // light mode
+                'uncategorized' : {
+                    light : '#0FA3B1',
+                    DEFAULT : '#0FA3B1',
+                    dark : '#0FA3B1',
+                    500 : '#0FA3B1'
+                },
                 tremor: {
                     brand: {
                         faint: '#eff6ff', // blue-50
@@ -172,6 +177,7 @@ module.exports = {
             '[#FF6600]', // Orange
             '[#FF3300]', // Red-Orange
             '[#FF0000]', // Red
+            'uncategorized'
         ].flatMap((customColor) => [
             `bg-${customColor}`,
             `border-${customColor}`,

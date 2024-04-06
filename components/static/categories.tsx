@@ -136,5 +136,10 @@ export function getBadgeByCategoryName(
 }
 export function getColor(id?: number) {
     let badges = CategoryBadge()
-    return id ? badges[id][1] : 'gray'
+    return id ? badges[id][1] : 'uncategorized'
+}
+
+export function SpecialGetColor(id: number, opacity: number) {
+    let badges = CategoryBadge()
+    return id ? `${badges[id][1]}-${opacity}` : 'uncategorized'
 }

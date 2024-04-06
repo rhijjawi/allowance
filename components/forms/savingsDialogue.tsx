@@ -35,7 +35,7 @@ export function SavingsModal({
             return
         }
         setMisc({ ...misc, savings: [saved, GoalAmount, currency] })
-        axios.put('/api/user/misc', misc).then((res) => {
+        axios.put('/api/user/misc', { ...misc, savings: [saved, GoalAmount, currency] }).then((res) => {
             if (res.status == 200) {
                 addAlert('success', 'Savings goal updated!', 2000)
             } else {
