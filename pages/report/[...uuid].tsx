@@ -476,7 +476,7 @@ export default function Report(props: {
                                     currFormatter(val, props.homeCurr)
                                 }
                             />
-                            <Divider className='col-span-3'/>
+                            <Divider className='col-span-3 py-5'/>
                             <div className="my-5 h-[24rem] relative">
                                 <div className="absolute bg-white p-3 right-5 top-5 w-36 h-fit gap-y-2 rounded-md flex flex-col flex-wrap shadow-md shadow-slate-300/10 border border-slate-400 z-20">
                                     {Object.values(categoryData).filter((cat)=>sum![cat.id]).map((cat)=>{
@@ -495,6 +495,7 @@ export default function Report(props: {
                                     valueFormatter={(val)=>(val*100).toPrecision(3)+"%"}
                                 />
                             </div>
+                            <Divider className='py-5'/>
                             <div className="grid grid-cols-3 gap-y-5 w-full">
                                 {Object.values(categoryData!).map((cat) => {
                                     return (
