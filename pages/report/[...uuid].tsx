@@ -478,7 +478,7 @@ export default function Report(props: {
                             />
                             <Divider className='col-span-3 py-5'/>
                             <div className="my-5 h-[24rem] relative">
-                                <div className="absolute bg-white p-3 right-5 top-5 w-36 h-fit gap-y-2 rounded-md flex flex-col flex-wrap shadow-md shadow-slate-300/10 border border-slate-400 z-20">
+                                <div className="absolute p-3 right-5 top-5 w-36 h-fit gap-y-2 rounded-md flex flex-col flex-wrap shadow-md shadow-slate-300/10 border border-slate-400 z-20">
                                     {Object.values(categoryData).filter((cat)=>sum![cat.id]).map((cat)=>{
                                         return (<div className="flex flex-row align-center gap-x-1"><div className={`rounded-full w-4 h-4 bg-slate-300/10 border-[0.5px] inline-block relative`}><div className={`rounded-full absolute right-0 left-0 top-0 bottom-0 mx-auto my-auto w-3 h-3 bg-${SpecialGetColor(cat.id, 500)} inline-block`}></div></div><span className='leading-none text-sm inline-block'>{cat.category}</span></div>)
                                     })}
