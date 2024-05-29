@@ -95,7 +95,7 @@ export default function EmergencyFundModal({
                                             color="amber"
                                         >
                                             <Text className="dark:text-slate-300">
-                                                If you don't have an emergency
+                                                If you don&apos;t have an emergency
                                                 fund, you should start one.
                                             </Text>
                                             <Text className="dark:text-slate-300">
@@ -109,9 +109,9 @@ export default function EmergencyFundModal({
                                                 <i>Anything can happen.</i>
                                             </Text>
                                             <Text className="dark:text-slate-300">
-                                                An "emergency fund" can also be
-                                                considered a "rainy day fund";
-                                                enough money to cover life's
+                                                An &quot;emergency fund&quot; can also be
+                                                considered a &quot;rainy day fund&quot;;
+                                                enough money to cover life&apos;s
                                                 small emergencies.{' '}
                                             </Text>
                                         </Callout>
@@ -171,6 +171,7 @@ export default function EmergencyFundModal({
                                                                 index: number
                                                             ) => (
                                                                 <SelectItem
+                                                                    key={`currency_sel_${index}`}
                                                                     className="text-center z-60 mx-auto"
                                                                     value={
                                                                         currency

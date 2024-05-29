@@ -148,7 +148,7 @@ export function TransactionHandlerProvider({
                                         <div className="mt-2">
                                             <>
                                                 <p className="text-sm mb-2 text-gray-500">
-                                                    Confirm that you'd like to
+                                                    Confirm that you&apos;d like to
                                                     delete{' '}
                                                     {resolvedExpense.length > 1
                                                         ? `${resolvedExpense.length} transactions`

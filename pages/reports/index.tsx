@@ -292,7 +292,7 @@ export default function Index() {
                             {user!.publicMetadata.role == 'parent' &&
                                 settings.map((setting) => {
                                     return (
-                                        <div className="relative col-span-2 col-start-1 mx-auto mb-5 w-[45%]  rounded-md border-2 border-indigo-500 bg-indigo-200/50 px-4 py-4 shadow-md dark:border-cyan-500">
+                                        <div key={`${setting.name}`} className="relative col-span-2 col-start-1 mx-auto mb-5 w-[45%]  rounded-md border-2 border-indigo-500 bg-indigo-200/50 px-4 py-4 shadow-md dark:border-cyan-500">
                                             <setting.icon
                                                 className={`absolute right-3 top-3 h-6 w-6 ${setting.icon_color}`}
                                             />

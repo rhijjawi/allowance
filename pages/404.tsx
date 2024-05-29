@@ -13,10 +13,10 @@ export default function FourOhFour({ errorCode }: { errorCode: number }) {
     const { user, isLoaded, isSignedIn } = useUser()
     const { _error, _setError } = useExpenses()
     const router = useRouter()
-    if (!isLoaded) return <></>
     useEffect(() => {
         _setError(true)
     }, [isLoaded])
+    if (!isLoaded) return <></>
     return (
         <>
             <div className="min-h-screen bg-gray-500/10">

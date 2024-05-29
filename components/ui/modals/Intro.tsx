@@ -104,8 +104,8 @@ export default function Introduction() {
                                                     .
                                                 </p>
                                                 <p className="text-xs leading-6 text-gray-500/40">
-                                                    You're exploring
-                                                    LogMoney.app's Beta version,
+                                                    You&apos;re exploring
+                                                    LogMoney.app&apos;s Beta version,
                                                     where features are evolving
                                                     (or buggy) and your feedback
                                                     shapes our journey.

@@ -244,10 +244,11 @@ export function GoalModal(props: {
                                         setCurrency(e)
                                     }}
                                 >
-                                    {Object.keys(symbols).map((curr) => {
+                                    {Object.keys(symbols).map((curr, idx) => {
                                         //@ts-ignore
                                         return (
                                             <SearchSelectItem
+                                                key={`symbol_${idx}`}
                                                 value={curr}
                                                 className='cursor-pointer'
                                                 //@ts-ignore

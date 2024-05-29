@@ -198,7 +198,7 @@ export function DragAndDrop(props: {
                         {Object.keys(fileURLs).map(
                             (key: string, idx: number) => {
                                 return (
-                                    <div className="w-fit max-w-full h-fit mx-auto">
+                                    <div key={`${idx}_DND`} className="w-fit max-w-full h-fit mx-auto">
                                         <Link
                                             target="_blank"
                                             href={fileURLs[key]}

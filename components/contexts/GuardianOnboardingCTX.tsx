@@ -137,8 +137,8 @@ export function GuardianOnboardingProvider({
                         </p>
                         <p className="py-auto px-4 py-5">
                             If you are a student and signed up as a parent by
-                            mistake, please contact us via the 'Contact Us'
-                            page. We'll be happy to help!
+                            mistake, please contact us via the &apos;Contact Us&apos;
+                            page. We&apos;ll be happy to help!
                         </p>
                     </motion.div>
                     <motion.div className="bg-gray-300/90 border-t border-t-black h-16 relative">

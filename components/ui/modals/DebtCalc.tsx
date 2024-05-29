@@ -274,6 +274,7 @@ export function AddDebtModal(props: {
                                                                     index: number
                                                                 ) => (
                                                                     <SelectItem
+                                                                        key={`curr_${index}`}
                                                                         className="text-center z-60 mx-auto"
                                                                         value={
                                                                             currency

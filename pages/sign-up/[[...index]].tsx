@@ -38,7 +38,7 @@ function SignUpPage() {
                 >
                     <div className="mx-auto my-auto bottom-0 right-0 top-0 left-0 absolute max-w-md max-h-fit h-fit min-w-2xl py-6 px-8 bg-white dark:bg-black rounded-md outline-indigo-500 outline">
                         <p className="mb-3">
-                            You are already signed in. To sign up, you'll need
+                            You are already signed in. To sign up, you&apos;ll need
                             to sign out first.
                         </p>
                         <SignOutButton
@@ -135,8 +135,8 @@ function SignUpPage() {
                             </Select>
                         </div>
                         <p className="my-2">
-                            This doesn't have to be the currency of the country
-                            you're residing in, just one you're comfortable with
+                            This doesn&apos;t have to be the currency of the country
+                            you&apos;re residing in, just one you&apos;re comfortable with
                             and can interpret easily
                         </p>
                         <Button

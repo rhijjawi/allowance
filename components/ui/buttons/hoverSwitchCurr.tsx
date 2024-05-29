@@ -4,7 +4,7 @@ import { useUser } from '@clerk/nextjs'
 import { Button } from '@tremor/react'
 import { useState } from 'react'
 import UserType from '@/components/interfaces/userwithMetadata'
-export default function buttonWhenHoverShowOrigCurr(props: {
+export default function ButtonWhenHoverShowOrigCurr(props: {
     expense: ExpenseSchema
     size: 'sm' | 'md' | 'xs' | 'lg' | 'xl'
 }) {

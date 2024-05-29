@@ -51,8 +51,8 @@ let ChevronStyle = [
 ]
 const chevrons = [
     null,
-    <ChevronUpIcon className={ChevronStyle[1]} />,
-    <ChevronDownIcon className={ChevronStyle[1]} />,
+    <ChevronUpIcon key={"ChevyUp"} className={ChevronStyle[1]} />,
+    <ChevronDownIcon key={"ChevyDown"} className={ChevronStyle[1]} />,
 ]
 
 interface EXP_Filters {
@@ -796,9 +796,9 @@ export default function ExpTable({
                     <div className="absolute text-center text-lg top-0 bottom-0 right-0 left-0 w-fit mx-auto my-auto h-12">
                         {search.length > 0 && [
                             `The search: `,
-                            <i>{search}</i>,
+                            <i key={"search_q"}>{search}</i>,
                             ` has no results.`,
-                            <br />,
+                            <br key={"br"}/>,
                             `Try a different query`,
                         ]}
                     </div>

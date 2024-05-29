@@ -188,22 +188,7 @@ export default function Report(props: {
     const [actualSum, setActualSum] = useState(0)
     const { addAlert } = useAlerts()
 
-    if (props.error) {
-        return (
-            <>
-                <div className="w-full h-[96vh] relative overflow-hidden border-t-2 bg-white dark:bg-dark-tremor-background-muted/75">
-                    <div className="w-fit h-fit absolute right-0 left-0 top-0 bottom-0 my-auto mx-auto">
-                        <ExclamationCircleIcon className="w-24 h-24 mb-3\  text-white mx-auto dark:text-white fill-red-600" />
-                        <p className="text-3xl text-center">
-                            {props.error.title}
-                        </p>
-                        <p>{props.error.message}</p>
-                    </div>
-                    <span className="sr-only">Loading...</span>
-                </div>
-            </>
-        )
-    }
+    
     const customTooltip = (_: any) => {
         const { payload, active } = _
         if (!active || !payload) return null
@@ -330,7 +315,22 @@ export default function Report(props: {
             active = false
         }
     }, [props.expenses, categories])
-
+    if (props.error) {
+        return (
+            <>
+                <div className="w-full h-[96vh] relative overflow-hidden border-t-2 bg-white dark:bg-dark-tremor-background-muted/75">
+                    <div className="w-fit h-fit absolute right-0 left-0 top-0 bottom-0 my-auto mx-auto">
+                        <ExclamationCircleIcon className="w-24 h-24 mb-3\  text-white mx-auto dark:text-white fill-red-600" />
+                        <p className="text-3xl text-center">
+                            {props.error.title}
+                        </p>
+                        <p>{props.error.message}</p>
+                    </div>
+                    <span className="sr-only">Loading...</span>
+                </div>
+            </>
+        )
+    }
     if (!categoryData || !dayByDay || !categories) {
         return (
             <div className="w-full h-[96vh] relative overflow-hidden border-t-2 bg-white dark:bg-dark-tremor-background-muted/75">
@@ -435,7 +435,7 @@ export default function Report(props: {
                             )}
                             <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
                                 { /*@ts-ignore*/ }
-                                {props.child.firstName}'s Expenditure Report
+                                {props.child.firstName}&apos;s Expenditure Report
                             </h3>
                             <h3 className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
                                 {new Date(
@@ -480,7 +480,7 @@ export default function Report(props: {
                             <div className="my-5 h-[24rem] relative">
                                 <div className="absolute p-3 right-5 top-5 w-36 h-fit gap-y-2 rounded-md flex flex-col flex-wrap shadow-md shadow-slate-300/10 border border-slate-400 z-20">
                                     {Object.values(categoryData).filter((cat)=>sum![cat.id]).map((cat)=>{
-                                        return (<div className="flex flex-row align-center gap-x-1"><div className={`rounded-full w-4 h-4 bg-slate-300/10 border-[0.5px] inline-block relative`}><div className={`rounded-full absolute right-0 left-0 top-0 bottom-0 mx-auto my-auto w-3 h-3 bg-${SpecialGetColor(cat.id, 500)} inline-block`}></div></div><span className='leading-none text-sm inline-block'>{cat.category}</span></div>)
+                                        return (<div key={`${cat.category}_cat`} className="flex flex-row align-center gap-x-1"><div className={`rounded-full w-4 h-4 bg-slate-300/10 border-[0.5px] inline-block relative`}><div className={`rounded-full absolute right-0 left-0 top-0 bottom-0 mx-auto my-auto w-3 h-3 bg-${SpecialGetColor(cat.id, 500)} inline-block`}></div></div><span className='leading-none text-sm inline-block'>{cat.category}</span></div>)
                                     })}
                                 </div>
                                 <DonutChart
@@ -579,9 +579,10 @@ export default function Report(props: {
                                                 </TableHeaderCell>
                                             </TableHead>
                                             <TableBody className='w-full'>
-                                                {props.expenses.map((exp) => {
+                                                {props.expenses.map((exp, idx) => {
                                                     return (
                                                         <TableRow
+                                                            key={`exp_row_${idx}`}
                                                             className={`cursor-pointer ${!selectedExpenses.includes(exp.id!) && 'hover:bg-slate-300/10'} rounded-md ${selectedExpenses.includes(exp.id!) && 'bg-slate-300/30'}`}
                                                             onClick={() => {
                                                                 if (
@@ -654,7 +655,7 @@ export default function Report(props: {
                                         <>
                                             <p className="text-center">
                                                 It seems like{' '}
-                                                {props.child.firstName} hasn't
+                                                {props.child.firstName} hasn&apos;t
                                                 recorded any transcations for
                                                 this month 😔.
                                             </p>

@@ -86,7 +86,7 @@ export default function LegalModal(props: {
                                             professional advice.
                                         </p>
                                         <p className="text-sm leading-6 text-gray-500">
-                                            The content of this "advice" is not
+                                            The content of this &quot;advice&quot; is not
                                             to be interpreted as a promise or
                                             guarantee of debt resolution or
                                             financial improvement.

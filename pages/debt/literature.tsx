@@ -40,7 +40,7 @@ export default function Index() {
                 '• $10,000 credit card debt at an 18.99% annual percentage rate (APR)',
                 '• $9,000 car loan at 3.00% interest rate',
                 '• $15,000 student loan at 4.50% interest rate',
-                "The snowball method would have you focus on the car loan first because you owe the smallest amount of money on it. You'd settle it in about three months, then tackle the other two. As with the debt avalanche method, you'd become debt-free in about 11 months. However, you would have paid $1,514.97 in interest—about $500 more overall.",
+                "The snowball method would have you focus on the car loan first because you owe the smallest amount of money on it. You'd settle it in about three months, then tackle the other two. As with the debt avalanche method, you&apos;d become debt-free in about 11 months. However, you would have paid $1,514.97 in interest—about $500 more overall.",
             ],
             adv: [
                 '• Builds motivation by settling debts fast',
@@ -90,10 +90,10 @@ export default function Index() {
                         </motion.p>
                         {isSignedIn && (
                             <motion.p className="mb-4 leading-7">
-                                In today's complex financial landscape, debt has
-                                become an integral part of many individuals' and
-                                organizations' financial portfolios. Whether
-                                it's a mortgage, student loans, credit card
+                                In today&apos;s complex financial landscape, debt has
+                                become an integral part of many individuals&apos; and
+                                organizations&apos; financial portfolios. Whether
+                                it&apos;s a mortgage, student loans, credit card
                                 debt, or business loans, managing debt
                                 effectively is essential for maintaining
                                 financial stability and securing a brighter
@@ -103,7 +103,7 @@ export default function Index() {
                         <motion.p className="mb-4 leading-7">
                             The importance of debt management cannot be
                             overstated, as it plays a pivotal role in
-                            determining one's financial well-being and long-term
+                            determining one&apos;s financial well-being and long-term
                             prosperity. Debt management encompasses a variety of
                             strategies and practices aimed at responsible
                             borrowing, timely repayment, and ultimately
@@ -113,7 +113,7 @@ export default function Index() {
                             to repay them while minimizing interest costs.
                             Furthermore, effective debt management goes beyond
                             mere repayment and extends to building a solid
-                            credit history, safeguarding one's credit score, and
+                            credit history, safeguarding one&apos;s credit score, and
                             improving overall financial literacy.
                         </motion.p>
                         <motion.div
@@ -145,6 +145,7 @@ export default function Index() {
                                 index: number
                             ) => (
                                 <motion.div
+                                    key={`lit_${index}`}
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{
@@ -157,9 +158,9 @@ export default function Index() {
                                     <motion.p className="text-2xl mb-3 leading-10 font-semibold">
                                         {el.heading}
                                     </motion.p>
-                                    {el.text.map((string) => {
+                                    {el.text.map((string, idx : number) => {
                                         return (
-                                            <motion.p className="mb-4 text-base leading-7">
+                                            <motion.p key={`text_${idx}`} className="mb-4 text-base leading-7">
                                                 {string} <br />
                                             </motion.p>
                                         )
@@ -169,8 +170,8 @@ export default function Index() {
                                             <p className="mx-auto w-fit font-bold text-green-500 border-b border-b-green-200">
                                                 Pros
                                             </p>
-                                            {el.adv.map((adv: string) => (
-                                                <p className="w-[70%] mx-auto my-3 dark:text-green-200">
+                                            {el.adv.map((adv: string, idx : number) => (
+                                                <p key={`adv_${idx}`} className="w-[70%] mx-auto my-3 dark:text-green-200">
                                                     {adv}
                                                 </p>
                                             ))}
@@ -179,9 +180,9 @@ export default function Index() {
                                             <p className="mx-auto w-fit font-bold text-red-500 border-b border-b-red-200">
                                                 Cons
                                             </p>
-                                            {el.dis.map((adv: string) => (
-                                                <p className="w-[70%] mx-auto my-3 dark:text-red-200">
-                                                    {adv}
+                                            {el.dis.map((dis: string, idx) => (
+                                                <p key={`dis_${idx}`} className="w-[70%] mx-auto my-3 dark:text-red-200">
+                                                    {dis}
                                                 </p>
                                             ))}
                                         </div>
@@ -201,7 +202,7 @@ export default function Index() {
                             <motion.p className="text-sm mt-5">
                                 The Debt Calculator is a simple financial tool
                                 designed to help you manage your financial
-                                obligations. Whether you're trying to understand
+                                obligations. Whether you&apos;re trying to understand
                                 how to best pay back your credit card bills,
                                 looking to pay off existing debt, or simply want
                                 to understand your financial commitments better,

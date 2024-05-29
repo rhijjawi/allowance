@@ -123,9 +123,9 @@ export default function Manage() {
                             Linked Accounts
                         </p>
                         <div className="mx-2 my-3">
-                            {childAccounts?.map((childAccount) => {
+                            {childAccounts?.map((childAccount, idx) => {
                                 return (
-                                    <div className=" select-none rounded-md  border border-indigo-300">
+                                    <div key={`${idx}_childAccount`} className=" select-none rounded-md  border border-indigo-300">
                                         <Button
                                             tooltip="Remove linked account"
                                             onClick={() => {
