@@ -23,7 +23,7 @@ let TableHeadStyle = [
     'dark:bg-black bg-white select-none',
     'h-6 relative right-0 bottom-0 top-0 left-0 mx-auto my-auto',
 ]
-export default function table() {
+export default function TABLE() {
     const { expenseData: expenses, categoryData: categories } = useExpenses()
     const [modalOpen, setModalOpen] = useState<any>(false)
     const [recurring, setRecurring] = useState<any>([])
